@@ -402,8 +402,10 @@ export default {
         this.zhSearchList.length &&
         this.newLang == "zh"
       ) {
-        this.appendStringItem(this.zhSearchList[0]);
-        this.tmpPingying = "";
+        //已匹配待选的中文元素是字符串
+        if (this.zhSearchList && this.zhSearchList[0]) {
+          this.clickCnTextItem(this.zhSearchList[0]);
+        }
       }
       return;
     },
