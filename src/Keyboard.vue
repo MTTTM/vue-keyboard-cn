@@ -6,13 +6,18 @@
     <div class="key-board-box">
       <div class="key-board-box-head">
         <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
-          <div>{{ this.tmpPingying }}</div>
+          <!-- <div>{{ this.tmpPingying }}</div> -->
+          <div>
+            <span v-for="(item, index) in showZhMatchArr" :key="index">{{
+              item
+            }}</span>
+          </div>
           <div class="scroll-box">
             <span
               v-for="(item, index) in zhSearchList"
-              :key="item"
+              :key="item + index"
               :class="['zh-text-item', index == 0 ? 'active' : '']"
-              @click="appendStringItem(item)"
+              @click="clickCnTextItem(item)"
               >{{ item }}</span
             >
           </div>
@@ -30,12 +35,12 @@
           :key="index"
         >
           <div
-            class="key-board-box-item"
+            :class="['key-board-box-item', el.operate ? 'fn-text' : '']"
             v-for="(el, i) in item"
             :key="index + '_' + i"
             @click="press(el)"
           >
-            {{ getItemText(el) }}
+            <span>{{ getItemText(el) }}</span>
           </div>
         </div>
       </div>
@@ -44,6 +49,8 @@
 </template>
 <script>
 import ZH from "./zh";
+import boardMaps from "./boardMaps";
+const zhKeys = Object.keys(ZH);
 export default {
   props: {
     type: {
@@ -70,370 +77,12 @@ export default {
       newLang: "",
       mainKeyBoardType: "",
       zhSearchList: [],
-      numberMap: [
-        [
-          {
-            text: "%",
-          },
-          {
-            text: 1,
-          },
-          {
-            text: 2,
-          },
-          {
-            text: 3,
-          },
-          {
-            text: "delete",
-            zhText: "删除",
-            enText: "delete",
-            operate: "delete",
-          },
-        ],
-        [
-          {
-            text: "+",
-          },
-          {
-            text: "4",
-          },
-          {
-            text: 5,
-          },
-          {
-            text: 6,
-          },
-          {
-            text: ".",
-          },
-        ],
-        [
-          {
-            text: "-",
-          },
-          {
-            text: 7,
-          },
-          {
-            text: 8,
-          },
-          {
-            text: 9,
-          },
-          {
-            text: "@",
-          },
-        ],
-        [
-          {
-            text: "/",
-          },
-          {
-            text: "返回",
-            zhText: "返回",
-            enText: "back",
-            operate: "back",
-          },
-          {
-            text: 0,
-          },
-          {
-            text: " ",
-          },
-          {
-            text: "搜索",
-            zhText: "搜索",
-            enText: "search",
-          },
-        ],
-      ],
-      textMap: [
-        [
-          {
-            text: "Q",
-            isText: true,
-          },
-          {
-            text: "W",
-            isText: true,
-          },
-          {
-            text: "E",
-            isText: true,
-          },
-          {
-            text: "R",
-            isText: true,
-          },
-          {
-            text: "T",
-            isText: true,
-          },
-          {
-            text: "Y",
-            isText: true,
-          },
-          {
-            text: "U",
-            isText: true,
-          },
-          {
-            text: "I",
-            isText: true,
-          },
-          {
-            text: "O",
-            isText: true,
-          },
-          {
-            text: "P",
-            isText: true,
-          },
-        ],
-        [
-          {
-            text: "A",
-            isText: true,
-          },
-          {
-            text: "S",
-            isText: true,
-          },
-          {
-            text: "D",
-            isText: true,
-          },
-          {
-            text: "F",
-            isText: true,
-          },
-          {
-            text: "G",
-            isText: true,
-          },
-          {
-            text: "H",
-            isText: true,
-          },
-          {
-            text: "J",
-            isText: true,
-          },
-          {
-            text: "K",
-            isText: true,
-          },
-          {
-            text: "L",
-            isText: true,
-          },
-        ],
-        [
-          {
-            text: "大写",
-            zhText: "大写",
-            enText: "capital",
-            zhLowText: "小写",
-            enLowText: "low",
-            operate: "changeCapital",
-          },
-          {
-            text: "Z",
-            isText: true,
-          },
-          {
-            text: "X",
-            isText: true,
-          },
-          {
-            text: "C",
-            isText: true,
-          },
-          {
-            text: "V",
-            isText: true,
-          },
-          {
-            text: "B",
-            isText: true,
-          },
-          {
-            text: "N",
-            isText: true,
-          },
-          {
-            text: "M",
-            isText: true,
-          },
-          {
-            text: "删除",
-            zhText: "删除",
-            enText: "delete",
-            operate: "delete",
-          },
-        ],
-        [
-          {
-            text: "符",
-            zhText: "符",
-            enText: "symbol",
-            operate: "symbol",
-          },
-          {
-            text: "123",
-            operate: "changeNumber",
-          },
-          {
-            text: ",",
-            zhText: "，",
-            enText: ",",
-          },
-          {
-            text: " ",
-          },
-          {
-            text: "。",
-            zhText: "。",
-            enText: ".",
-          },
-          {
-            text: "中/英",
-            operate: "changeLan",
-            zhText: "中/英",
-            enText: "zh/en",
-          },
-          {
-            text: "搜索",
-            operate: "search",
-            zhText: "搜索",
-            enText: "search",
-          },
-        ],
-      ],
-      cnSymbolMap: [
-        [
-          {
-            text: "【",
-          },
-          {
-            text: "】",
-          },
-          {
-            text: "{",
-          },
-          {
-            text: "}",
-          },
-          {
-            text: "#",
-          },
-          {
-            text: "%",
-          },
-          {
-            text: "^",
-          },
-          {
-            text: "*",
-          },
-          {
-            text: "+",
-          },
-          {
-            text: "=",
-          },
-        ],
-        [
-          {
-            text: "_",
-          },
-          {
-            text: "-",
-          },
-          {
-            text: "\\",
-          },
-          {
-            text: "|",
-          },
-          {
-            text: "~",
-          },
-          {
-            text: "@",
-          },
-          {
-            text: "《",
-          },
-          {
-            text: "》",
-          },
-          {
-            text: "￥",
-          },
-          {
-            text: "$",
-          },
-          {
-            text: "&",
-          },
-          {
-            text: ".",
-          },
-        ],
-        [
-          {
-            text: "123",
-            operate: "changeNumber",
-          },
-          {
-            text: "...",
-          },
-          {
-            text: ",",
-          },
-
-          {
-            text: "^_^",
-          },
-          {
-            text: "?",
-          },
-          {
-            text: "!",
-          },
-          {
-            text: "“",
-          },
-          {
-            text: "”",
-          },
-          {
-            text: "delete",
-            zhText: "删除",
-            enText: "delete",
-            operate: "delete",
-          },
-        ],
-        [
-          {
-            text: "返回",
-            zhText: "返回",
-            enText: "back",
-            operate: "back",
-          },
-          {
-            text: " ",
-          },
-          {
-            text: "搜索",
-            operate: "search",
-            zhText: "搜索",
-            enText: "search",
-          },
-        ],
-      ],
+      ...boardMaps,
+      zhKeys,
+      selectedTextArr: [], //中文已选，待填入的字
+      matchedKeyArr: [], //匹配到的key集合
+      matchedKeyArrSelectedIndex: 0, //已匹配拼音key对应的索引
+      showZhMatchArr: [], //展示的选中后的中文和未选中的拼音
     };
   },
   watch: {
@@ -449,9 +98,53 @@ export default {
     tmpPingying() {
       let matchStr = this.pingyingMap[this.tmpPingying];
       if (matchStr) {
+        this.showZhMatchArr = [];
         this.zhSearchList = matchStr.split("");
       } else {
-        this.zhSearchList = [];
+        let matchResult = [];
+        for (let i = 0; i < this.zhKeys.length - 1; i++) {
+          let item = this.zhKeys[i];
+          let index = this.tmpPingying.indexOf(item);
+          matchResult.push({
+            index,
+            key: item,
+          });
+        }
+        matchResult = matchResult.filter((el) => el.index != -1);
+        let group = {};
+        matchResult.forEach((item) => {
+          if (!group[item.index]) {
+            group[item.index] = [];
+          }
+          group[item.index].push(item);
+        });
+        let groupKeysArray = Object.keys(group);
+        let endMatchPingying = [];
+        groupKeysArray.forEach((item) => {
+          let itemArr = group[item];
+          let maxLen = 0;
+          itemArr.forEach((subItem) => {
+            if (subItem.key.length > maxLen) {
+              maxLen = subItem.key.length;
+              endMatchPingying[Number(subItem.index)] = subItem;
+            }
+          });
+        });
+        let pingyingFilter = [];
+        endMatchPingying.forEach((item, index) => {
+          let prevItem = endMatchPingying[index - 1];
+          if (prevItem) {
+            if (prevItem.index + prevItem.key.length <= item.index) {
+              pingyingFilter.push(item);
+            }
+          } else {
+            pingyingFilter.push(item);
+          }
+        });
+        this.matchedKeyArr = pingyingFilter;
+        this.showZhMatchArr = this.matchedKeyArr.map((item) => item.key);
+        // console.log("matchResult",matchResult)
+        console.log("endMatchPingying", pingyingFilter);
       }
     },
   },
@@ -467,11 +160,12 @@ export default {
       return this[this.curr + "Map"];
     },
     showZhText() {
-      return this.zhSearchList.length && this.newLang == "zh";
+      return this.tmpPingying.length && this.newLang == "zh";
     },
   },
   mounted() {
     this.mainKeyBoardType = this.newLang = this.lang;
+    console.log("zhKeys", this.zhKeys);
   },
   methods: {
     getItemText(el) {
@@ -491,6 +185,31 @@ export default {
       return end;
     },
     computedZhSearhList() {},
+    clickCnTextItem(text) {
+      if (this.matchedKeyArr.length == 0) {
+        this.appendStringItem(text);
+      } else if (
+        this.matchedKeyArrSelectedIndex >=
+        this.matchedKeyArr.length - 1
+      ) {
+        this.showZhMatchArr[this.matchedKeyArrSelectedIndex] = text;
+        let textStr = this.showZhMatchArr.reduce((a, b) => a + b, "");
+        this.appendStringItem(textStr);
+      } else {
+        this.showZhMatchArr[this.matchedKeyArrSelectedIndex] = text;
+        this.showZhMatchArr = [...this.showZhMatchArr];
+        this.matchedKeyArrSelectedIndex++;
+
+        let matchStr = this.pingyingMap[
+          this.showZhMatchArr[this.matchedKeyArrSelectedIndex]
+        ];
+        if (matchStr) {
+          this.zhSearchList = matchStr.split("");
+        }
+
+        console.log(" this.showZhMatchArr", this.showZhMatchArr);
+      }
+    },
     appendStringItem(text) {
       let len = this.valueArr.length - 1;
       this.$set(this.valueArr, len, text);
@@ -543,13 +262,24 @@ export default {
       this.curr = "cnSymbol";
       this.tmpPingying = "";
     },
+    searchFn() {
+      if (
+        this.curr === "text" &&
+        this.zhSearchList.length &&
+        this.newLang == "zh"
+      ) {
+        this.appendStringItem(this.zhSearchList[0]);
+        this.tmpPingying = "";
+      }
+      return;
+    },
     //
   },
 };
 </script>
 <style lang="scss" >
 .input {
-  width: 600px;
+  max-width: 600px;
   height: 300px;
   line-height: 30px;
   border: 1px solid #eee;
@@ -572,7 +302,6 @@ export default {
   animation: flash 0.3s infinite linear;
 }
 .key-board-box {
-  height: 300p;
   width: 100%;
   position: fixed;
   left: 0;
@@ -580,6 +309,7 @@ export default {
   background: #eee;
   padding: 5px;
   user-select: none;
+  box-sizing: border-box;
   .key-board-box-head {
     height: 50px;
     background: #eee;
@@ -596,7 +326,8 @@ export default {
     background: rgba(255, 255, 255, 0.6);
     opacity: 0.8;
     font-size: 14px;
-    padding: 5px 10px;
+    padding: 5px 0;
+    height: 30px;
     flex: 1;
     border-radius: 4px;
     display: flex;
@@ -604,6 +335,16 @@ export default {
     align-content: center;
     transition: 0.5s;
     color: #000;
+    span {
+      line-height: 30px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    &.fn-text {
+      span {
+        font-size: 12px;
+      }
+    }
     &:active {
       background: rgba(255, 255, 255, 1);
       opacity: 0.2;
@@ -620,22 +361,21 @@ export default {
   align-items: center;
   &.zh-text-list-box {
     justify-content: flex-start;
+    align-items: flex-start;
     flex-direction: column;
     .scroll-box {
       display: flex;
     }
     .zh-text-item {
       padding: 0 10px;
+      &.active {
+        color: orange;
+      }
     }
   }
   span {
     & + span {
       margin-left: 5px;
-    }
-  }
-  .zh-text-item {
-    &.actice {
-      color: orange;
     }
   }
 }
