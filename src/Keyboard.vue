@@ -71,14 +71,14 @@ export default {
     return {
       pingyingMap: { ...ZH },
       tmpPingying: "", //临时中文输入
-      valueArr: [],
+      valueArr: [], //已填入的字符串转数组
       curr: "text",
-      isLower: false,
+      isLower: false, //键盘显示小写(如果是英文模式就是输入小写)
       newLang: "",
       mainKeyBoardType: "",
-      zhSearchList: [],
+      zhSearchList: [], //匹配到的可选中文文字列表
       ...boardMaps,
-      zhKeys,
+      zhKeys, //可匹配到的中文拼音
       selectedTextArr: [], //中文已选，待填入的字
       matchedKeyArr: [], //匹配到的key集合
       matchedKeyArrSelectedIndex: 0, //已匹配拼音key对应的索引
@@ -95,6 +95,7 @@ export default {
       },
       immediate: true,
     },
+    //监听键盘输入，拆解拼音
     tmpPingying() {
       let matchStr = this.pingyingMap[this.tmpPingying];
       if (matchStr) {
@@ -149,6 +150,7 @@ export default {
     },
   },
   computed: {
+    //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {
       let t = "";
       this.valueArr.forEach((e) => {
@@ -168,6 +170,9 @@ export default {
     console.log("zhKeys", this.zhKeys);
   },
   methods: {
+    /**
+     * 键盘展示字符串
+     */
     getItemText(el) {
       let end = el.text;
       if (el.operate == "changeCapital") {
@@ -185,6 +190,9 @@ export default {
       return end;
     },
     computedZhSearhList() {},
+    /**
+     * 点击中文待选列表文字
+     */
     clickCnTextItem(text) {
       if (this.matchedKeyArr.length == 0) {
         this.appendStringItem(text);
@@ -194,6 +202,7 @@ export default {
       ) {
         this.showZhMatchArr[this.matchedKeyArrSelectedIndex] = text;
         let textStr = this.showZhMatchArr.reduce((a, b) => a + b, "");
+        this.matchedKeyArrSelectedIndex = 0;
         this.appendStringItem(textStr);
       } else {
         this.showZhMatchArr[this.matchedKeyArrSelectedIndex] = text;
@@ -216,19 +225,23 @@ export default {
       this.valueArr.push('<span class="key-board-flash"></span>');
       this.tmpPingying = "";
     },
+    /***
+     * 按键按下
+     */
     press(val) {
+      //中文输入特殊处理
       if (val.isText && this.newLang == "zh") {
         this.tmpPingying += val.text.toLowerCase();
         return;
       }
-      if (!val.operate) {
-        let text = this.getItemText(val);
-        this.appendStringItem(text);
-      } else {
-        if (typeof this[val.operate + "Fn"] === "function") {
-          this[val.operate + "Fn"](val);
-        }
+      //功能键处理
+      if (val.operate && typeof this[val.operate + "Fn"] === "function") {
+        this[val.operate + "Fn"](val);
+        return;
       }
+      //常规处理
+      let text = this.getItemText(val);
+      this.appendStringItem(text);
     },
     deleteFn() {
       if (this.tmpPingying.length) {
@@ -247,7 +260,6 @@ export default {
       }
     },
     changeCapitalFn() {
-      console.log("大小写");
       this.isLower = !this.isLower;
     },
     changeNumberFn() {
