@@ -12,14 +12,16 @@
               item
             }}</span>
           </div>
-          <div class="scroll-box">
-            <span
-              v-for="(item, index) in zhSearchList"
-              :key="item + index"
-              :class="['zh-text-item', index == 0 ? 'active' : '']"
-              @click="clickCnTextItem(item)"
-              >{{ item }}</span
-            >
+          <div class="scroll-box-wrap">
+            <div class="scroll-box">
+              <span
+                v-for="(item, index) in zhSearchList"
+                :key="item + index"
+                :class="['zh-text-item', index == 0 ? 'active' : '']"
+                @click="clickCnTextItem(item)"
+                >{{ item }}</span
+              >
+            </div>
           </div>
         </div>
         <div class="key-board-box-head-op" v-else>
@@ -499,6 +501,10 @@ export default {
     justify-content: flex-start;
     align-items: flex-start;
     flex-direction: column;
+    .scroll-box-wrap {
+      width: 100%;
+      overflow: auto;
+    }
     .scroll-box {
       display: flex;
     }
