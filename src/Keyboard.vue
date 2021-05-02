@@ -9,7 +9,7 @@
           <!-- <div>{{ this.tmpPingying }}</div> -->
           <div>
             <span v-for="(item, index) in showZhMatchArr" :key="index">{{
-              item
+              zhSelectedAreaItem(item, index)
             }}</span>
           </div>
           <div class="scroll-box-wrap">
@@ -135,11 +135,15 @@ export default {
     //监听键盘输入，拆解拼音
     tmpPingying() {
       let matchStr = this.pingyingMap[this.tmpPingying];
+      //如果直接匹配，就不再做待选文章列表处理
       if (matchStr) {
         this.showZhMatchArr = [];
         this.zhSearchList = matchStr.split("");
       } else {
+        //如果没有匹配，就需要做分词处理
         let matchResult = [];
+        //遍历词库的key，得到可能存在的分词组合,
+        //如果当前输入的拼音有对应山的，返回它在字符串中的索引index，否则为-1
         for (let i = 0; i < this.zhKeys.length - 1; i++) {
           let item = this.zhKeys[i];
           let index = this.tmpPingying.indexOf(item);
@@ -148,7 +152,9 @@ export default {
             key: item,
           });
         }
+        //过滤结果集中不符合条件的元素
         matchResult = matchResult.filter((el) => el.index != -1);
+        console.log("matchResult", matchResult, this.tmpPingying);
         let group = {};
         matchResult.forEach((item) => {
           if (!group[item.index]) {
@@ -180,12 +186,40 @@ export default {
           }
         });
         this.matchedKeyArr = pingyingFilter;
-        this.showZhMatchArr = this.matchedKeyArr.map((item) => item.key);
-        // console.log("matchResult",matchResult)
-        console.log("endMatchPingying", pingyingFilter);
+        //增量修改处理===========================
+        if (this.showZhMatchArr.length == 0) {
+          this.showZhMatchArr = this.matchedKeyArr.map((item) => {
+            let t = { ...item };
+            t.text = t.key;
+            return t;
+          });
+        } else {
+          this.matchedKeyArr.forEach((item, index) => {
+            let showItem = this.showZhMatchArr[index];
+            let newItem = {
+              ...item,
+              text: item.key,
+            };
+            //如果不存在，就追加
+            if (!showItem) {
+              this.showZhMatchArr[index] = newItem;
+            } else {
+              //如果已存在，但是拼音不一样，需要从新赋值
+              // console.log("showItem.key", showItem.key, "item.key", item.key);
+              if (showItem.key !== item.key || showItem.text != showItem.text) {
+                this.showZhMatchArr[index] = newItem;
+              }
+            }
+          });
+          this.showZhMatchArr = [...this.showZhMatchArr];
+        }
       }
-      this.matchedKeyArrSelectedIndex = 0; //只要输入内容有变动，已选中文索引就为0
-      this.updateWillSelectedZhList();
+      //获取已选择的中文占未已输入拼音分词的长度(下一个可更新的待选择元素的索引）
+      let showZhMatchedArrLen = this.showZhMatchArr.filter(
+        (item) => item.text != item.key
+      ).length;
+      this.matchedKeyArrSelectedIndex =
+        showZhMatchedArrLen == 0 ? 0 : showZhMatchedArrLen - 1;
     },
   },
   computed: {
@@ -209,9 +243,15 @@ export default {
   },
   mounted() {
     this.mainKeyBoardType = this.newLang = this.lang;
-    console.log("zhKeys", this.zhKeys);
+    // console.log("zhKeys", this.zhKeys);
   },
   methods: {
+    zhSelectedAreaItem(item) {
+      // if(this.showZhMatchArr.text==this.showZhMatchArr.key){
+      //   return
+      // }
+      return item.text;
+    },
     operateBtnFn(index) {
       switch (index) {
         case 0:
@@ -252,36 +292,54 @@ export default {
      * 更新，待选中文列表
      */
     updateWillSelectedZhList() {
-      let matchStr = this.pingyingMap[
-        this.showZhMatchArr[this.matchedKeyArrSelectedIndex]
-      ];
-      if (matchStr) {
-        this.zhSearchList = matchStr.split("");
+      if (this.showZhMatchArr[this.matchedKeyArrSelectedIndex]) {
+        let matchStr = this.pingyingMap[
+          this.showZhMatchArr[this.matchedKeyArrSelectedIndex].key
+        ];
+        if (matchStr) {
+          this.zhSearchList = matchStr.split("");
+        }
       }
     },
     /**
      * 点击中文待选列表文字
      */
     clickCnTextItem(text) {
+      console.log(
+        "this.matchedKeyArr",
+        this.matchedKeyArr.length,
+        this.matchedKeyArr,
+        "this.matchedKeyArrSelectedIndex",
+        this.matchedKeyArrSelectedIndex
+      );
       if (this.matchedKeyArr.length == 0) {
         this.appendStringItem(text);
       } else if (
         this.matchedKeyArrSelectedIndex >=
         this.matchedKeyArr.length - 1
       ) {
-        this.showZhMatchArr[this.matchedKeyArrSelectedIndex] = text;
-        let textStr = this.showZhMatchArr.reduce((a, b) => a + b, "");
-        this.matchedKeyArrSelectedIndex = 0;
-        this.appendStringItem(textStr);
-      } else {
-        this.showZhMatchArr[this.matchedKeyArrSelectedIndex] = text;
-        this.showZhMatchArr = [...this.showZhMatchArr];
-        this.matchedKeyArrSelectedIndex++;
+        this.showZhMatchArr[this.matchedKeyArrSelectedIndex].text = text;
+        let textStr = "";
+        for (let i = 0; i < this.showZhMatchArr.length; i++) {
+          textStr += this.showZhMatchArr[i].text;
+        }
 
-        this.updateWillSelectedZhList();
+        // console.log(
+        //   " this.showZhMatchArr this.showZhMatchArr",
+        //   this.showZhMatchArr,
+        //   textStr
+        // );
+        this.appendStringItem(textStr);
+        this.matchedKeyArrSelectedIndex = 0;
+      } else {
+        this.showZhMatchArr[this.matchedKeyArrSelectedIndex].text = text;
+        this.showZhMatchArr = [...this.showZhMatchArr];
 
         console.log(" this.showZhMatchArr", this.showZhMatchArr);
       }
+
+      this.matchedKeyArrSelectedIndex++;
+      this.updateWillSelectedZhList();
     },
     appendStringItem(text) {
       let len = this.valueArr.length - 1;
