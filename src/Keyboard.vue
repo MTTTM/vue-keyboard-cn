@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="input" v-html="tmpValue">
+    <div class="input" v-html="tmpValue" @click="fouseFn">
       <!-- <span class="key-board-flash"></span> -->
     </div>
-    <div class="key-board-box">
+    <div class="key-board-box" v-show="show">
       <div class="key-board-box-head">
         <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
           <!-- <div>{{ this.tmpPingying }}</div> -->
@@ -23,9 +23,14 @@
           </div>
         </div>
         <div class="key-board-box-head-op" v-else>
-          <span class="head-op-icon">头像</span>
-          <span class="head-op-icon">键盘</span>
-          <span class="head-op-icon">光标</span>
+          <span
+            class="head-op-icon"
+            v-for="(item, index) in operationList"
+            :key="item.id"
+            :class="[operationActiveIndex == index ? 'active' : '']"
+          >
+            <span :class="item.classs" @click="operateBtnFn(index)"></span>
+          </span>
         </div>
       </div>
       <div class="key-board-box-body">
@@ -69,6 +74,7 @@ export default {
   },
   data() {
     return {
+      show: false,
       pingyingMap: { ...ZH },
       tmpPingying: "", //临时中文输入
       valueArr: [], //已填入的字符串转数组
@@ -83,17 +89,46 @@ export default {
       matchedKeyArr: [], //匹配到的key集合
       matchedKeyArrSelectedIndex: 0, //已匹配拼音key对应的索引
       showZhMatchArr: [], //展示的选中后的中文和未选中的拼音
+      operationActiveIndex: 0, //切换列表高亮索引
+      operationList: [
+        {
+          classs: "icon iconfont icon-keyboard-26",
+          id: 1,
+        },
+        {
+          classs: "icon iconfont icon-smile",
+          id: 2,
+        },
+        {
+          classs: "icon iconfont icon-operation",
+          id: 3,
+        },
+        {
+          classs: "icon iconfont icon-arrow-down-filling",
+          id: 4,
+        },
+      ],
     };
   },
   watch: {
     value: {
       handler(newV, oldV) {
         this.valueArr = this.value.split("");
-        if (!oldV) {
+        if (!oldV && this.show) {
           this.valueArr.push('<span class="key-board-flash"></span>');
         }
       },
       immediate: true,
+    },
+    show(newV) {
+      this.valueArr = this.value.split("");
+      if (newV) {
+        this.valueArr.push('<span class="key-board-flash"></span>');
+      } else {
+        this.valueArr = this.valueArr.filter(
+          (item) => item != '<span class="key-board-flash"></span>'
+        );
+      }
     },
     //监听键盘输入，拆解拼音
     tmpPingying() {
@@ -152,6 +187,9 @@ export default {
     },
   },
   computed: {
+    isFouse() {
+      return this.show;
+    },
     //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {
       let t = "";
@@ -172,6 +210,22 @@ export default {
     console.log("zhKeys", this.zhKeys);
   },
   methods: {
+    operateBtnFn(index) {
+      switch (index) {
+        case 0:
+          break;
+        case 1:
+          break;
+        case 2:
+          break;
+        case 3:
+          this.show = false;
+          break;
+      }
+    },
+    fouseFn() {
+      this.show = true;
+    },
     /**
      * 键盘展示字符串
      */
@@ -298,6 +352,57 @@ export default {
 };
 </script>
 <style lang="scss" >
+@font-face {
+  font-family: "iconfont"; /* Project id 2524527 */
+  src: url("./assets/font/iconfont.woff2?t=1619945697477") format("woff2"),
+    url("./assets/font/iconfont.woff?t=1619945697477") format("woff"),
+    url("./assets/font/iconfont.ttf?t=1619945697477") format("truetype");
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-delete:before {
+  content: "\e66a";
+}
+
+.icon-keyboard-26:before {
+  content: "\e675";
+}
+
+.icon-operation:before {
+  content: "\e679";
+}
+
+.icon-smile:before {
+  content: "\e67e";
+}
+
+.icon-setting:before {
+  content: "\e67d";
+}
+
+.icon-arrow-up-filling:before {
+  content: "\e688";
+}
+
+.icon-arrow-down-filling:before {
+  content: "\e689";
+}
+
+.icon-arrow-left-filling:before {
+  content: "\e68a";
+}
+
+.icon-arrow-right-filling:before {
+  content: "\e68b";
+}
+
 .input {
   max-width: 600px;
   height: 300px;
@@ -379,6 +484,17 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  .head-op-icon {
+    height: 40px;
+    font-size: 14px;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &.active {
+      color: orange;
+    }
+  }
   &.zh-text-list-box {
     justify-content: flex-start;
     align-items: flex-start;
