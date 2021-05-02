@@ -147,6 +147,8 @@ export default {
         // console.log("matchResult",matchResult)
         console.log("endMatchPingying", pingyingFilter);
       }
+      this.matchedKeyArrSelectedIndex = 0; //只要输入内容有变动，已选中文索引就为0
+      this.updateWillSelectedZhList();
     },
   },
   computed: {
@@ -191,6 +193,17 @@ export default {
     },
     computedZhSearhList() {},
     /**
+     * 更新，待选中文列表
+     */
+    updateWillSelectedZhList() {
+      let matchStr = this.pingyingMap[
+        this.showZhMatchArr[this.matchedKeyArrSelectedIndex]
+      ];
+      if (matchStr) {
+        this.zhSearchList = matchStr.split("");
+      }
+    },
+    /**
      * 点击中文待选列表文字
      */
     clickCnTextItem(text) {
@@ -209,12 +222,7 @@ export default {
         this.showZhMatchArr = [...this.showZhMatchArr];
         this.matchedKeyArrSelectedIndex++;
 
-        let matchStr = this.pingyingMap[
-          this.showZhMatchArr[this.matchedKeyArrSelectedIndex]
-        ];
-        if (matchStr) {
-          this.zhSearchList = matchStr.split("");
-        }
+        this.updateWillSelectedZhList();
 
         console.log(" this.showZhMatchArr", this.showZhMatchArr);
       }
