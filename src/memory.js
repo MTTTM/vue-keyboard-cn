@@ -54,7 +54,6 @@ export const setPingying=(pingying="",zhStr="")=>{
    }
    else{
      let index=store[pingying].findIndex(item=>item.key==pingying&&item.zh==zhStr);
-     console.log("input",index,pingying,zhStr)
      if(index==-1){
       store[pingying].push({
         key:pingying,
@@ -77,7 +76,7 @@ export const matchHotPingying=(pingyingStr)=>{
   let getStore=Object.keys(obj);
   let arr=getFullPingMatchObjKey(pingyingStr,getStore)[0];
   if(arr&&arr.key&&obj[arr.key]){
-    return obj[arr.key].sort((a,b)=>b.order-a.order);
+    return obj[arr.key].sort((a,b)=>b.order-a.order).slice(0,3);//只返回最热的三条
   }
   else{
     return []
