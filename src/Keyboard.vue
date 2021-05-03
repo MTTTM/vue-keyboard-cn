@@ -6,14 +6,16 @@
     <div class="key-board-box" v-show="show">
       <div class="key-board-box-head">
         <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
-          <!-- <div>{{ this.tmpPingying }}</div> -->
+          <!-- 展示拼音输入和已选择中文的区域 -->
           <div>
             <span v-for="(item, index) in showZhMatchArr" :key="index">{{
               zhSelectedAreaItem(item, index)
             }}</span>
           </div>
+          <!-- 展示待选择的中文列表 -->
           <div class="scroll-box-wrap">
             <div class="scroll-box">
+              <!-- 用户曾经输入的词列表 -->
               <template v-if="showzhMemoryResult">
                 <span
                   v-for="(item, index) in zhMemoryResult"
@@ -23,7 +25,7 @@
                   >{{ item.zh }}</span
                 >
               </template>
-
+              <!-- 单字，可选列表 -->
               <span
                 v-for="(item, index) in zhSearchList"
                 :key="item + index"
@@ -35,6 +37,7 @@
           </div>
         </div>
         <div class="key-board-box-head-op" v-else>
+          <!-- 键盘设置列表 -->
           <span
             class="head-op-icon"
             v-for="(item, index) in operationList"
