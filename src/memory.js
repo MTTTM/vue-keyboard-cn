@@ -1,4 +1,4 @@
-import { getPingMatchObjKey } from "./tools.js";
+import { getFullPingMatchObjKey } from "./tools.js";
 const localStoreKey = "vue-keyboard-cn-store";
 /**
  * 存储的格式入:
@@ -54,6 +54,7 @@ export const setPingying=(pingying="",zhStr="")=>{
    }
    else{
      let index=store[pingying].findIndex(item=>item.key==pingying&&item.zh==zhStr);
+     console.log("input",index,pingying,zhStr)
      if(index==-1){
       store[pingying].push({
         key:pingying,
@@ -72,11 +73,9 @@ export const setPingying=(pingying="",zhStr="")=>{
  * @param {*} pingyingStr 
  */
 export const matchHotPingying=(pingyingStr)=>{
-  //const zhKeys = Object.keys(ZH);
   let obj=getItem();
   let getStore=Object.keys(obj);
-  let arr=getPingMatchObjKey(pingyingStr,getStore)[0];
-
+  let arr=getFullPingMatchObjKey(pingyingStr,getStore)[0];
   if(arr&&arr.key&&obj[arr.key]){
     return obj[arr.key].sort((a,b)=>b.order-a.order);
   }

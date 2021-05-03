@@ -229,10 +229,21 @@ export default {
   computed: {
     showzhMemoryResult() {
       let zhMatchItem = this.showZhMatchArr[0];
-      console.log("zhMatchItem", zhMatchItem);
-      if (zhMatchItem && zhMatchItem.text === zhMatchItem.key) {
+      let pingyinglen = this.tmpPingying.length;
+      //用户没有做选择前
+      //用户输入的拼音和历史记忆匹配的key完全相等时候
+      //才显示推荐的历史输入
+      //  let key = this.zhMemoryResult[0] ? this.zhMemoryResult[0].key : "";
+      //  console.log("xxx", this.zhMemoryResult, "pingyinglen", pingyinglen);
+      if (
+        zhMatchItem &&
+        zhMatchItem.text === zhMatchItem.key &&
+        this.zhMemoryResult[0] &&
+        pingyinglen == this.zhMemoryResult[0].key.length
+      ) {
         return true;
       }
+
       return false;
     },
     isFouse() {
@@ -262,12 +273,8 @@ export default {
     getHotzhSearchList() {
       let memoryResult = matchHotPingying(this.tmpPingying);
       this.zhMemoryResult = memoryResult;
-      // console.log("memoryResult", memoryResult);
     },
     zhSelectedAreaItem(item) {
-      // if(this.showZhMatchArr.text==this.showZhMatchArr.key){
-      //   return
-      // }
       return item.text;
     },
     operateBtnFn(index) {
@@ -351,7 +358,7 @@ export default {
      * 历史记录匹配到的词
      */
     clickCnTextItemObj(item) {
-      //console.log("item", item);
+      setPingying(this.tmpPingying, item.zh); //存到热词的优先级
       this.appendStringItem(item.zh);
       this.matchedKeyArrSelectedIndex = 0;
     },
