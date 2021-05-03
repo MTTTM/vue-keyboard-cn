@@ -58,6 +58,7 @@
 import ZH from "./zh";
 import boardMaps from "./boardMaps";
 const zhKeys = Object.keys(ZH);
+import { getAllIndex } from "./tools.js";
 export default {
   props: {
     type: {
@@ -146,15 +147,17 @@ export default {
         //如果当前输入的拼音有对应山的，返回它在字符串中的索引index，否则为-1
         for (let i = 0; i < this.zhKeys.length - 1; i++) {
           let item = this.zhKeys[i];
-          let index = this.tmpPingying.indexOf(item);
-          matchResult.push({
-            index,
-            key: item,
+          let indexArr = getAllIndex(this.tmpPingying, item);
+          indexArr.forEach((elIndex) => {
+            matchResult.push({
+              index: elIndex,
+              key: item,
+            });
           });
         }
         //过滤结果集中不符合条件的元素
         matchResult = matchResult.filter((el) => el.index != -1);
-        console.log("matchResult", matchResult, this.tmpPingying);
+        // console.log("matchResult", matchResult, this.tmpPingying);
         let group = {};
         matchResult.forEach((item) => {
           if (!group[item.index]) {
