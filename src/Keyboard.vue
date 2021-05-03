@@ -14,6 +14,16 @@
           </div>
           <div class="scroll-box-wrap">
             <div class="scroll-box">
+              <template v-if="showzhMemoryResult">
+                <span
+                  v-for="(item, index) in zhMemoryResult"
+                  :key="item.zh + index"
+                  :class="['zh-text-item', index == 0 ? 'active' : '']"
+                  @click="clickCnTextItemObj(item)"
+                  >{{ item.zh }}</span
+                >
+              </template>
+
               <span
                 v-for="(item, index) in zhSearchList"
                 :key="item + index"
@@ -58,7 +68,8 @@
 import ZH from "./zh";
 import boardMaps from "./boardMaps";
 const zhKeys = Object.keys(ZH);
-import { getAllIndex } from "./tools.js";
+import { getPingMatchObjKey } from "./tools.js";
+import { matchHotPingying, setPingying } from "./memory.js";
 export default {
   props: {
     type: {
@@ -86,6 +97,7 @@ export default {
       newLang: "",
       mainKeyBoardType: "",
       zhSearchList: [], //匹配到的可选中文文字列表
+      zhMemoryResult: [], //历史记录中，匹配到可选的中文文字列表{key:"nih",order:1,zh:"你好"}
       ...boardMaps,
       zhKeys, //可匹配到的中文拼音
       selectedTextArr: [], //中文已选，待填入的字
@@ -142,22 +154,11 @@ export default {
         this.zhSearchList = matchStr.split("");
       } else {
         //如果没有匹配，就需要做分词处理
-        let matchResult = [];
-        //遍历词库的key，得到可能存在的分词组合,
-        //如果当前输入的拼音有对应山的，返回它在字符串中的索引index，否则为-1
-        for (let i = 0; i < this.zhKeys.length - 1; i++) {
-          let item = this.zhKeys[i];
-          let indexArr = getAllIndex(this.tmpPingying, item);
-          indexArr.forEach((elIndex) => {
-            matchResult.push({
-              index: elIndex,
-              key: item,
-            });
-          });
-        }
-        //过滤结果集中不符合条件的元素
-        matchResult = matchResult.filter((el) => el.index != -1);
+        // let memoryResult = matchHotPingying(this.tmpPingying);
+        this.getHotzhSearchList(); //根据历史输入，获取可能待选的中文列表
+        let matchResult = getPingMatchObjKey(this.tmpPingying, this.zhKeys);
         // console.log("matchResult", matchResult, this.tmpPingying);
+
         let group = {};
         matchResult.forEach((item) => {
           if (!group[item.index]) {
@@ -226,6 +227,14 @@ export default {
     },
   },
   computed: {
+    showzhMemoryResult() {
+      let zhMatchItem = this.showZhMatchArr[0];
+      console.log("zhMatchItem", zhMatchItem);
+      if (zhMatchItem && zhMatchItem.text === zhMatchItem.key) {
+        return true;
+      }
+      return false;
+    },
     isFouse() {
       return this.show;
     },
@@ -249,6 +258,12 @@ export default {
     // console.log("zhKeys", this.zhKeys);
   },
   methods: {
+    //从历史输入中匹配当前拼音
+    getHotzhSearchList() {
+      let memoryResult = matchHotPingying(this.tmpPingying);
+      this.zhMemoryResult = memoryResult;
+      // console.log("memoryResult", memoryResult);
+    },
     zhSelectedAreaItem(item) {
       // if(this.showZhMatchArr.text==this.showZhMatchArr.key){
       //   return
@@ -308,13 +323,6 @@ export default {
      * 点击中文待选列表文字
      */
     clickCnTextItem(text) {
-      console.log(
-        "this.matchedKeyArr",
-        this.matchedKeyArr.length,
-        this.matchedKeyArr,
-        "this.matchedKeyArrSelectedIndex",
-        this.matchedKeyArrSelectedIndex
-      );
       if (this.matchedKeyArr.length == 0) {
         this.appendStringItem(text);
       } else if (
@@ -326,12 +334,7 @@ export default {
         for (let i = 0; i < this.showZhMatchArr.length; i++) {
           textStr += this.showZhMatchArr[i].text;
         }
-
-        // console.log(
-        //   " this.showZhMatchArr this.showZhMatchArr",
-        //   this.showZhMatchArr,
-        //   textStr
-        // );
+        setPingying(this.tmpPingying, textStr); //存到热词里面去
         this.appendStringItem(textStr);
         this.matchedKeyArrSelectedIndex = 0;
       } else {
@@ -343,6 +346,14 @@ export default {
 
       this.matchedKeyArrSelectedIndex++;
       this.updateWillSelectedZhList();
+    },
+    /**
+     * 历史记录匹配到的词
+     */
+    clickCnTextItemObj(item) {
+      //console.log("item", item);
+      this.appendStringItem(item.zh);
+      this.matchedKeyArrSelectedIndex = 0;
     },
     appendStringItem(text) {
       let len = this.valueArr.length - 1;
@@ -573,6 +584,7 @@ export default {
     }
     .zh-text-item {
       padding: 0 10px;
+      white-space: nowrap;
       &.active {
         color: orange;
       }
