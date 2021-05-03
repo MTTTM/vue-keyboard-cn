@@ -43,6 +43,10 @@ export const setItem=(obj={})=>{
  * @param {*} zhStr 
  */
 export const setPingying=(pingying="",zhStr="")=>{
+  //热词长度限制
+  if(!pingying||pingying.length>20){
+    return;
+  }
   let store=getItem();
    if(!store[pingying]){
     store[pingying]=[];
