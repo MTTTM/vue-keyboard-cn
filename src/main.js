@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-
+import kbInput from "./input.vue";
+import keyBoard from "./board.vue";
 Vue.config.productionTip = false
-import Keyboard from "./index";
+Vue.component("ky-input",kbInput)
+Vue.component("key-board",keyBoard)
 new Vue({
   render: h => h(App),
 }).$mount('#app')

@@ -1,16 +1,19 @@
 <template>
   <div id="app">
-    <Keyboard :value="value" type="number" />
+    <!-- <Keyboard :value="value" type="number" /> -->
+    <!-- <p>{{ value }}</p> -->
+    <ky-input v-model="value" />
+    <key-board :value="value" />
   </div>
 </template>
 
 <script>
-import Keyboard from "./index";
+// import Keyboard from "./index";
 export default {
   name: "App",
-  components: {
-    Keyboard,
-  },
+  // components: {
+  //   Keyboard,
+  // },
   data() {
     return {
       value:
