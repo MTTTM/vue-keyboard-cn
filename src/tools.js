@@ -81,6 +81,9 @@ var emojiIndexObj={};
 while ((result = patt.exec(str)) != null)  {
   emojiIndexObj[result.index]=result[0]
  }
+ if(!Object.keys(emojiIndexObj).length){
+  return str.split("");
+}
  let endResult=[];//最终分割数组
  let normallArrayPushIndex=0;//普通字段的数组索引
  for(let key in emojiIndexObj){

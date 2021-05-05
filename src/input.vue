@@ -42,12 +42,12 @@ export default {
   },
   watch: {
     value: {
-      handler(newV) {
-        this.valueArr = splitStringToArray(newV);
+      handler() {
+        this.valueArr = splitStringToArray(this.value);
         if (this.isFocus) {
           this.valueArr.push(flashBlock);
         }
-        console.log("this.valueArr", this.valueArr);
+        console.log("this.valueArr", this.valueArr, this.value);
       },
       immediate: true,
     },
@@ -61,6 +61,7 @@ export default {
     },
   },
   created() {
+    //   this.valueArr = splitStringToArray(this.value);
     //监听键盘关闭事件
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
       this.isFocus = bool;
@@ -70,8 +71,6 @@ export default {
       let len = this.valueArr.length - 1;
       this.valueArr[len] = text;
       this.valueArr.push('<span class="key-board-flash"></span>');
-      // this.valueArr = data;
-      // console.log("append", data, this.tmpValue);
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     });
     //删除

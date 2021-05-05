@@ -8,13 +8,19 @@
 </head>
 <body>
   <script>
-    var str = "0000<span src='ssss'/>111<img src='jjyy'/><img src='jjyy'/>";
+  //  var str = "0000<span src='ssss'/>111<img src='jjyy'/><img src='jjyy'/>";
+  var str="123123123123123123123123123123123123123123123123123euwrweirewr456euwrweirewr456euwrweirewr456euwrweirewr456euwrweirewr456"
 var patt = new RegExp(/<[^>]+>/,"g");
 var result;
 var normarlStringArray=str.split(/<[^>]+>/);
 var emojiIndexObj={};
 while ((result = patt.exec(str)) != null)  {
   emojiIndexObj[result.index]=result[0]
+ }
+ if(!Object.keys(emojiIndexObj).length){
+   let t=str.split("");
+   console.log("ttt",t)
+  // return t;
  }
  let endResult=[];//最终分割数组
  let normallArrayPushIndex=0;//普通字段的数组索引
