@@ -402,6 +402,7 @@ export default {
       } else {
         let len = this.valueArr.length - 2;
         this.valueArr.splice(len, 2, '<span class="key-board-flash"></span>');
+        this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);
       }
     },
     changeLanFn() {

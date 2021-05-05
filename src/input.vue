@@ -3,6 +3,7 @@
 </template>
 <script>
 import EventKeys from "./eventKeys";
+const flashBlock = '<span class="key-board-flash"></span>';
 export default {
   props: {
     value: {
@@ -29,26 +30,31 @@ export default {
       });
       return t;
     },
+    tmpValueNoFlash() {
+      let t = "";
+      let tmpArray = this.valueArr.filter((item) => item != flashBlock);
+      tmpArray.forEach((e) => {
+        t += e;
+      });
+      return t;
+    },
   },
   watch: {
     value: {
-      handler(newV, oldV) {
+      handler() {
         this.valueArr = this.value.split("");
-        if (!oldV && this.show) {
-          this.valueArr.push('<span class="key-board-flash"></span>');
+        if (this.isFocus) {
+          this.valueArr.push(flashBlock);
         }
       },
       immediate: true,
     },
     isFocus(newV) {
       this.valueArr = this.value.split("");
-      console.log("newV", newV);
       if (newV) {
-        this.valueArr.push('<span class="key-board-flash"></span>');
+        this.valueArr.push(flashBlock);
       } else {
-        this.valueArr = this.valueArr.filter(
-          (item) => item != '<span class="key-board-flash"></span>'
-        );
+        this.valueArr = this.valueArr.filter((item) => item != flashBlock);
       }
     },
   },
@@ -61,10 +67,19 @@ export default {
     this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (data) => {
       this.valueArr = data;
       console.log("append", data, this.tmpValue);
-      this.$emit("change", this.tmpValue); //同步给外层
+      this.$emit("change", this.tmpValueNoFlash); //同步给外层
+    });
+    //删除
+    this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
+      this.deleteFn();
     });
   },
   methods: {
+    deleteFn() {
+      let len = this.valueArr.length - 2;
+      this.valueArr.splice(len, 2, flashBlock);
+      this.$emit("change", this.tmpValueNoFlash); //同步给外层
+    },
     focus(bool = false) {
       this.isFocus = bool;
       this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], {
