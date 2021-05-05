@@ -4,6 +4,7 @@
 <script>
 import EventKeys from "./eventKeys";
 const flashBlock = '<span class="key-board-flash"></span>';
+import { splitStringToArray } from "./tools.js";
 export default {
   props: {
     value: {
@@ -41,11 +42,12 @@ export default {
   },
   watch: {
     value: {
-      handler() {
-        this.valueArr = this.value.split("");
+      handler(newV) {
+        this.valueArr = splitStringToArray(newV);
         if (this.isFocus) {
           this.valueArr.push(flashBlock);
         }
+        console.log("this.valueArr", this.valueArr);
       },
       immediate: true,
     },
@@ -81,6 +83,7 @@ export default {
     deleteFn() {
       let len = this.valueArr.length - 2;
       this.valueArr.splice(len, 2, flashBlock);
+      console.log("delete", this.valueArr, this.tmpValueNoFlash);
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     focus(bool = false) {

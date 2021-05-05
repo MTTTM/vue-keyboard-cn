@@ -49,7 +49,7 @@ export default {
     appendItem(item) {
       this.$root.$emit(
         EventKeys["vue-keyboard-cn-append-item"],
-        `<span style="background-image: url(${item.path})" class="emoji-icon icon-${item.key}"></span>`
+        `<img src="${item.path}" class="emoji-icon icon-${item.key}"/>`
       );
     },
   },
