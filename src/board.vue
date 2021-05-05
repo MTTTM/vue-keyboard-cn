@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="key-board-box" v-show="show">
+    <div>
       <div class="key-board-box-head">
         <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
           <!-- 展示拼音输入和已选择中文的区域 -->
@@ -33,8 +33,7 @@
             </div>
           </div>
         </div>
-        <div class="key-board-box-head-op" v-else>
-          <!-- 键盘设置列表 -->
+        <!-- <div class="key-board-box-head-op" v-else>
           <span
             class="head-op-icon"
             v-for="(item, index) in operationList"
@@ -43,7 +42,7 @@
           >
             <span :class="item.classs" @click="operateBtnFn(index)"></span>
           </span>
-        </div>
+        </div> -->
       </div>
       <div class="key-board-box-body">
         <div
@@ -268,12 +267,12 @@ export default {
   mounted() {
     this.mainKeyBoardType = this.newLang = this.lang;
     // console.log("zhKeys", this.zhKeys);
-    this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
-      console.log("data", data);
-      let { isFocus, value } = data;
-      this.show = isFocus;
-      this.valueArr = value; //直接引用
-    });
+    // this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
+    //   console.log("data", data);
+    //   let { isFocus, value } = data;
+    //   this.show = isFocus;
+    //   this.valueArr = value; //直接引用
+    // });
   },
   methods: {
     //从历史输入中匹配当前拼音
@@ -284,20 +283,20 @@ export default {
     zhSelectedAreaItem(item) {
       return item.text;
     },
-    operateBtnFn(index) {
-      switch (index) {
-        case 0:
-          break;
-        case 1:
-          break;
-        case 2:
-          break;
-        case 3:
-          this.show = false;
-          this.$root.$emit(EventKeys["vue-keyboard-cn-show"], false);
-          break;
-      }
-    },
+    // operateBtnFn(index) {
+    //   switch (index) {
+    //     case 0:
+    //       break;
+    //     case 1:
+    //       break;
+    //     case 2:
+    //       break;
+    //     case 3:
+    //       this.show = false;
+    //       this.$root.$emit(EventKeys["vue-keyboard-cn-show"], false);
+    //       break;
+    //   }
+    // },
     fouseFn() {
       this.show = true;
     },
@@ -371,11 +370,11 @@ export default {
       this.matchedKeyArrSelectedIndex = 0;
     },
     appendStringItem(text) {
-      let len = this.valueArr.length - 1;
-      this.valueArr[len] = text;
-      this.valueArr.push('<span class="key-board-flash"></span>');
+      // let len = this.valueArr.length - 1;
+      // this.valueArr[len] = text;
+      // this.valueArr.push('<span class="key-board-flash"></span>');
       this.tmpPingying = "";
-      this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], this.valueArr);
+      this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
     },
     /***
      * 按键按下

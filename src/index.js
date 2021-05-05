@@ -1,7 +1,7 @@
 
-import Keyboard from './Keyboard.vue'
+import input from './input.vue'
 
-Keyboard.install = function(Vue) {
-  Vue.component(Keyboard.name, Keyboard)
+input.install = function(Vue) {
+  Vue.component('input', Keyboard)
 }
 export default Keyboard

@@ -64,9 +64,12 @@ export default {
       this.isFocus = bool;
     });
     //监听键盘内容输入
-    this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (data) => {
-      this.valueArr = data;
-      console.log("append", data, this.tmpValue);
+    this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
+      let len = this.valueArr.length - 1;
+      this.valueArr[len] = text;
+      this.valueArr.push('<span class="key-board-flash"></span>');
+      // this.valueArr = data;
+      // console.log("append", data, this.tmpValue);
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     });
     //删除
