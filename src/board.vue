@@ -399,8 +399,8 @@ export default {
         let len = this.tmpPingying.length - 1;
         this.tmpPingying = this.tmpPingying.slice(0, len);
       } else {
-        let len = this.valueArr.length - 2;
-        this.valueArr.splice(len, 2, '<span class="key-board-flash"></span>');
+        // let len = this.valueArr.length - 2;
+        // this.valueArr.splice(len, 2, '<span class="key-board-flash"></span>');
         this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);
       }
     },
@@ -524,7 +524,7 @@ export default {
   left: 0;
   bottom: 0;
   background: #eee;
-  padding: 5px;
+  padding: 5px 0;
   user-select: none;
   box-sizing: border-box;
   .key-board-box-head {
@@ -532,6 +532,7 @@ export default {
     background: #eee;
   }
   .key-board-box-body {
+    padding: 0 5px;
   }
   .key-board-box-item-wrap {
     display: flex;
@@ -593,6 +594,7 @@ export default {
     flex-direction: column;
     .scroll-box-wrap {
       width: 100%;
+      padding: 5px 5px;
       overflow: auto;
     }
     .scroll-box {

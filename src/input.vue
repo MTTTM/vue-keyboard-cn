@@ -88,7 +88,6 @@ export default {
     deleteFn() {
       let len = this.valueArr.length - 2;
       this.valueArr.splice(len, 2, flashBlock);
-      // console.log("delete", this.valueArr, this.tmpValueNoFlash);
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     focus(bool = false) {

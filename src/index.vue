@@ -1,15 +1,16 @@
 <template>
   <div>
-    <div class="key-board-box" v-show="show" @touchstart.prevent.stop>
+    <div class="key-board-box" v-show="show">
       <div class="key-board-box-head-op">
         <!-- 键盘设置列表 -->
         <span
           class="head-op-icon"
           v-for="(item, index) in operationList"
           :key="item.id"
+          @click.prevent.stop="operateBtnFn(index)"
           :class="[operationActiveIndex == index ? 'active' : '']"
         >
-          <span :class="item.classs" @click="operateBtnFn(index)"></span>
+          <span :class="item.classs"></span>
         </span>
       </div>
       <component v-bind:is="currentView" :emojiMap="emojiMap"></component>
@@ -85,6 +86,8 @@ export default {
       this.currentView = path;
     },
     operateBtnFn(index) {
+      this.operationActiveIndex = index;
+      console.log("切换", index);
       switch (index) {
         case 0:
           this.changeView("board");
@@ -186,13 +189,15 @@ export default {
   animation: flash 0.3s infinite linear;
 }
 .key-board-box {
+  touch-action: none;
+  user-select: none;
   width: 100%;
   height: 300px;
   position: fixed;
   left: 0;
   bottom: 0;
   background: #eee;
-  padding: 5px;
+  padding: 5px 0;
   user-select: none;
   box-sizing: border-box;
   .key-board-box-head {

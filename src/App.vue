@@ -9,13 +9,15 @@
 
 <script>
 // import Keyboard from "./index";
-import { person } from "./emojiImages.js";
+import { person, hearts, symbo } from "./emojiImages.js";
 export default {
   name: "App",
   data() {
     return {
       emoji: {
         person,
+        hearts,
+        symbo,
       },
       value: "4w",
     };
