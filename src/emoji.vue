@@ -80,6 +80,7 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .emoj-wrap-body {
   position: relative;
   height: 208px;

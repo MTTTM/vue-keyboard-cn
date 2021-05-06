@@ -47,7 +47,7 @@ export default {
     return {
       show: false,
       currentView: "",
-      operationActiveIndex: 0, //切换列表高亮索引
+      operationActiveIndex: 2, //切换列表高亮索引
       operationList: [
         {
           classs: "icon iconfont icon-keyboard-26",
@@ -80,6 +80,7 @@ export default {
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
       this.show = bool;
     });
+    this.operateBtnFn(this.operationActiveIndex);
   },
   methods: {
     changeView(path = "board") {
@@ -111,23 +112,21 @@ export default {
 <style lang="scss" >
 @font-face {
   font-family: "iconfont"; /* Project id 2524527 */
-  src: url("./assets/font/iconfont.woff2?t=1619945697477") format("woff2"),
-    url("./assets/font/iconfont.woff?t=1619945697477") format("woff"),
-    url("./assets/font/iconfont.ttf?t=1619945697477") format("truetype");
+  src: url("./assets/font/iconfont.woff2?t=1620317185581") format("woff2"),
+    url("./assets/font/iconfont.woff?t=1620317185581") format("woff"),
+    url("./assets/font/iconfont.ttf?t=1620317185581") format("truetype");
 }
-.emoji-icon {
-  width: 20px;
-  height: 20px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  display: inline-block;
-}
+
 .iconfont {
   font-family: "iconfont" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-enter:before {
+  content: "\e673";
 }
 
 .icon-delete:before {

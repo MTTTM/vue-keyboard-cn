@@ -101,7 +101,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .vue-keyboard-input {
   max-width: 600px;
   height: 300px;
@@ -123,6 +123,10 @@ export default {
     height: 12px;
     background: red;
     animation: flash 0.3s infinite linear;
+  }
+  .emoji-icon {
+    width: 20px;
+    height: 20px;
   }
 }
 </style>
