@@ -4,6 +4,7 @@
     <p v-html="value"></p>
     <ky-input v-model="value" />
     <key-board :value="value" :emojiMap="emoji" />
+    <div style="height: 899px"></div>
   </div>
 </template>
 

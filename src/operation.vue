@@ -4,10 +4,11 @@
       <div class="operation-wrap-left-pancel">
         <!-- 上下 -->
         <span
-          class="operation-btn operation-btn-top icon iconfont icon-arrow-up-filling"
-        ></span>
+          class="operation-btn operation-btn-top icon iconfont icon-bg-next"
+        >
+        </span>
         <span
-          class="operation-btn operation-btn-btm icon iconfont icon-arrow-down-filling"
+          class="operation-btn operation-btn-btm icon icon iconfont icon-bg-next"
         ></span>
         <!-- 左右 -->
         <span
@@ -54,9 +55,11 @@ export default {
   .operation-wrap-right {
     flex: 1;
     display: flex;
+
     .operation-wrap-right-inner {
       width: 50%;
     }
+
     .operation-wrap-right-item {
       width: 60px;
       height: 40px;
@@ -67,10 +70,12 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+
       & + .operation-wrap-right-item {
         margin-top: 10px;
       }
-      &.iconfont {
+      &.iconfont,
+      .iconfont {
         font-size: 25px;
       }
       &:active {
@@ -93,22 +98,34 @@ export default {
     color: #666;
     font-size: 32px;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
     &:active {
       color: #000;
     }
+    .operation-btn-top-line {
+      &::before {
+        content: "";
+        display: block;
+        width: 15px;
+        height: 1px;
+        background: #333;
+      }
+    }
   }
   .operation-btn-top {
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(-90deg);
     top: 5px;
+    font-size: 24px;
   }
   .operation-btn-btm {
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(90deg);
     bottom: 5px;
+    font-size: 24px;
   }
   .operation-btn-left {
     top: 50%;

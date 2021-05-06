@@ -1,7 +1,7 @@
 <template>
-  <div class="emoji-wrap">
+  <div class="emoji-wrap" @touchmove.stop.prevent>
     <div class="emoj-wrap-body">
-      <div class="emoj-wrap-body-inner">
+      <div class="emoj-wrap-body-inner" @touchmove.stop>
         <div
           class="emoj-wrap-body-item"
           v-for="item in currEmojList"

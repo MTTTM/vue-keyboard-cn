@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @touchmove.prevent.stop>
     <div class="key-board-box" v-show="show">
       <div class="key-board-box-head-op">
         <!-- 键盘设置列表 -->
@@ -125,6 +125,26 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-iconfontsvgnext:before {
+  content: "\e629";
+}
+
+.icon-bg-next:before {
+  content: "\e649";
+}
+
+.icon-24gf-previous:before {
+  content: "\ea88";
+}
+
+.icon-bg-previous:before {
+  content: "\e645";
+}
+
+.icon-skip-previous:before {
+  content: "\e8d7";
+}
+
 .icon-enter:before {
   content: "\e673";
 }
@@ -147,14 +167,6 @@ export default {
 
 .icon-setting:before {
   content: "\e67d";
-}
-
-.icon-arrow-up-filling:before {
-  content: "\e688";
-}
-
-.icon-arrow-down-filling:before {
-  content: "\e689";
 }
 
 .icon-arrow-left-filling:before {
