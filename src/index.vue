@@ -86,8 +86,9 @@ export default {
       this.currentView = path;
     },
     operateBtnFn(index) {
-      this.operationActiveIndex = index;
-      console.log("切换", index);
+      if (index != 3) {
+        this.operationActiveIndex = index;
+      }
       switch (index) {
         case 0:
           this.changeView("board");

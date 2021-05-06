@@ -18,7 +18,7 @@
                   v-for="(item, index) in zhMemoryResult"
                   :key="item.zh + index"
                   :class="['zh-text-item', index == 0 ? 'active' : '']"
-                  @click="clickCnTextItemObj(item)"
+                  @click.stop.prevent="clickCnTextItemObj(item)"
                   >{{ item.zh }}</span
                 >
               </template>
@@ -27,7 +27,7 @@
                 v-for="(item, index) in zhSearchList"
                 :key="item + index"
                 :class="['zh-text-item', index == 0 ? 'active' : '']"
-                @click="clickCnTextItem(item)"
+                @click.stop.prevent="clickCnTextItem(item)"
                 >{{ item }}</span
               >
             </div>
@@ -54,7 +54,7 @@
             :class="['key-board-box-item', el.operate ? 'fn-text' : '']"
             v-for="(el, i) in item"
             :key="index + '_' + i"
-            @click="press(el)"
+            @touchstart.stop.prevent="press(el)"
           >
             <span>{{ getItemText(el) }}</span>
           </div>
