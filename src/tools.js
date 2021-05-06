@@ -73,51 +73,26 @@ export const getPingMatchObjKey=(pingyingStr="",objKeys=[])=>{
  * @returns 
  */
 export const splitStringToArray=(str)=>{
- // var str = "0000<span src='ssss'/>111<img src='jjyy'/><img src='jjyy'/>";
-var patt = new RegExp(/<[^>]+>/,"g");
-var result;
-var normarlStringArray=str.split(/<[^>]+>/);
-var emojiIndexObj={};
-while ((result = patt.exec(str)) != null)  {
-  emojiIndexObj[result.index]=result[0]
- }
- if(!Object.keys(emojiIndexObj).length){
-  return str.split("");
-}
- let endResult=[];//最终分割数组
- let normallArrayPushIndex=0;//普通字段的数组索引
- for(let key in emojiIndexObj){
-    let item=emojiIndexObj[key];
-    let tmpTxt="";
-    normarlStringArray.forEach((el,index)=>{
-     
-      if(endResult.length==0&&key!=0){
-        tmpTxt+=el;
-      }
-      else{
-        tmpTxt+=endResult.join("");
-      }
-      //没问题
-      if(key==0&&endResult.length==0){
-        console.log("1el?")
-        endResult.push(item)
-      }
-      else if(index<Number(key)&&el&&normallArrayPushIndex==index){
-        endResult.push(el);
-        normallArrayPushIndex++;
-      }
-      
-      if(tmpTxt.length==key){
-        endResult.push(item)
-        
-      }
+  var tmpArr = str.split("");
+  var endArr = [];
+  var tmpStr = "";
+  var findFlash = false;
+  for (let i = 0; i < tmpArr.length; i++) {
+    let item = tmpArr[i];
+    if (item == "<") {
+      findFlash = true;
+    } else if (!findFlash) {
+      endArr.push(item);
+    }
 
-      // console.log("tmpTxt.length",endResult)
-      // console.log("tmpTxt.length",tmpTxt)
-     
-      
-      
-    })
+    if (findFlash) {
+      tmpStr += item;
+    }
+    if (tmpArr[i - 1] && tmpArr[i - 1] == "/" && item == ">") {
+      endArr.push(tmpStr);
+      findFlash = false;
+      tmpStr = "";
+    }
   }
-  return endResult;
+  return endArr;
 }

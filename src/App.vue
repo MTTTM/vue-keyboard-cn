@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- <Keyboard :value="value" type="number" /> -->
-    <!-- <p>{{ value }}</p> -->
+    <p v-html="value"></p>
     <ky-input v-model="value" />
     <key-board :value="value" :emojiMap="emoji" />
   </div>
@@ -17,8 +17,7 @@ export default {
       emoji: {
         person,
       },
-      value:
-        "123123123123123123123123123123123123123123123123123euwrweirewr456euwrweirewr456euwrweirewr456euwrweirewr456euwrweirewr456",
+      value: "4w",
     };
   },
 };

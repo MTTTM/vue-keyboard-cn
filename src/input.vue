@@ -26,6 +26,7 @@ export default {
     //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {
       let t = "";
+      console.log("草你麻痹,!!!", this.valueArr);
       this.valueArr.forEach((e) => {
         t += e;
       });
@@ -42,12 +43,14 @@ export default {
   },
   watch: {
     value: {
-      handler() {
-        this.valueArr = splitStringToArray(this.value);
+      handler(newV) {
+        console.log("草你麻痹  有新值", newV);
+        this.valueArr = splitStringToArray(newV);
+        console.log("草你麻痹  新值结果", this.valueArr);
         if (this.isFocus) {
           this.valueArr.push(flashBlock);
         }
-        console.log("this.valueArr", this.valueArr, this.value);
+        console.log("this.valueArr", this.valueArr, newV);
       },
       immediate: true,
     },
@@ -68,10 +71,13 @@ export default {
     });
     //监听键盘内容输入
     this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
-      let len = this.valueArr.length - 1;
-      this.valueArr[len] = text;
-      this.valueArr.push('<span class="key-board-flash"></span>');
-      this.$emit("change", this.tmpValueNoFlash); //同步给外层
+      let tmpArray = this.valueArr.filter((item) => item != flashBlock);
+      let len = tmpArray.length;
+      tmpArray[len] = text;
+      this.valueArr = [...tmpArray, flashBlock];
+      // console.log("插入你麻痹!!!", text, "结果！！！！！", this.valueArr);
+      let end = tmpArray.reduce((a, b) => a + b, "");
+      this.$emit("change", end); //同步给外层
     });
     //删除
     this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
@@ -82,11 +88,12 @@ export default {
     deleteFn() {
       let len = this.valueArr.length - 2;
       this.valueArr.splice(len, 2, flashBlock);
-      console.log("delete", this.valueArr, this.tmpValueNoFlash);
+      // console.log("delete", this.valueArr, this.tmpValueNoFlash);
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     focus(bool = false) {
       this.isFocus = bool;
+      //   this.valueArr.push('<span class="key-board-flash"></span>');
       this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], {
         isFocus: bool,
         value: this.valueArr,
