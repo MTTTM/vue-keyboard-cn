@@ -6,7 +6,7 @@
           class="emoj-wrap-body-item"
           v-for="item in currEmojList"
           :key="item.key"
-          @touchstart.stop.prevent="appendItem(item)"
+          @click.stop.prevent="appendItem(item)"
         >
           <div
             :style="{ 'background-image': `url(${item.path})` }"
@@ -16,7 +16,7 @@
       </div>
       <span
         class="emoji-delete icon iconfont icon-delete"
-        @touchstart.stop.prevent="deleteFn"
+        @click.stop.prevent="deleteFn"
       ></span>
     </div>
     <div class="emoji-wrap-head">
@@ -25,7 +25,7 @@
           :class="['emoji-wrap-head-item', key == item ? 'active' : '']"
           v-for="item in emojiKeys"
           :key="item"
-          @touchstart.stop.prevent="setKey(item)"
+          @click.stop.prevent="setKey(item)"
         >
           {{ emojiMap[item].text }}
         </div>
