@@ -62,7 +62,7 @@ export default {
           id: 3,
         },
         {
-          classs: "icon iconfont icon-arrow-down-filling",
+          classs: "icon iconfont icon-arrow-right-filling icon-route",
           id: 4,
         },
       ],
@@ -261,6 +261,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  .icon-route {
+    transform: rotate(90deg);
+  }
   .head-op-icon {
     height: 40px;
     font-size: 14px;
