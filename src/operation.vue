@@ -73,6 +73,7 @@
 </template>
 <script>
 import EventKeys from "./eventKeys";
+import { getCopyLocalStorage } from "./copyPaste.js";
 import Vue from "vue";
 import VueClipboard from "vue-clipboard2";
 Vue.use(VueClipboard);
@@ -95,8 +96,22 @@ export default {
   },
   created() {
     this.getCopyLocalStorage();
+    //监听原生复制
+    this.$root.$on(
+      EventKeys["vue-keyboard-cn-natice-copy"],
+      this.nativeCopyCallback
+    );
+  },
+  beforeDestroy() {
+    this.$root.$off(
+      EventKeys["vue-keyboard-cn-natice-copy"],
+      this.nativeCopyCallback
+    );
   },
   methods: {
+    nativeCopyCallback(str) {
+      this.appendCopyArrayItem(str);
+    },
     paste() {
       if (this.copyTextArray && this.copyTextArray[0]) {
         this.appendStringItem(this.copyTextArray[0]);
@@ -126,20 +141,8 @@ export default {
       );
     },
     getCopyLocalStorage() {
-      try {
-        let store = localStorage.getItem("vue-keyboard-copy");
-        if (store) {
-          let storeParse = JSON.parse(store);
-          if (Array.isArray(storeParse)) {
-            this.copyTextArray = storeParse;
-          } else {
-            this.copyTextArray = [];
-          }
-        }
-        this.copyTextArray = [];
-      } catch (e) {
-        this.copyTextArray = [];
-      }
+      this.copyTextArray = getCopyLocalStorage();
+      console.log("this.copyTextArray", this.copyTextArray);
     },
     deleteFn() {
       this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);
@@ -159,15 +162,18 @@ export default {
         this.isselectAll
       );
     },
-    onCopy(e) {
-      this.toastText = "复制成功";
-      this.showToast = true;
-      this.copyText = e.text;
+    appendCopyArrayItem(str) {
       //限制只存20条
       if (this.copyTextArray.length > 20) {
         this.copyTextArray.pop();
       }
-      this.copyTextArray.unshift(e.text);
+      this.copyTextArray.unshift(str);
+    },
+    onCopy(e) {
+      this.toastText = "复制成功";
+      this.showToast = true;
+      this.copyText = e.text;
+      this.appendCopyArrayItem(e.text);
       this.saveCopyLocalStorage();
       clearTimeout(timer);
       timer = setTimeout(() => (this.showToast = false), 1500);

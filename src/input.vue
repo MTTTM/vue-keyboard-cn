@@ -10,6 +10,7 @@
 import EventKeys from "./eventKeys";
 const flashBlock = '<span class="key-board-flash"></span>';
 import { splitStringToArray } from "./tools.js";
+import { copyEventListener, onNaticeCopyEvent } from "./copyPaste.js";
 export default {
   props: {
     value: {
@@ -69,9 +70,8 @@ export default {
     },
   },
   created() {
-    //   this.valueArr = splitStringToArray(this.value);
-    document.body.oncopy = () => {};
-    document.body.addEventListener("copy", this.copyFunc);
+    //监听原生复制事件
+    copyEventListener(this);
     //监听键盘关闭事件
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
       this.isFocus = bool;
@@ -82,7 +82,6 @@ export default {
       let len = tmpArray.length;
       tmpArray[len] = text;
       this.valueArr = [...tmpArray, flashBlock];
-      // console.log("插入你麻痹!!!", text, "结果！！！！！", this.valueArr);
       let end = tmpArray.reduce((a, b) => a + b, "");
       this.$emit("change", end); //同步给外层
     });
@@ -90,14 +89,25 @@ export default {
     this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
       this.deleteFn();
     });
+    //全选按钮
     this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], (bool) => {
-      console.log("this.isSelectedAll", bool);
       this.isSelectedAll = bool;
     });
+    //监听原生复制
+    this.$root.$on(
+      EventKeys["vue-keyboard-cn-natice-copy"],
+      this.nativeCopyCallback
+    );
+  },
+  beforeDestroy() {
+    this.$root.$off(
+      EventKeys["vue-keyboard-cn-natice-copy"],
+      this.nativeCopyCallback
+    );
   },
   methods: {
-    copyFunc() {
-      alert("被复制的数据:" + window.getSelection(0).toString());
+    nativeCopyCallback(str) {
+      onNaticeCopyEvent(str); //已经做去重处理
     },
     deleteFn() {
       let len = this.valueArr.length - 2;
