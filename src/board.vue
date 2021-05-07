@@ -33,16 +33,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="key-board-box-head-op" v-else>
-          <span
-            class="head-op-icon"
-            v-for="(item, index) in operationList"
-            :key="item.id"
-            :class="[operationActiveIndex == index ? 'active' : '']"
-          >
-            <span :class="item.classs" @click="operateBtnFn(index)"></span>
-          </span>
-        </div> -->
       </div>
       <div class="key-board-box-body">
         <div

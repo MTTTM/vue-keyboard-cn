@@ -1,5 +1,5 @@
 <template>
-  <div @touchmove.prevent.stop>
+  <div>
     <div class="key-board-box" v-show="show">
       <div class="key-board-box-head-op">
         <!-- 键盘设置列表 -->
@@ -13,7 +13,11 @@
           <span :class="item.classs"></span>
         </span>
       </div>
-      <component v-bind:is="currentView" :emojiMap="emojiMap"></component>
+      <component
+        v-bind:is="currentView"
+        :emojiMap="emojiMap"
+        :inputValue="value"
+      ></component>
     </div>
   </div>
 </template>
@@ -66,15 +70,34 @@ export default {
           id: 4,
         },
       ],
+      bodyEl: document.body,
+      top: 0,
+      value: "", //输入框组件的值，不可以手动改
     };
   },
+  watch: {
+    show: {
+      handler() {
+        this.fixedBg();
+      },
+      immediate: true,
+    },
+  },
+  created() {
+    this.bodyEl = document.body;
 
+    //获取最新输入框的值
+    this.$root.$on(EventKeys["vue-keyboard-cn-update-value"], (newV) => {
+      this.value = newV;
+      console.log("更新值", this.value);
+    });
+  },
   mounted() {
     this.changeView();
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
-      let { isFocus } = data;
+      let { isFocus, tmpValueNoFlash } = data;
       this.show = isFocus;
-      //this.valueArr = value; //直接引用
+      this.value = tmpValueNoFlash; //直接引用
     });
     //监听键盘关闭事件
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
@@ -106,6 +129,18 @@ export default {
           break;
       }
     },
+    fixedBg() {
+      if (this.show) {
+        this.top = window.scrollY;
+        this.bodyEl.style.position = "fixed";
+        this.bodyEl.style.top = -top + "px";
+      } else {
+        this.bodyEl.style.position = "";
+        this.bodyEl.style.top = "";
+
+        window.scrollTo(0, top); // 回到原先的top
+      }
+    },
   },
 };
 </script>
@@ -116,7 +151,13 @@ export default {
     url("./assets/font/iconfont.woff?t=1620317185581") format("woff"),
     url("./assets/font/iconfont.ttf?t=1620317185581") format("truetype");
 }
-
+body {
+  width: 100%;
+  left: 0;
+  top: 0;
+  margin: 0;
+  padding: 0;
+}
 .iconfont {
   font-family: "iconfont" !important;
   font-size: 16px;

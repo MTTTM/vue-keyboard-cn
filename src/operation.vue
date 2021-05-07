@@ -21,22 +21,158 @@
     </div>
     <div class="operation-wrap-right">
       <div class="operation-wrap-right-inner">
-        <div class="operation-wrap-right-item">全选</div>
-        <div class="operation-wrap-right-item">复制</div>
-        <div class="operation-wrap-right-item">粘贴</div>
+        <div class="operation-wrap-right-item" @click="selectAll">全选</div>
+        <div
+          class="operation-wrap-right-item"
+          v-clipboard:copy="inputValue"
+          v-clipboard:success="onCopy"
+          v-clipboard:error="onError"
+        >
+          复制
+        </div>
+        <div class="operation-wrap-right-item" @click.stop.prevent="paste">
+          粘贴
+        </div>
       </div>
       <div class="operation-wrap-right-inner">
-        <div class="operation-wrap-right-item icon iconfont icon-delete"></div>
+        <div
+          class="operation-wrap-right-item icon iconfont icon-delete"
+          @click.stop.prevent="deleteFn"
+        ></div>
         <div class="operation-wrap-right-item icon iconfont icon-enter"></div>
-        <div class="operation-wrap-right-item">剪切板</div>
+        <div class="operation-wrap-right-item" @click="showCopyBox = true">
+          剪切板
+        </div>
       </div>
+    </div>
+    <!-- 复制提示toast -->
+    <div :class="['operation-toast', showToast ? 'active' : '']">
+      <span>{{ toastText }}</span>
+    </div>
+    <!-- 剪切板 -->
+    <div class="copy-box-show" v-if="showCopyBox" @touchmove.stop>
+      <div class="copy-box-show-inner">
+        <p v-for="(item, index) in copyTextArray" :key="index">
+          {{ item }}
+          <span class="close" @click="removeFn(index)">x</span>
+        </p>
+        <div style="height: 50px"></div>
+      </div>
+      <span
+        class="copy-back icon iconfont icon-delete"
+        @click="showCopyBox = false"
+      ></span>
     </div>
   </div>
 </template>
 <script>
+import EventKeys from "./eventKeys";
+import Vue from "vue";
+import VueClipboard from "vue-clipboard2";
+Vue.use(VueClipboard);
+let timer;
 export default {
   data() {
-    return {};
+    return {
+      isselectAll: false,
+      toastText: "",
+      showToast: false,
+      copyTextArray: [],
+      showCopyBox: false,
+    };
+  },
+  props: {
+    inputValue: {
+      type: String,
+      required: true,
+    },
+  },
+  created() {
+    this.getCopyLocalStorage();
+  },
+  methods: {
+    paste() {
+      if (this.copyTextArray && this.copyTextArray[0]) {
+        this.appendStringItem(this.copyTextArray[0]);
+        this.toastText = "粘贴成功";
+        this.showToast = true;
+        clearTimeout(timer);
+        timer = setTimeout(() => (this.showToast = false), 1500);
+      } else {
+        this.toastText = "没有粘贴的文字";
+        this.showToast = true;
+        clearTimeout(timer);
+        timer = setTimeout(() => (this.showToast = false), 1500);
+      }
+    },
+    appendStringItem(text) {
+      this.tmpPingying = "";
+      this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
+    },
+    removeFn(index) {
+      this.copyTextArray.splice(index, 1);
+      this.saveCopyLocalStorage();
+    },
+    saveCopyLocalStorage() {
+      localStorage.setItem(
+        "vue-keyboard-copy",
+        JSON.stringify(this.copyTextArray)
+      );
+    },
+    getCopyLocalStorage() {
+      try {
+        let store = localStorage.getItem("vue-keyboard-copy");
+        if (store) {
+          let storeParse = JSON.parse(store);
+          if (Array.isArray(storeParse)) {
+            this.copyTextArray = storeParse;
+          } else {
+            this.copyTextArray = [];
+          }
+        }
+        this.copyTextArray = [];
+      } catch (e) {
+        this.copyTextArray = [];
+      }
+    },
+    deleteFn() {
+      this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);
+      this.switchSelectAll(false);
+    },
+    selectAll() {
+      if (!this.inputValue.length) {
+        return;
+      }
+      this.isselectAll = !this.isselectAll;
+      this.switchSelectAll(this.isselectAll);
+    },
+    switchSelectAll(bool) {
+      this.isselectAll = bool;
+      this.$root.$emit(
+        EventKeys["vue-keyboard-cn-select-all"],
+        this.isselectAll
+      );
+    },
+    onCopy(e) {
+      this.toastText = "复制成功";
+      this.showToast = true;
+      this.copyText = e.text;
+      //限制只存20条
+      if (this.copyTextArray.length > 20) {
+        this.copyTextArray.pop();
+      }
+      this.copyTextArray.unshift(e.text);
+      this.saveCopyLocalStorage();
+      clearTimeout(timer);
+      timer = setTimeout(() => (this.showToast = false), 1500);
+    },
+    //复制失败的回调
+    onError() {
+      this.toastText = "复制失败";
+      this.showToast = true;
+      clearTimeout(timer);
+      timer = setTimeout(() => (this.showToast = false), 1500);
+    },
   },
 };
 </script>
@@ -47,6 +183,34 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  .operation-toast {
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-size: 14px;
+    display: block;
+    position: absolute;
+    left: 50%;
+    top: 40px;
+    transform: translateX(-50%);
+    z-index: 20;
+    max-width: 0;
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: 0.5s;
+    span {
+      padding: 7px 10px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+    &.active {
+      opacity: 1;
+      max-width: 140px;
+      max-height: 40px;
+    }
+  }
   .operation-wrap-left {
     flex: 1;
     display: flex;
@@ -82,6 +246,63 @@ export default {
         color: #000;
         background: rgba(255, 255, 255, 1);
       }
+    }
+  }
+  .copy-box-show {
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+
+    left: 0;
+    bottom: 0;
+    background: #eee;
+    overflow: auto;
+    .copy-box-show-inner {
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      p {
+        position: relative;
+        padding-right: 40px;
+      }
+      .close {
+        display: inline-block;
+        padding: 10px;
+        position: absolute;
+        font-size: 16px;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+      }
+    }
+    .copy-back {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      width: 45px;
+      height: 35px;
+      color: #666;
+      font-size: 35px;
+      font-weight: normal;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    }
+    p {
+      line-height: 40px;
+      background: rgba(255, 255, 255, 0.7);
+      color: #333;
+      border-radius: 4px;
+      margin: 0 5px 5px;
+      padding: 0 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   .operation-wrap-left-pancel {

@@ -1,5 +1,10 @@
 <template>
-  <div class="vue-keyboard-input" @click="focus(true)" v-html="tmpValue"></div>
+  <div class="vue-keyboard-input" @click="focus(true)">
+    <span
+      :class="['vue-keyboard-input-text', isSelectedAll ? 'active' : '']"
+      v-html="tmpValue"
+    ></span>
+  </div>
 </template>
 <script>
 import EventKeys from "./eventKeys";
@@ -20,6 +25,7 @@ export default {
     return {
       isFocus: false, //获取焦点
       valueArr: [], //已填入的字符串转数组
+      isSelectedAll: false,
     };
   },
   computed: {
@@ -44,13 +50,12 @@ export default {
   watch: {
     value: {
       handler(newV) {
-        console.log("草你麻痹  有新值", newV);
         this.valueArr = splitStringToArray(newV);
-        console.log("草你麻痹  新值结果", this.valueArr);
         if (this.isFocus) {
           this.valueArr.push(flashBlock);
         }
-        console.log("this.valueArr", this.valueArr, newV);
+        //向所有组件推送，最新值
+        this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
       },
       immediate: true,
     },
@@ -83,6 +88,10 @@ export default {
     this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
       this.deleteFn();
     });
+    this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], (bool) => {
+      console.log("this.isSelectedAll", bool);
+      this.isSelectedAll = bool;
+    });
   },
   methods: {
     deleteFn() {
@@ -92,10 +101,10 @@ export default {
     },
     focus(bool = false) {
       this.isFocus = bool;
-      //   this.valueArr.push('<span class="key-board-flash"></span>');
       this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], {
         isFocus: bool,
         value: this.valueArr,
+        tmpValueNoFlash: this.tmpValueNoFlash,
       });
     },
   },
@@ -127,6 +136,11 @@ export default {
   .emoji-icon {
     width: 20px;
     height: 20px;
+  }
+}
+.vue-keyboard-input-text {
+  &.active {
+    background: rgba(135, 206, 235, 0.3);
   }
 }
 </style>
