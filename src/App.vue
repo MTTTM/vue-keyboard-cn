@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <!-- <Keyboard :value="value" type="number" /> -->
+    <input type="text" value="fasdfsdfdfsdfsdsdfa" />
     <p v-html="value"></p>
     <ky-input v-model="value" />
     <key-board :value="value" :emojiMap="emoji" />
@@ -20,7 +21,7 @@ export default {
         hearts,
         symbo,
       },
-      value: "4w",
+      value: "4w0000000000",
     };
   },
 };

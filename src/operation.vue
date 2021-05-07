@@ -21,7 +21,9 @@
     </div>
     <div class="operation-wrap-right">
       <div class="operation-wrap-right-inner">
-        <div class="operation-wrap-right-item" @click="selectAll">全选</div>
+        <div class="operation-wrap-right-item" @click.stop.prevent="selectAll">
+          全选
+        </div>
         <div
           class="operation-wrap-right-item"
           v-clipboard:copy="inputValue"
@@ -40,11 +42,15 @@
           @click.stop.prevent="deleteFn"
         ></div>
         <div class="operation-wrap-right-item icon iconfont icon-enter"></div>
-        <div class="operation-wrap-right-item" @click="showCopyBox = true">
+        <div
+          class="operation-wrap-right-item"
+          @click.stop.prevent="showCopyBox = true"
+        >
           剪切板
         </div>
       </div>
     </div>
+    <p class="copy-tip">本键盘不支持[系统自带]的复制粘贴</p>
     <!-- 复制提示toast -->
     <div :class="['operation-toast', showToast ? 'active' : '']">
       <span>{{ toastText }}</span>
@@ -184,6 +190,15 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
+  .copy-tip {
+    color: #999;
+    text-align: center;
+    font-size: 12px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+  }
   .operation-toast {
     background: rgba(0, 0, 0, 0.8);
     color: #fff;

@@ -70,6 +70,8 @@ export default {
   },
   created() {
     //   this.valueArr = splitStringToArray(this.value);
+    document.body.oncopy = () => {};
+    document.body.addEventListener("copy", this.copyFunc);
     //监听键盘关闭事件
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
       this.isFocus = bool;
@@ -94,6 +96,9 @@ export default {
     });
   },
   methods: {
+    copyFunc() {
+      alert("被复制的数据:" + window.getSelection(0).toString());
+    },
     deleteFn() {
       let len = this.valueArr.length - 2;
       this.valueArr.splice(len, 2, flashBlock);
