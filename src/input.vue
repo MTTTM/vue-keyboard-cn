@@ -78,12 +78,8 @@ export default {
     });
     //监听键盘内容输入
     this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
-      let tmpArray = this.valueArr.filter((item) => item != flashBlock);
-      let len = tmpArray.length;
-      tmpArray[len] = text;
-      this.valueArr = [...tmpArray, flashBlock];
-      let end = tmpArray.reduce((a, b) => a + b, "");
-      this.$emit("change", end); //同步给外层
+      let textArray = splitStringToArray(text); //分割内容为数组
+      textArray.forEach((item) => this.appendItem(item));
     });
     //删除
     this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
@@ -106,6 +102,14 @@ export default {
     );
   },
   methods: {
+    appendItem(text = "") {
+      let tmpArray = this.valueArr.filter((item) => item != flashBlock);
+      let len = tmpArray.length;
+      tmpArray[len] = text;
+      this.valueArr = [...tmpArray, flashBlock];
+      let end = tmpArray.reduce((a, b) => a + b, "");
+      this.$emit("change", end); //同步给外层
+    },
     nativeCopyCallback(str) {
       onNaticeCopyEvent(str); //已经做去重处理
     },

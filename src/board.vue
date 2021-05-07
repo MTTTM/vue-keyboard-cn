@@ -327,6 +327,7 @@ export default {
      * 点击中文待选列表文字
      */
     clickCnTextItem(text) {
+      console.log("hellow", text);
       if (this.matchedKeyArr.length == 0) {
         this.appendStringItem(text);
       } else if (
@@ -360,9 +361,6 @@ export default {
       this.matchedKeyArrSelectedIndex = 0;
     },
     appendStringItem(text) {
-      // let len = this.valueArr.length - 1;
-      // this.valueArr[len] = text;
-      // this.valueArr.push('<span class="key-board-flash"></span>');
       this.tmpPingying = "";
       this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
     },
