@@ -1,6 +1,7 @@
 <template>
   <div class="vue-keyboard-input" @click="focus(true)">
     <span
+      tabindex="0"
       :class="['vue-keyboard-input-text', isSelectedAll ? 'active' : '']"
       v-html="tmpValue"
     ></span>
@@ -158,7 +159,8 @@ export default {
   }
 }
 .vue-keyboard-input-text {
-  &.active {
+  &.active,
+  &:focus {
     background: rgba(135, 206, 235, 0.3);
   }
 }

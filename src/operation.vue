@@ -149,11 +149,12 @@ export default {
       this.switchSelectAll(false);
     },
     selectAll() {
-      if (!this.inputValue.length) {
-        return;
-      }
-      this.isselectAll = !this.isselectAll;
-      this.switchSelectAll(this.isselectAll);
+      // if (!this.inputValue.length) {
+      //   return;
+      // }
+      // this.isselectAll = !this.isselectAll;
+      // this.switchSelectAll(this.isselectAll);
+      document.querySelector(".vue-keyboard-input-text").focus();
     },
     switchSelectAll(bool) {
       this.isselectAll = bool;
