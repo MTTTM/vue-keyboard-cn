@@ -6,4 +6,5 @@ export default{
   'vue-keyboard-cn-append-delete':'vue-keyboard-cn-append-delete',//键盘提交删除
   'vue-keyboard-cn-select-all':'vue-keyboard-cn-select-all',//全选,参数，true||false
   "vue-keyboard-cn-natice-copy":"vue-keyboard-cn-natice-copy",//推送输入框的最新值,string
+  "vue-keyboard-cn-cursor-move":"vue-keyboard-cn-cursor-move",//方向键，移动光标，top|bottom|left|top
 }

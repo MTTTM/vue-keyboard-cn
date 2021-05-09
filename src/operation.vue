@@ -5,17 +5,21 @@
         <!-- 上下 -->
         <span
           class="operation-btn operation-btn-top icon iconfont icon-bg-next"
+          @click.stop.prevent="cursorMove('top')"
         >
         </span>
         <span
           class="operation-btn operation-btn-btm icon icon iconfont icon-bg-next"
+          @click.stop.prevent="cursorMove('bottom')"
         ></span>
         <!-- 左右 -->
         <span
           class="operation-btn operation-btn-left icon iconfont icon-arrow-left-filling"
+          @click.stop.prevent="cursorMove('left')"
         ></span>
         <span
           class="operation-btn operation-btn-right icon iconfont icon-arrow-right-filling"
+          @click.stop.prevent="cursorMove('right')"
         ></span>
       </div>
     </div>
@@ -114,6 +118,9 @@ export default {
     );
   },
   methods: {
+    cursorMove(str) {
+      this.$root.$emit(EventKeys["vue-keyboard-cn-cursor-move"], str);
+    },
     nativeCopyCallback(str) {
       this.appendCopyArrayItem(str);
     },

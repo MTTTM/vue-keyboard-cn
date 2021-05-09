@@ -11,9 +11,9 @@
 </template>
 <script>
 import EventKeys from "./eventKeys";
-const flashBlock = '<span class="key-board-flash"></span>';
 import { splitStringToArray } from "./tools.js";
 import { copyEventListener, onNaticeCopyEvent } from "./copyPaste.js";
+import { cursorStr, moveToFn } from "./cursor.js";
 export default {
   props: {
     value: {
@@ -30,6 +30,7 @@ export default {
       isFocus: false, //获取焦点
       valueArr: [], //已填入的字符串转数组
       isSelectedAll: false,
+      cursorIndex: 0, //当前光标的位置，也就是下一次输入内容插入的位置
     };
   },
   computed: {
@@ -39,7 +40,6 @@ export default {
     //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {
       let t = "";
-      console.log("草你麻痹,!!!", this.valueArr);
       this.valueArr.forEach((e) => {
         t += e;
       });
@@ -47,7 +47,7 @@ export default {
     },
     tmpValueNoFlash() {
       let t = "";
-      let tmpArray = this.valueArr.filter((item) => item != flashBlock);
+      let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.forEach((e) => {
         t += e;
       });
@@ -59,8 +59,9 @@ export default {
       handler(newV) {
         this.valueArr = splitStringToArray(newV);
         if (this.isFocus) {
-          this.valueArr.push(flashBlock);
+          this.valueArr.push(cursorStr);
         }
+        this.cursorIndex = this.valueArr.length - 1;
         //向所有组件推送，最新值
         this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
       },
@@ -69,9 +70,9 @@ export default {
     isFocus(newV) {
       this.valueArr = this.value.split("");
       if (newV) {
-        this.valueArr.push(flashBlock);
+        this.valueArr.push(cursorStr);
       } else {
-        this.valueArr = this.valueArr.filter((item) => item != flashBlock);
+        this.valueArr = this.valueArr.filter((item) => item != cursorStr);
       }
     },
   },
@@ -103,6 +104,13 @@ export default {
       EventKeys["vue-keyboard-cn-natice-copy"],
       this.nativeCopyCallback
     );
+    //监听方向
+    this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
+      let movedData = moveToFn(this.valueArr, str);
+      if (Array.isArray(movedData.arr)) {
+        this.valueArr = movedData.arr;
+      }
+    });
   },
   beforeDestroy() {
     this.$root.$off(
@@ -112,19 +120,20 @@ export default {
   },
   methods: {
     appendItem(text = "") {
-      let tmpArray = this.valueArr.filter((item) => item != flashBlock);
+      let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       let len = tmpArray.length;
       tmpArray[len] = text;
-      this.valueArr = [...tmpArray, flashBlock];
-      let end = tmpArray.reduce((a, b) => a + b, "");
-      this.$emit("change", end); //同步给外层
+      this.valueArr = [...tmpArray, cursorStr];
+      this.cursorIndex = this.valueArr.length;
+      // let end = tmpArray.reduce((a, b) => a + b, "");
+      // this.$emit("change", end); //同步给外层
     },
     nativeCopyCallback(str) {
       onNaticeCopyEvent(str); //已经做去重处理
     },
     deleteFn() {
       let len = this.valueArr.length - 2;
-      this.valueArr.splice(len, 2, flashBlock);
+      this.valueArr.splice(len, 2, cursorStr);
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     focus(bool = false) {
