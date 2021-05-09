@@ -58,10 +58,15 @@
     <!-- 剪切板 -->
     <div class="copy-box-show" v-if="showCopyBox" @touchmove.stop>
       <div class="copy-box-show-inner">
-        <p v-for="(item, index) in copyTextArray" :key="index">
-          {{ item }}
-          <span class="close" @click="removeFn(index)">x</span>
-        </p>
+        <div
+          class="p"
+          v-for="(item, index) in copyTextArray"
+          :key="index"
+          @click.stop.prevent="pasteItem(item)"
+        >
+          <div v-html="item"></div>
+          <span class="close" @click.stop.prevent="removeFn(index)">x</span>
+        </div>
         <div style="height: 50px"></div>
       </div>
       <span
@@ -112,6 +117,9 @@ export default {
     nativeCopyCallback(str) {
       this.appendCopyArrayItem(str);
     },
+    pasteItem(text) {
+      this.appendStringItem(text);
+    },
     paste() {
       if (this.copyTextArray && this.copyTextArray[0]) {
         this.appendStringItem(this.copyTextArray[0]);
@@ -146,22 +154,12 @@ export default {
     },
     deleteFn() {
       this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);
-      this.switchSelectAll(false);
     },
     selectAll() {
-      // if (!this.inputValue.length) {
-      //   return;
-      // }
-      // this.isselectAll = !this.isselectAll;
-      // this.switchSelectAll(this.isselectAll);
-      document.querySelector(".vue-keyboard-input-text").focus();
-    },
-    switchSelectAll(bool) {
-      this.isselectAll = bool;
-      this.$root.$emit(
-        EventKeys["vue-keyboard-cn-select-all"],
-        this.isselectAll
-      );
+      if (!this.inputValue.length) {
+        return;
+      }
+      this.$root.$emit(EventKeys["vue-keyboard-cn-select-all"], true);
     },
     appendCopyArrayItem(str) {
       //限制只存20条
@@ -189,7 +187,7 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 .operation-wrap {
   height: 230px;
   padding: 10px;
@@ -315,7 +313,7 @@ export default {
       border-radius: 4px;
       box-shadow: 1px 1px 2px 0px rgba(0, 0, 0, 0.3);
     }
-    p {
+    .p {
       line-height: 40px;
       background: rgba(255, 255, 255, 0.7);
       color: #333;
@@ -325,6 +323,13 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      position: relative;
+      display: flex;
+      align-items: center;
+      .emoji-icon {
+        width: 20px;
+        height: 20px;
+      }
     }
   }
   .operation-wrap-left-pancel {

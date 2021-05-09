@@ -1,9 +1,11 @@
 <template>
   <div class="vue-keyboard-input" @click="focus(true)">
     <span
+      :id="inputId"
       tabindex="0"
       :class="['vue-keyboard-input-text', isSelectedAll ? 'active' : '']"
       v-html="tmpValue"
+      ref="input"
     ></span>
   </div>
 </template>
@@ -31,6 +33,9 @@ export default {
     };
   },
   computed: {
+    inputId() {
+      return `input-id-${new Date().time}`;
+    },
     //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {
       let t = "";
@@ -87,8 +92,11 @@ export default {
       this.deleteFn();
     });
     //全选按钮
-    this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], (bool) => {
-      this.isSelectedAll = bool;
+    this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], () => {
+      if (this.$refs["input"]) {
+        this.$refs["input"].focus();
+      }
+      document.querySelector(".vue-keyboard-input-text").focus();
     });
     //监听原生复制
     this.$root.$on(
