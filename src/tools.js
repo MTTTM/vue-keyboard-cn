@@ -73,6 +73,9 @@ export const getPingMatchObjKey=(pingyingStr="",objKeys=[])=>{
  * @returns 
  */
 export const splitStringToArray=(str)=>{
+  if(String(str).length==1){
+    return [String(str)];
+  }
   var tmpArr = str.split("");
   var endArr = [];
   var tmpStr = "";
@@ -96,3 +99,12 @@ export const splitStringToArray=(str)=>{
   }
   return endArr;
 }
+// /**
+//  * 计算 解析字符串后的某个数组元素的长度
+//  * @param {*} text 
+//  */
+// export const computedItemLen=(text)=>{
+//    if(/<[^>]+>/g.test(text)){
+//     return 1;
+//    }
+// }

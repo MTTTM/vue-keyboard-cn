@@ -3,7 +3,7 @@
     <span
       :id="inputId"
       tabindex="0"
-      :class="['vue-keyboard-input-text', isSelectedAll ? 'active' : '']"
+      class="vue-keyboard-input-text"
       v-html="tmpValue"
       ref="input"
     ></span>
@@ -27,9 +27,8 @@ export default {
   },
   data() {
     return {
-      isFocus: false, //获取焦点
+      isFocus: false, //获取焦点，可输入的状态
       valueArr: [], //已填入的字符串转数组
-      isSelectedAll: false,
       cursorIndex: 0, //当前光标的位置，也就是下一次输入内容插入的位置
     };
   },
@@ -56,12 +55,17 @@ export default {
   },
   watch: {
     value: {
-      handler(newV) {
+      handler(newV, oldV) {
         this.valueArr = splitStringToArray(newV);
         if (this.isFocus) {
           this.valueArr.push(cursorStr);
         }
-        this.cursorIndex = this.valueArr.length - 1;
+        //只有第一次才更新光标
+        if (!oldV) {
+          this.cursorIndex = this.valueArr.length - 1;
+          console.log("我又更新啦?");
+        }
+
         //向所有组件推送，最新值
         this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
       },
@@ -85,15 +89,27 @@ export default {
     });
     //监听键盘内容输入
     this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
+      if (!this.isFocus) {
+        return;
+      }
+      if (!text) {
+        return;
+      }
       let textArray = splitStringToArray(text); //分割内容为数组
       textArray.forEach((item) => this.appendItem(item));
     });
     //删除
     this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
+      if (!this.isFocus) {
+        return;
+      }
       this.deleteFn();
     });
     //全选按钮
     this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], () => {
+      if (!this.isFocus) {
+        return;
+      }
       if (this.$refs["input"]) {
         this.$refs["input"].focus();
       }
@@ -106,6 +122,9 @@ export default {
     );
     //监听方向
     this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
+      if (!this.isFocus) {
+        return;
+      }
       let movedData = moveToFn(this.valueArr, str);
       if (Array.isArray(movedData.arr)) {
         this.valueArr = movedData.arr;
@@ -120,15 +139,29 @@ export default {
   },
   methods: {
     appendItem(text = "") {
-      let tmpArray = this.valueArr.filter((item) => item != cursorStr);
-      let len = tmpArray.length;
-      tmpArray[len] = text;
-      this.valueArr = [...tmpArray, cursorStr];
-      this.cursorIndex = this.valueArr.length;
+      // let tmpArray = this.valueArr.filter((item) => item != cursorStr);
+      // let len = tmpArray.length;
+      // tmpArray[len] = text;
+      // this.valueArr = [...tmpArray, cursorStr];
+      // this.cursorIndex = this.valueArr.length;
+
       // let end = tmpArray.reduce((a, b) => a + b, "");
       // this.$emit("change", end); //同步给外层
+      if (!text) {
+        return;
+      }
+      //光标处插入文字
+      this.valueArr.splice(this.cursorIndex, 0, text);
+      this.cursorIndex = this.cursorIndex + 1;
+      //修复光标
+      let tmpArray = this.valueArr.filter((item) => item != cursorStr);
+      tmpArray.splice(this.cursorIndex, 0, cursorStr);
+      this.valueArr = tmpArray;
     },
     nativeCopyCallback(str) {
+      if (!this.isFocus) {
+        return;
+      }
       onNaticeCopyEvent(str); //已经做去重处理
     },
     deleteFn() {
