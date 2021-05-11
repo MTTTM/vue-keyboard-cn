@@ -1,5 +1,5 @@
 <template>
-  <div class="operation-wrap">
+  <div class="operation-wrap" @touchstart.stop.prevent>
     <div class="operation-wrap-left">
       <div class="operation-wrap-left-pancel">
         <!-- 上下 -->
@@ -43,7 +43,7 @@
       <div class="operation-wrap-right-inner">
         <div
           class="operation-wrap-right-item icon iconfont icon-delete"
-          @click.stop.prevent="deleteFn"
+          @touchend.stop.prevent="deleteFn"
         ></div>
         <div class="operation-wrap-right-item icon iconfont icon-enter"></div>
         <div
@@ -54,7 +54,6 @@
         </div>
       </div>
     </div>
-    <p class="copy-tip">本键盘不支持[系统自带]的复制粘贴</p>
     <!-- 复制提示toast -->
     <div :class="['operation-toast', showToast ? 'active' : '']">
       <span>{{ toastText }}</span>

@@ -156,22 +156,10 @@ export default {
   methods: {
     getClickElement(e) {
       let index = getElementIndexOnParent(e.target);
-      console.log(
-        "e",
-        e.target.getAttribute("class"),
-        "index:",
-        index,
-        "domText",
-        e.target.innerText,
-        "数组里面的值：",
-        labelStringRemoveLabel(this.valueArr[index]),
-        e.target.tagName
-      );
       let movedData = moveTo(this.valueArr, index);
       if (Array.isArray(movedData.arr)) {
         this.valueArr = movedData.arr;
         this.cursorIndex = movedData.index;
-        console.log("this.cursorIndex333", this.cursorIndex);
       }
     },
     appendItem(text = "") {
@@ -185,8 +173,6 @@ export default {
       let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.splice(this.cursorIndex, 0, cursorStr);
       this.valueArr = tmpArray;
-      // let end = tmpArray.reduce((a, b) => a + b, "");
-      // this.$emit("change", end); //同步给外层
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     nativeCopyCallback(str) {
