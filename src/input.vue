@@ -1,19 +1,23 @@
 <template>
   <div class="vue-keyboard-input" @click="focus(true)">
     <span
-      :id="inputId"
       tabindex="0"
       class="vue-keyboard-input-text"
       v-html="tmpValue"
       ref="input"
+      @click="getClickElement"
     ></span>
   </div>
 </template>
 <script>
 import EventKeys from "./eventKeys";
-import { splitStringToArray } from "./tools.js";
+import {
+  splitStringToArray,
+  getElementIndexOnParent,
+  labelStringRemoveLabel,
+} from "./tools.js";
 import { copyEventListener, onNaticeCopyEvent } from "./copyPaste.js";
-import { cursorStr, moveToFn } from "./cursor.js";
+import { cursorStr, moveToFn, moveTo } from "./cursor.js";
 export default {
   props: {
     value: {
@@ -48,6 +52,9 @@ export default {
       let t = "";
       let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.forEach((e) => {
+        if (/<span/gi.test(e)) {
+          e = labelStringRemoveLabel(e); //移除普通文本包裹的标签
+        }
         t += e;
       });
       return t;
@@ -73,19 +80,13 @@ export default {
           this.valueArr.splice(this.cursorIndex, 0, cursorStr);
           console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
         }
-        //只有第一次才更新光标
-        // if (!oldV) {
-        //   this.cursorIndex = this.valueArr.length - 1;
-        //   console.log("我又更新啦?");
-        // }
-
         //向所有组件推送，最新值
         //this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
       },
       immediate: true,
     },
     isFocus(newV) {
-      this.valueArr = this.value.split("");
+      this.valueArr = splitStringToArray(this.value);
       if (newV) {
         this.valueArr.push(cursorStr);
       } else {
@@ -153,6 +154,26 @@ export default {
     );
   },
   methods: {
+    getClickElement(e) {
+      let index = getElementIndexOnParent(e.target);
+      console.log(
+        "e",
+        e.target.getAttribute("class"),
+        "index:",
+        index,
+        "domText",
+        e.target.innerText,
+        "数组里面的值：",
+        labelStringRemoveLabel(this.valueArr[index]),
+        e.target.tagName
+      );
+      let movedData = moveTo(this.valueArr, index);
+      if (Array.isArray(movedData.arr)) {
+        this.valueArr = movedData.arr;
+        this.cursorIndex = movedData.index;
+        console.log("this.cursorIndex333", this.cursorIndex);
+      }
+    },
     appendItem(text = "") {
       if (!text) {
         return;
@@ -164,8 +185,9 @@ export default {
       let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.splice(this.cursorIndex, 0, cursorStr);
       this.valueArr = tmpArray;
-      let end = tmpArray.reduce((a, b) => a + b, "");
-      this.$emit("change", end); //同步给外层
+      // let end = tmpArray.reduce((a, b) => a + b, "");
+      // this.$emit("change", end); //同步给外层
+      this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     nativeCopyCallback(str) {
       if (!this.isFocus) {

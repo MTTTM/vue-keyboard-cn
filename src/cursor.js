@@ -37,11 +37,12 @@ const last=(arr=[])=>{
  * @param {*} targetIndex 
  * @returns 
  */
-const moveTo=(arr=[],targetIndex)=>{
-  arr.splice(targetIndex,0,cursorStr)
+export const moveTo=(arr=[],targetIndex)=>{
+  let filterCursorArr=getNoCursorArr(arr);
+  filterCursorArr.splice(targetIndex,0,cursorStr)
   return {
     index:targetIndex,
-    arr:arr
+    arr:filterCursorArr
   }
 }
 /**
@@ -82,3 +83,4 @@ export const moveToFn=(arr=[],dirStr="bottom")=>{
     return moveTo(filterCursorArr,dirStr);
   }
 }
+

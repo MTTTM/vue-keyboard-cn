@@ -9,32 +9,30 @@
 </head>
 
 <body>
+  <ul >
+    <li>hello</li>
+    <li>hello</li>
+    <p>00</p>  
+    <li id="mts">hello</li>
+    <li>hello</li>
+</ul>
   <script>
-    var str = "4w";
-    var tmpArr = str.split("");
-    var endArr = [];
-    var tmpStr = "";
-    var findFlash = false;
-    for (let i = 0; i < tmpArr.length ; i++) {
-      let item = tmpArr[i];
-      if (item == "<") {
-        findFlash = true;
-      } else if (!findFlash) {
-        endArr.push(item);
-      }
+    window.onload=function(){
+      var elt=document.getElementById('mts');
+      //去掉换行的空格
 
-      if (findFlash) {
-        tmpStr += item;
-      }
-      if (tmpArr[i - 1] && tmpArr[i - 1] == "/" && item == ">") {
-        endArr.push(tmpStr);
-        findFlash = false;
-        tmpStr = "";
-      }
+      var b =elt.parentNode.childNodes;
+      var childNodes=[];
+      for(var i=0; i<b.length;i++){
+        if(b[i].tagName&&b[i].nodeName !== "#text"){
+          childNodes.push(b[i]);
+        }
+    }
+      console.log("index",childNodes.indexOf(elt),"childNodes",childNodes);
     }
 
-    console.log("end", endArr);
-  </script>
+</script>
+
 </body>
 
 </html>

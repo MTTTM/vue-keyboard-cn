@@ -85,7 +85,7 @@ export const splitStringToArray=(str)=>{
     if (item == "<") {
       findFlash = true;
     } else if (!findFlash) {
-      endArr.push(item);
+      endArr.push(`<span class="vue-keyboard-text-item">${item}</span>`);
     }
 
     if (findFlash) {
@@ -99,12 +99,29 @@ export const splitStringToArray=(str)=>{
   }
   return endArr;
 }
-// /**
-//  * 计算 解析字符串后的某个数组元素的长度
-//  * @param {*} text 
-//  */
-// export const computedItemLen=(text)=>{
-//    if(/<[^>]+>/g.test(text)){
-//     return 1;
-//    }
-// }
+/**
+ * 获取dom在父级下的索引
+ * @param {*} childElement 
+ * @returns number
+ */
+export const getElementIndexOnParent=(childElement)=>{
+  var parentNode =childElement.parentNode.childNodes;
+  var childNodes=[];
+  for(var i=0; i<parentNode.length;i++){
+    let item=parentNode[i];
+    //排除文本节点
+    if(item.tagName&&item.nodeName !== "#text"){
+      childNodes.push(item);
+    }
+  }
+  return childNodes.indexOf(childElement);
+      
+}
+/**
+ * 移除字符串里面的html标签，留下html标签里面的文字
+ * @param {*} labelStr 
+ * @returns 
+ */
+export const labelStringRemoveLabel=(labelStr="")=>{
+  return labelStr.replace(/<[^>]+>/g,"")
+}
