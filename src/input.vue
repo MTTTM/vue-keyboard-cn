@@ -29,7 +29,7 @@ export default {
     return {
       isFocus: false, //获取焦点，可输入的状态
       valueArr: [], //已填入的字符串转数组
-      cursorIndex: 0, //当前光标的位置，也就是下一次输入内容插入的位置
+      cursorIndex: null, //当前光标的位置，也就是下一次输入内容插入的位置
     };
   },
   computed: {
@@ -55,19 +55,32 @@ export default {
   },
   watch: {
     value: {
-      handler(newV, oldV) {
-        this.valueArr = splitStringToArray(newV);
-        if (this.isFocus) {
-          this.valueArr.push(cursorStr);
+      handler(newV) {
+        let t = splitStringToArray(newV);
+        let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
+        console.log("this.valueArr", this.valueArr, labelIndex);
+        if (this.isFocus && labelIndex == -1) {
+          t.push(cursorStr);
+          this.valueArr = t;
+          console.log("新值 cursorIndex 为0", this.valueArr);
+          this.cursorIndex = this.valueArr.length - 1;
+        } else if (!this.isFocus) {
+          this.valueArr = t;
+          this.cursorIndex = this.valueArr.length;
+        } else {
+          this.valueArr = this.valueArr.filter((item) => item != cursorStr);
+          //this.cursorIndex就是光标的索引，所以不需要-1
+          this.valueArr.splice(this.cursorIndex, 0, cursorStr);
+          console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
         }
         //只有第一次才更新光标
-        if (!oldV) {
-          this.cursorIndex = this.valueArr.length - 1;
-          console.log("我又更新啦?");
-        }
+        // if (!oldV) {
+        //   this.cursorIndex = this.valueArr.length - 1;
+        //   console.log("我又更新啦?");
+        // }
 
         //向所有组件推送，最新值
-        this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
+        //this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
       },
       immediate: true,
     },
@@ -128,6 +141,8 @@ export default {
       let movedData = moveToFn(this.valueArr, str);
       if (Array.isArray(movedData.arr)) {
         this.valueArr = movedData.arr;
+        this.cursorIndex = movedData.index;
+        console.log("this.cursorIndex111", this.cursorIndex);
       }
     });
   },
@@ -139,14 +154,6 @@ export default {
   },
   methods: {
     appendItem(text = "") {
-      // let tmpArray = this.valueArr.filter((item) => item != cursorStr);
-      // let len = tmpArray.length;
-      // tmpArray[len] = text;
-      // this.valueArr = [...tmpArray, cursorStr];
-      // this.cursorIndex = this.valueArr.length;
-
-      // let end = tmpArray.reduce((a, b) => a + b, "");
-      // this.$emit("change", end); //同步给外层
       if (!text) {
         return;
       }
@@ -157,6 +164,8 @@ export default {
       let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.splice(this.cursorIndex, 0, cursorStr);
       this.valueArr = tmpArray;
+      let end = tmpArray.reduce((a, b) => a + b, "");
+      this.$emit("change", end); //同步给外层
     },
     nativeCopyCallback(str) {
       if (!this.isFocus) {
@@ -165,8 +174,14 @@ export default {
       onNaticeCopyEvent(str); //已经做去重处理
     },
     deleteFn() {
-      let len = this.valueArr.length - 2;
-      this.valueArr.splice(len, 2, cursorStr);
+      if (this.cursorIndex <= 0) {
+        this.cursorIndex = 0;
+        return;
+      }
+      //删掉光标前一个字符串
+      this.valueArr.splice(this.cursorIndex - 1, 1);
+      //修复光标的坐标
+      this.cursorIndex = this.cursorIndex - 1;
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     focus(bool = false) {

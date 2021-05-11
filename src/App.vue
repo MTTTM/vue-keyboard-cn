@@ -21,7 +21,7 @@ export default {
         hearts,
         symbo,
       },
-      value: "4w0000000000",
+      value: "4w000000000102",
     };
   },
 };
