@@ -124,10 +124,16 @@ export default {
       if (!this.isFocus) {
         return;
       }
-      if (this.$refs["input"]) {
+      if (
+        this.$refs["input"].classList.contains("vue-keyboard-input-text-focus")
+      ) {
+        this.$refs["input"].blur();
+        this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
+      } else {
+        this.$refs["input"].classList.add("vue-keyboard-input-text-focus");
         this.$refs["input"].focus();
       }
-      document.querySelector(".vue-keyboard-input-text").focus();
+      // document.querySelector(".vue-keyboard-input-text").focus();
     });
     //监听原生复制
     this.$root.$on(
@@ -136,14 +142,15 @@ export default {
     );
     //监听方向
     this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
+      console.log("this.cursorIndex111", this.isFocus);
       if (!this.isFocus) {
         return;
       }
       let movedData = moveToFn(this.valueArr, str);
+      console.log("this.cursorIndex111", this.cursorIndex);
       if (Array.isArray(movedData.arr)) {
         this.valueArr = movedData.arr;
         this.cursorIndex = movedData.index;
-        console.log("this.cursorIndex111", this.cursorIndex);
       }
     });
   },
@@ -194,6 +201,7 @@ export default {
     },
     focus(bool = false) {
       this.isFocus = bool;
+
       this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], {
         isFocus: bool,
         value: this.valueArr,
@@ -232,9 +240,10 @@ export default {
   }
 }
 .vue-keyboard-input-text {
-  &.active,
-  &:focus {
-    background: rgba(135, 206, 235, 0.3);
+  &.vue-keyboard-input-text-focus {
+    &:focus {
+      background: rgba(135, 206, 235, 0.3);
+    }
   }
 }
 </style>

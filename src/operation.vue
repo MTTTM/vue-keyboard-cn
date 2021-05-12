@@ -1,5 +1,5 @@
 <template>
-  <div class="operation-wrap" @touchstart.stop.prevent>
+  <div class="operation-wrap" @touchstart.stop>
     <div class="operation-wrap-left">
       <div class="operation-wrap-left-pancel">
         <!-- 上下 -->
@@ -43,6 +43,7 @@
       <div class="operation-wrap-right-inner">
         <div
           class="operation-wrap-right-item icon iconfont icon-delete"
+          @touchstart.stop.prevent
           @touchend.stop.prevent="deleteFn"
         ></div>
         <div class="operation-wrap-right-item icon iconfont icon-enter"></div>

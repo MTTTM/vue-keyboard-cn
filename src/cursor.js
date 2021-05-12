@@ -62,7 +62,7 @@ export const moveToFn=(arr=[],dirStr="bottom")=>{
   else{
     let currCursorIndex=arr.findIndex(item=>item==cursorStr);
     if(dirStr=="left"){
-      if(currCursorIndex==0){
+      if(currCursorIndex<=0){
         return {};
       }
       else{
