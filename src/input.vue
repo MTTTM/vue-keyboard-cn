@@ -34,6 +34,7 @@ export default {
       isFocus: false, //获取焦点，可输入的状态
       valueArr: [], //已填入的字符串转数组
       cursorIndex: null, //当前光标的位置，也就是下一次输入内容插入的位置
+      blurMethods: null, //点击document失去焦点事件
     };
   },
   computed: {
@@ -135,13 +136,7 @@ export default {
         this.$refs["input"].classList.add("vue-keyboard-input-text-focus");
         this.$refs["input"].focus();
       }
-      // document.querySelector(".vue-keyboard-input-text").focus();
     });
-    // //监听原生复制
-    // this.$root.$on(
-    //   EventKeys["vue-keyboard-cn-natice-copy"],
-    //   this.nativeCopyCallback
-    // );
     //监听方向
     this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
       console.log("this.cursorIndex111", this.isFocus);
@@ -155,14 +150,25 @@ export default {
         this.cursorIndex = movedData.index;
       }
     });
+    this.blurMethods = this.inputWillblur.bind(this);
+    document.addEventListener("click", this.blurMethods);
   },
-  // beforeDestroy() {
-  //   this.$root.$off(
-  //     EventKeys["vue-keyboard-cn-natice-copy"],
-  //     this.nativeCopyCallback
-  //   );
-  // },
+  beforeDestroy() {
+    document.removeEventListener("click", this.blurMethods);
+  },
   methods: {
+    inputWillblur(e) {
+      if (!this.isFocus) {
+        return;
+      }
+      if (
+        e.target &&
+        typeof e.target.getAttribute == "function" &&
+        e.target.getAttribute("attr-input-select") !== "true"
+      ) {
+        this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
+      }
+    },
     getClickElement(e) {
       let index = getElementIndexOnParent(e.target);
       let movedData = moveTo(this.valueArr, index);

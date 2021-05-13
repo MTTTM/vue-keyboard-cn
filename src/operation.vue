@@ -1,5 +1,5 @@
 <template>
-  <div class="operation-wrap" @touchstart.stop>
+  <div class="operation-wrap">
     <div class="operation-wrap-left">
       <div class="operation-wrap-left-pancel">
         <!-- 上下 -->
@@ -25,7 +25,11 @@
     </div>
     <div class="operation-wrap-right">
       <div class="operation-wrap-right-inner">
-        <div class="operation-wrap-right-item" @click.stop.prevent="selectAll">
+        <div
+          class="operation-wrap-right-item"
+          attr-input-select="true"
+          @click.stop.prevent="selectAll"
+        >
           全选
         </div>
         <!-- <div
