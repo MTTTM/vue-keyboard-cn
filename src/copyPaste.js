@@ -104,3 +104,23 @@ export const onNaticeCopyEvent=(strx)=>{
   copylist.unshift(str);
   saveCopyList(copylist);
 }
+/**
+ * 用原生复制功能复制字符串
+ * @param {*} str 
+ * @returns 
+ */
+export const nativeCopyString=(str)=>{
+  const input = document.createElement("input");
+  input.readOnly = 'readonly';
+  input.value = str;
+  input.style.width="1px";
+  input.style.height="1px";
+  input.style.opacity=0;
+  input.style.position="absolute";
+  document.body.appendChild(input);
+  input.select();
+  input.setSelectionRange(0, input.value.length);
+  var t=document.execCommand('copy');
+  document.body.removeChild(input);
+  return t;
+}

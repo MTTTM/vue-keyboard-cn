@@ -28,12 +28,15 @@
         <div class="operation-wrap-right-item" @click.stop.prevent="selectAll">
           全选
         </div>
-        <div
-          class="operation-wrap-right-item"
+        <!-- <div
+          
           v-clipboard:copy="inputValue"
           v-clipboard:success="onCopy"
           v-clipboard:error="onError"
         >
+          复制
+        </div> -->
+        <div class="operation-wrap-right-item" @click="onCopyCallback">
           复制
         </div>
         <div class="operation-wrap-right-item" @click.stop.prevent="paste">
@@ -82,10 +85,7 @@
 </template>
 <script>
 import EventKeys from "./eventKeys";
-import { getCopyLocalStorage } from "./copyPaste.js";
-import Vue from "vue";
-import VueClipboard from "vue-clipboard2";
-Vue.use(VueClipboard);
+import { getCopyLocalStorage, nativeCopyString } from "./copyPaste.js";
 let timer;
 export default {
   data() {
@@ -178,12 +178,18 @@ export default {
       }
       this.copyTextArray.unshift(str);
     },
-    onCopy(e) {
+    onCopyCallback() {
+      let copyText = nativeCopyString(this.inputValue);
+      if (copyText) {
+        this.onCopy({ e: copyText });
+      } else {
+        this.onError();
+      }
+    },
+    onCopy() {
       this.toastText = "复制成功";
       this.showToast = true;
-      this.copyText = e.text;
-      this.appendCopyArrayItem(e.text);
-      this.saveCopyLocalStorage();
+      //因为触发的是原生的复制事件，所以不要再这里再处理一遍
       clearTimeout(timer);
       timer = setTimeout(() => (this.showToast = false), 1500);
     },
