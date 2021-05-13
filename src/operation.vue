@@ -105,24 +105,27 @@ export default {
   },
   created() {
     this.getCopyLocalStorage();
-    //监听原生复制
+    // //监听原生复制
     this.$root.$on(
       EventKeys["vue-keyboard-cn-natice-copy"],
-      this.nativeCopyCallback
+      this.nativeCopyRead
     );
   },
   beforeDestroy() {
     this.$root.$off(
       EventKeys["vue-keyboard-cn-natice-copy"],
-      this.nativeCopyCallback
+      this.nativeCopyRead
     );
   },
   methods: {
     cursorMove(str) {
       this.$root.$emit(EventKeys["vue-keyboard-cn-cursor-move"], str);
     },
-    nativeCopyCallback(str) {
-      this.appendCopyArrayItem(str);
+    nativeCopyRead() {
+      //this.appendCopyArrayItem(str);
+      setTimeout(() => {
+        this.getCopyLocalStorage();
+      });
     },
     pasteItem(text) {
       this.appendStringItem(text);

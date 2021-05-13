@@ -1,5 +1,6 @@
 
 import EventKeys from "./eventKeys";
+import {labelStringRemoveLabelExceptImg} from "./tools.js"
 let hasListenerCopy=false;
 let localStorageKey="vue-keyboard-copy";
 
@@ -87,18 +88,19 @@ export const addOne=(str)=>{
   hasListenerCopy=true;
 }
 /**
- * 监听原生复制的事件回调
+ * 复制的事件回调(监听原生,或非原生)
  * 如果内容已存在，就替换到第一个
  * @param {*} str 
  */
-export const onNaticeCopyEvent=(str)=>{
+export const onNaticeCopyEvent=(strx)=>{
+  //原生复制的地方就没有携带标签，不知道为何以前不是这样的
+  //这样也不需要考虑自定义input的·自定义光标会被复制到·
+  let str=labelStringRemoveLabelExceptImg(strx);
+  if(!str){
+    return;
+  }
   let copylist=getCopyLocalStorage();
-  let index=copylist.findIndex(el=>el==str);
-  let item=copylist[index];
-  // if(index>-1){
-  //   copylist[index]="";
-  // }
-  copylist.shift(item);
-  copylist=copylist.filter(item=>item!="");
+  copylist=copylist.filter(item=>item!=""&&item!=str);
+  copylist.unshift(str);
   saveCopyList(copylist);
 }

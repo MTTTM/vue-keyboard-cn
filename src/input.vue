@@ -16,7 +16,7 @@ import {
   getElementIndexOnParent,
   labelStringRemoveLabel,
 } from "./tools.js";
-import { copyEventListener, onNaticeCopyEvent } from "./copyPaste.js";
+import { copyEventListener } from "./copyPaste.js";
 import { cursorStr, moveToFn, moveTo } from "./cursor.js";
 export default {
   props: {
@@ -80,8 +80,10 @@ export default {
           this.valueArr.splice(this.cursorIndex, 0, cursorStr);
           console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
         }
-        //向所有组件推送，最新值
-        //this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
+        /*向所有组件推送，最新值
+         *1.光标控制面板，复制需要用到
+         */
+        this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
       },
       immediate: true,
     },
@@ -121,7 +123,7 @@ export default {
     });
     //全选按钮
     this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], () => {
-      if (!this.isFocus) {
+      if (!this.isFocus || !this.$refs["input"]) {
         return;
       }
       if (
@@ -135,11 +137,11 @@ export default {
       }
       // document.querySelector(".vue-keyboard-input-text").focus();
     });
-    //监听原生复制
-    this.$root.$on(
-      EventKeys["vue-keyboard-cn-natice-copy"],
-      this.nativeCopyCallback
-    );
+    // //监听原生复制
+    // this.$root.$on(
+    //   EventKeys["vue-keyboard-cn-natice-copy"],
+    //   this.nativeCopyCallback
+    // );
     //监听方向
     this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
       console.log("this.cursorIndex111", this.isFocus);
@@ -154,12 +156,12 @@ export default {
       }
     });
   },
-  beforeDestroy() {
-    this.$root.$off(
-      EventKeys["vue-keyboard-cn-natice-copy"],
-      this.nativeCopyCallback
-    );
-  },
+  // beforeDestroy() {
+  //   this.$root.$off(
+  //     EventKeys["vue-keyboard-cn-natice-copy"],
+  //     this.nativeCopyCallback
+  //   );
+  // },
   methods: {
     getClickElement(e) {
       let index = getElementIndexOnParent(e.target);
@@ -182,12 +184,12 @@ export default {
       this.valueArr = tmpArray;
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
-    nativeCopyCallback(str) {
-      if (!this.isFocus) {
-        return;
-      }
-      onNaticeCopyEvent(str); //已经做去重处理
-    },
+    // nativeCopyCallback(str) {
+    //   if (!this.isFocus) {
+    //     return;
+    //   }
+    //   onNaticeCopyEvent(str); //已经做去重处理
+    // },
     deleteFn() {
       if (this.cursorIndex <= 0) {
         this.cursorIndex = 0;

@@ -66,7 +66,7 @@ export default {
     appendItem(item) {
       this.$root.$emit(
         EventKeys["vue-keyboard-cn-append-item"],
-        `<img src="${item.path}" class="emoji-icon icon-${item.key}"/>`
+        `<img attr-img=""vue-keyboard-cn-emoji" class=" emoji-icon icon-${item.key}" src="${item.path}" />`
       );
     },
     deleteFn() {

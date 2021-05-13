@@ -125,3 +125,11 @@ export const getElementIndexOnParent=(childElement)=>{
 export const labelStringRemoveLabel=(labelStr="")=>{
   return labelStr.replace(/<[^>]+>/g,"")
 }
+/**
+ * 移除字符串里面的html标签(除了键盘自定义的img标签)
+ * @param {*} labelStr 
+ * @returns 
+ */
+export const labelStringRemoveLabelExceptImg=(labelStr="")=>{
+  return labelStr.replace(/<[^(img attr\-img=""vue\-keyboard\-cn\-emoji")>]+>/g,"");
+}

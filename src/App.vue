@@ -1,7 +1,12 @@
 <template>
   <div id="app">
     <!-- <Keyboard :value="value" type="number" /> -->
-    <input type="text" value="fasdfsdfdfsdfsdsdfa" />
+    111
+    <img
+      src="https://tpc.googlesyndication.com/daca_images/simgad/14840972809917267785"
+      alt=""
+      style="height: 10px; width: 20px"
+    />dsfsdfds
     <p v-html="value"></p>
     <ky-input v-model="value" />
     <key-board :value="value" :emojiMap="emoji" />

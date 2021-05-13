@@ -60,23 +60,26 @@ export const moveToFn=(arr=[],dirStr="bottom")=>{
     return last(filterCursorArr)
   }
   else{
+    //这是光标位于东时候的位置
     let currCursorIndex=arr.findIndex(item=>item==cursorStr);
+    let targetIndex=currCursorIndex-1;
     if(dirStr=="left"){
-      if(currCursorIndex<=0){
+      if(targetIndex<0){
         return {};
       }
       else{
-        let targetIndex=currCursorIndex-1;
+        
         return moveTo(filterCursorArr,targetIndex);
       }
       
     }
     else if(dirStr=="right"){
-      if(currCursorIndex>=arr.length-1){
+      let targetIndex=currCursorIndex+1;
+      if(targetIndex>arr.length-1){
         return {};
       }
       else{
-        let targetIndex=currCursorIndex+1;
+        
         return moveTo(filterCursorArr,targetIndex);
       }
     }

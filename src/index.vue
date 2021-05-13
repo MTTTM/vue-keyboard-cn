@@ -26,6 +26,7 @@ import Board from "./board.vue";
 import Emoji from "./emoji.vue";
 import Operation from "./operation.vue";
 import EventKeys from "./eventKeys";
+import { onNaticeCopyEvent } from "./copyPaste.js";
 export default {
   components: { Board, Emoji, Operation },
   props: {
@@ -91,6 +92,11 @@ export default {
       this.value = newV;
       console.log("更新值", this.value);
     });
+    //监听原生复制，
+    this.$root.$on(
+      EventKeys["vue-keyboard-cn-natice-copy"],
+      this.nativeCopyCallbackWrite
+    );
   },
   mounted() {
     this.changeView();
@@ -105,7 +111,19 @@ export default {
     });
     this.operateBtnFn(this.operationActiveIndex);
   },
+  beforeDestroy() {
+    this.$root.$off(
+      EventKeys["vue-keyboard-cn-natice-copy"],
+      this.nativeCopyCallbackWrite
+    );
+  },
   methods: {
+    nativeCopyCallbackWrite(str) {
+      if (!str) {
+        return;
+      }
+      onNaticeCopyEvent(str); //已经做去重处理
+    },
     changeView(path = "board") {
       this.currentView = path;
     },
