@@ -6,6 +6,7 @@
       v-html="tmpValue"
       ref="input"
       @click="getClickElement"
+      :id="inputId"
     ></span>
   </div>
 </template>
@@ -24,6 +25,15 @@ export default {
       type: String,
       required: true,
     },
+    type: {
+      type: [String],
+      required: false,
+      default: "cn", //number,zh,cn //展示键盘输入方式，默认中文，和键盘相对应
+    },
+    numberTypeCanSwitchOtherBoard: {
+      type: Boolean, //number类型的输入框是否能输入其他方式输入，默认否
+      default: () => false,
+    },
   },
   model: {
     prop: "value",
@@ -39,7 +49,8 @@ export default {
   },
   computed: {
     inputId() {
-      return `input-id-${new Date().time}`;
+      let tString = new Date().getTime();
+      return `input-id-${tString}`;
     },
     //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {
@@ -150,6 +161,14 @@ export default {
         this.cursorIndex = movedData.index;
       }
     });
+    //其他input触发获取焦点时候，本input失去焦点
+    this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
+      if (data.inputId !== this.inputId) {
+        this.isFocus = false;
+      } else {
+        this.isFocus = true;
+      }
+    });
     this.blurMethods = this.inputWillblur.bind(this);
     document.addEventListener("click", this.blurMethods);
   },
@@ -214,6 +233,9 @@ export default {
         isFocus: bool,
         value: this.valueArr,
         tmpValueNoFlash: this.tmpValueNoFlash,
+        type: this.type,
+        numberTypeCanSwitchOtherBoard: this.numberTypeCanSwitchOtherBoard,
+        inputId: this.inputId,
       });
     },
   },

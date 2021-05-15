@@ -3,7 +3,7 @@
     <div class="key-board-box-head" v-if="showZhText">
       <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
         <!-- 展示拼音输入和已选择中文的区域 -->
-        <div>
+        <div class="pingying-box">
           <span v-for="(item, index) in showZhMatchArr" :key="index">{{
             zhSelectedAreaItem(item, index)
           }}</span>
@@ -519,11 +519,11 @@ export default {
   // user-select: none;
   // box-sizing: border-box;
   .key-board-box-head {
-    height: 40px;
+    height: 50px;
     background: #eee;
     position: absolute;
     width: 100%;
-    overflow: auto;
+    overflow: hidden;
     top: 0;
     left: 0;
     z-index: 20;
@@ -546,7 +546,7 @@ export default {
     opacity: 0.8;
     font-size: 14px;
     padding: 5px 0;
-    // height: 30px;
+    position: relative;
     flex: 1;
     border-radius: 4px;
     display: flex;
@@ -558,6 +558,10 @@ export default {
       line-height: 1.4;
       font-size: 14px;
       white-space: nowrap;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
     }
     &.fn-text {
       span {
@@ -578,6 +582,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  .pingying-box {
+    font-size: 14px;
+    padding: 0 5px;
+    line-height: 1.6;
+  }
   .head-op-icon {
     height: 40px;
     font-size: 14px;
@@ -595,15 +604,18 @@ export default {
     flex-direction: column;
     .scroll-box-wrap {
       width: 100%;
-      padding: 0 5px;
+
       overflow: auto;
     }
     .scroll-box {
       display: flex;
+      padding: 0 5px;
     }
     .zh-text-item {
       padding-right: 10px;
       white-space: nowrap;
+      font-size: 13px;
+      line-height: 1.6;
       &.active {
         color: orange;
       }

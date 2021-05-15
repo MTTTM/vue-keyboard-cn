@@ -34,12 +34,12 @@ export default {
     type: {
       type: [String],
       required: false,
-      default: "number", //zh,en,number
+      default: "cn", //number,zh,cn //展示键盘输入方式，默认中文，如果是number就无法切换成其他输入法
     },
-    // value: {
-    //   type: String,
-    //   required: true,
-    // },
+    showEmoji: {
+      type: Boolean,
+      default: () => false,
+    },
     lang: {
       type: String,
       default: "zh",
@@ -78,6 +78,7 @@ export default {
       windowChangeCallbackBind: null,
       windowChangeTimer: null,
       screenDir: 0, //竖屏 0 横屏1
+      getInputInfo: {}, //当前获取焦点的input的信息
     };
   },
   watch: {
@@ -108,6 +109,7 @@ export default {
       let { isFocus, tmpValueNoFlash } = data;
       this.show = isFocus;
       this.value = tmpValueNoFlash; //直接引用
+      this.getInputInfo = data;
     });
     //监听键盘关闭事件
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
@@ -181,16 +183,16 @@ export default {
       }
     },
     fixedBg() {
-      if (this.show) {
-        this.top = window.scrollY;
-        this.bodyEl.style.position = "fixed";
-        this.bodyEl.style.top = -top + "px";
-      } else {
-        this.bodyEl.style.position = "";
-        this.bodyEl.style.top = "";
-
-        window.scrollTo(0, top); // 回到原先的top
-      }
+      // if (this.show) {
+      //   this.top = window.scrollY;
+      //   this.bodyEl.style.position = "fixed";
+      //   this.bodyEl.style.top = -top + "px";
+      //   this.bodyEl.style.width = "100%";
+      // } else {
+      //   this.bodyEl.style.position = "";
+      //   this.bodyEl.style.top = "";
+      //   window.scrollTo(0, top); // 回到原先的top
+      // }
     },
   },
 };
@@ -202,10 +204,7 @@ export default {
     url("./assets/font/iconfont.woff?t=1620317185581") format("woff"),
     url("./assets/font/iconfont.ttf?t=1620317185581") format("truetype");
 }
-body {
-  width: 100%;
-  left: 0;
-  top: 0;
+* {
   margin: 0;
   padding: 0;
 }
@@ -311,92 +310,11 @@ body {
     max-height: 300px;
   }
   .key-board-box-head {
-    height: 40px;
+    height: 50px;
     background: #eee;
   }
-  // .key-board-box-body {
-  // }
-  // .key-board-box-item-wrap {
-  //   display: flex;
-  //   & + .key-board-box-item-wrap {
-  //     margin-top: 5px;
-  //   }
-  // }
-  // .key-board-box-item {
-  //   background: rgba(255, 255, 255, 0.6);
-  //   opacity: 0.8;
-  //   font-size: 14px;
-  //   padding: 5px 0;
-  //   height: 30px;
-  //   flex: 1;
-  //   border-radius: 4px;
-  //   display: flex;
-  //   justify-content: center;
-  //   align-content: center;
-  //   transition: 0.5s;
-  //   color: #000;
-  //   span {
-  //     line-height: 30px;
-  //     font-size: 14px;
-  //     white-space: nowrap;
-  //   }
-  //   &.fn-text {
-  //     span {
-  //       font-size: 12px;
-  //     }
-  //   }
-  //   &:active {
-  //     background: rgba(255, 255, 255, 1);
-  //     opacity: 0.2;
-  //     color: #666;
-  //   }
-  //   & + .key-board-box-item {
-  //     margin-left: 5px;
-  //   }
-  // }
+  .icon-route {
+    transform: rotate(90deg);
+  }
 }
-// .key-board-box-head-op {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   height: 40px;
-.icon-route {
-  transform: rotate(90deg);
-}
-//   .head-op-icon {
-//     height: 40px;
-//     font-size: 14px;
-//     flex: 1;
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     &.active {
-//       color: orange;
-//     }
-//   }
-//   &.zh-text-list-box {
-//     justify-content: flex-start;
-//     align-items: flex-start;
-//     flex-direction: column;
-//     .scroll-box-wrap {
-//       width: 100%;
-//       overflow: auto;
-//     }
-//     .scroll-box {
-//       display: flex;
-//     }
-//     .zh-text-item {
-//       padding: 0 10px;
-//       white-space: nowrap;
-//       &.active {
-//         color: orange;
-//       }
-//     }
-//   }
-//   span {
-//     & + span {
-//       margin-left: 5px;
-//     }
-//   }
-// }
 </style>
