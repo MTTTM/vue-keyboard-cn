@@ -30,8 +30,8 @@ export default {
       required: false,
       default: "cn", //number,zh,cn //展示键盘输入方式，默认中文，和键盘相对应
     },
-    numberTypeCanSwitchOtherBoard: {
-      type: Boolean, //number类型的输入框是否能输入其他方式输入，默认否
+    canSwitchOtherBoard: {
+      type: Boolean, //输入框是否能切换输入其他方式输入，默认否
       default: () => false,
     },
   },
@@ -234,7 +234,7 @@ export default {
         value: this.valueArr,
         tmpValueNoFlash: this.tmpValueNoFlash,
         type: this.type,
-        numberTypeCanSwitchOtherBoard: this.numberTypeCanSwitchOtherBoard,
+        canSwitchOtherBoard: this.canSwitchOtherBoard,
         inputId: this.inputId,
       });
     },

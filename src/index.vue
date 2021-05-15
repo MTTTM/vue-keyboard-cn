@@ -19,6 +19,7 @@
       v-bind:is="currentView"
       :emojiMap="emojiMap"
       :inputValue="value"
+      :getInputInfo="getInputInfo"
     ></component>
   </div>
 </template>

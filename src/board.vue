@@ -39,14 +39,19 @@
         v-for="(item, index) in keyboardMap"
         :key="index"
       >
-        <div
-          :class="['key-board-box-item', el.operate ? 'fn-text' : '']"
-          v-for="(el, i) in item"
-          :key="index + '_' + i"
-          @touchstart.stop.prevent="press(el)"
-        >
-          <span>{{ getItemText(el) }}</span>
-        </div>
+        <template v-for="(el, i) in item">
+          <div
+            :class="[
+              'key-board-box-item',
+              el.operate ? 'fn-text' : '',
+              canSwitchOther(el) ? '' : 'key-board-box-item-disabled',
+            ]"
+            :key="index + '_' + i"
+            @touchstart.stop.prevent="press(el)"
+          >
+            <span>{{ getItemText(el) }}</span>
+          </div>
+        </template>
       </div>
     </div>
   </div>
@@ -72,6 +77,10 @@ export default {
     lang: {
       type: String,
       default: "zh",
+    },
+    getInputInfo: {
+      type: Object,
+      require: true,
     },
   },
   data() {
@@ -133,6 +142,20 @@ export default {
     //     );
     //   }
     // },
+    getInputInfo: {
+      handler(newV) {
+        if (newV.type === "number") {
+          this.changeNumberFn();
+        } else if (newV.type === "cn") {
+          this.curr = "text";
+          this.newLang = "zh";
+        } else {
+          this.curr = "text";
+          this.newLang = "en";
+        }
+      },
+      immediate: true,
+    },
     //监听键盘输入，拆解拼音
     tmpPingying() {
       let matchStr = this.pingyingMap[this.tmpPingying];
@@ -263,6 +286,16 @@ export default {
     // });
   },
   methods: {
+    canSwitchOther(e) {
+      if (
+        e.operate == "back" &&
+        this.getInputInfo &&
+        !this.getInputInfo.canSwitchOtherBoard
+      ) {
+        return false;
+      }
+      return true;
+    },
     //从历史输入中匹配当前拼音
     getHotzhSearchList() {
       let memoryResult = matchHotPingying(this.tmpPingying);
@@ -366,6 +399,9 @@ export default {
      * 按键按下
      */
     press(val) {
+      if (!this.canSwitchOther(val)) {
+        return;
+      }
       //中文输入特殊处理
       if (val.isText && this.newLang == "zh") {
         this.tmpPingying += val.text.toLowerCase();
@@ -554,6 +590,9 @@ export default {
     align-content: center;
     transition: 0.5s;
     color: #000;
+    &.key-board-box-item-disabled {
+      color: #999;
+    }
     span {
       line-height: 1.4;
       font-size: 14px;
