@@ -360,9 +360,9 @@ body {
 //   justify-content: center;
 //   align-items: center;
 //   height: 40px;
-//   .icon-route {
-//     transform: rotate(90deg);
-//   }
+.icon-route {
+  transform: rotate(90deg);
+}
 //   .head-op-icon {
 //     height: 40px;
 //     font-size: 14px;
