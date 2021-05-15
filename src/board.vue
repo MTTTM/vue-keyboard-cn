@@ -1,53 +1,51 @@
 <template>
-  <div>
-    <div>
-      <div class="key-board-box-head">
-        <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
-          <!-- 展示拼音输入和已选择中文的区域 -->
-          <div>
-            <span v-for="(item, index) in showZhMatchArr" :key="index">{{
-              zhSelectedAreaItem(item, index)
-            }}</span>
-          </div>
-          <!-- 展示待选择的中文列表 -->
-          <div class="scroll-box-wrap">
-            <div class="scroll-box">
-              <!-- 用户曾经输入的词列表 -->
-              <template v-if="showzhMemoryResult">
-                <span
-                  v-for="(item, index) in zhMemoryResult"
-                  :key="item.zh + index"
-                  :class="['zh-text-item', index == 0 ? 'active' : '']"
-                  @click.stop.prevent="clickCnTextItemObj(item)"
-                  >{{ item.zh }}</span
-                >
-              </template>
-              <!-- 单字，可选列表 -->
+  <div class="key-board-box-wrap">
+    <div class="key-board-box-head" v-if="showZhText">
+      <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
+        <!-- 展示拼音输入和已选择中文的区域 -->
+        <div>
+          <span v-for="(item, index) in showZhMatchArr" :key="index">{{
+            zhSelectedAreaItem(item, index)
+          }}</span>
+        </div>
+        <!-- 展示待选择的中文列表 -->
+        <div class="scroll-box-wrap">
+          <div class="scroll-box">
+            <!-- 用户曾经输入的词列表 -->
+            <template v-if="showzhMemoryResult">
               <span
-                v-for="(item, index) in zhSearchList"
-                :key="item + index"
+                v-for="(item, index) in zhMemoryResult"
+                :key="item.zh + index"
                 :class="['zh-text-item', index == 0 ? 'active' : '']"
-                @click.stop.prevent="clickCnTextItem(item)"
-                >{{ item }}</span
+                @click.stop.prevent="clickCnTextItemObj(item)"
+                >{{ item.zh }}</span
               >
-            </div>
+            </template>
+            <!-- 单字，可选列表 -->
+            <span
+              v-for="(item, index) in zhSearchList"
+              :key="item + index"
+              :class="['zh-text-item', index == 0 ? 'active' : '']"
+              @click.stop.prevent="clickCnTextItem(item)"
+              >{{ item }}</span
+            >
           </div>
         </div>
       </div>
-      <div class="key-board-box-body">
+    </div>
+    <div class="key-board-box-body">
+      <div
+        class="key-board-box-item-wrap"
+        v-for="(item, index) in keyboardMap"
+        :key="index"
+      >
         <div
-          class="key-board-box-item-wrap"
-          v-for="(item, index) in keyboardMap"
-          :key="index"
+          :class="['key-board-box-item', el.operate ? 'fn-text' : '']"
+          v-for="(el, i) in item"
+          :key="index + '_' + i"
+          @touchstart.stop.prevent="press(el)"
         >
-          <div
-            :class="['key-board-box-item', el.operate ? 'fn-text' : '']"
-            v-for="(el, i) in item"
-            :key="index + '_' + i"
-            @touchstart.stop.prevent="press(el)"
-          >
-            <span>{{ getItemText(el) }}</span>
-          </div>
+          <span>{{ getItemText(el) }}</span>
         </div>
       </div>
     </div>
@@ -506,24 +504,39 @@ export default {
   background: red;
   animation: flash 0.3s infinite linear;
 }
+.key-board-box-wrap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
 .key-board-box {
-  width: 100%;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  background: #eee;
-  padding: 5px 0;
-  user-select: none;
-  box-sizing: border-box;
+  // width: 100%;
+  // position: fixed;
+  // left: 0;
+  // bottom: 0;
+  // background: #eee;
+  // padding: 5px 0;
+  // user-select: none;
+  // box-sizing: border-box;
   .key-board-box-head {
-    height: 50px;
+    height: 40px;
     background: #eee;
+    position: absolute;
+    width: 100%;
+    overflow: auto;
+    top: 0;
+    left: 0;
+    z-index: 20;
   }
   .key-board-box-body {
     padding: 0 5px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
   }
   .key-board-box-item-wrap {
     display: flex;
+    flex: 1;
     & + .key-board-box-item-wrap {
       margin-top: 5px;
     }
@@ -533,7 +546,7 @@ export default {
     opacity: 0.8;
     font-size: 14px;
     padding: 5px 0;
-    height: 30px;
+    // height: 30px;
     flex: 1;
     border-radius: 4px;
     display: flex;
@@ -542,7 +555,7 @@ export default {
     transition: 0.5s;
     color: #000;
     span {
-      line-height: 30px;
+      line-height: 1.4;
       font-size: 14px;
       white-space: nowrap;
     }
@@ -582,14 +595,14 @@ export default {
     flex-direction: column;
     .scroll-box-wrap {
       width: 100%;
-      padding: 5px 5px;
+      padding: 0 5px;
       overflow: auto;
     }
     .scroll-box {
       display: flex;
     }
     .zh-text-item {
-      padding: 0 10px;
+      padding-right: 10px;
       white-space: nowrap;
       &.active {
         color: orange;

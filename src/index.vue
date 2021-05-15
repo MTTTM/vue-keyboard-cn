@@ -1,24 +1,25 @@
 <template>
-  <div>
-    <div class="key-board-box" v-show="show">
-      <div class="key-board-box-head-op">
-        <!-- 键盘设置列表 -->
-        <span
-          class="head-op-icon"
-          v-for="(item, index) in operationList"
-          :key="item.id"
-          @click.prevent.stop="operateBtnFn(index)"
-          :class="[operationActiveIndex == index ? 'active' : '']"
-        >
-          <span :class="item.classs"></span>
-        </span>
-      </div>
-      <component
-        v-bind:is="currentView"
-        :emojiMap="emojiMap"
-        :inputValue="value"
-      ></component>
+  <div
+    :class="['key-board-box', screenDir == 1 ? 'hs-key-board-box' : '']"
+    v-show="show"
+  >
+    <div class="key-board-box-head-op">
+      <!-- 键盘设置列表 -->
+      <span
+        class="head-op-icon"
+        v-for="(item, index) in operationList"
+        :key="item.id"
+        @click.prevent.stop="operateBtnFn(index)"
+        :class="[operationActiveIndex == index ? 'active' : '']"
+      >
+        <span :class="item.classs"></span>
+      </span>
     </div>
+    <component
+      v-bind:is="currentView"
+      :emojiMap="emojiMap"
+      :inputValue="value"
+    ></component>
   </div>
 </template>
 <script>
@@ -74,6 +75,9 @@ export default {
       bodyEl: document.body,
       top: 0,
       value: "", //输入框组件的值，不可以手动改
+      windowChangeCallbackBind: null,
+      windowChangeTimer: null,
+      screenDir: 0, //竖屏 0 横屏1
     };
   },
   watch: {
@@ -110,14 +114,43 @@ export default {
       this.show = bool;
     });
     this.operateBtnFn(this.operationActiveIndex);
+    this.windowChangeCallbackBind = this.windowChange.bind(this);
+    this.windowChangeCallbackBind();
+    if ("onorientationchange" in window) {
+      window.addEventListener(
+        "orientationchange",
+        this.windowChangeCallbackBind
+      );
+    } else {
+      window.addEventListener("resize", this.windowChangeCallbackBind);
+    }
   },
   beforeDestroy() {
     this.$root.$off(
       EventKeys["vue-keyboard-cn-natice-copy"],
       this.nativeCopyCallbackWrite
     );
+    window.removeEventListener(
+      "orientationchange",
+      this.windowChangeCallbackBind
+    );
+    window.removeEventListener("resize", this.windowChangeCallbackBind);
   },
   methods: {
+    windowChange() {
+      clearTimeout(this.windowChangeTimer);
+      this.windowChangeTimer = setTimeout(() => {
+        let clientWidth = document.documentElement.clientWidth;
+        let clientHeight = document.documentElement.clientHeight;
+
+        if (clientWidth > clientHeight) {
+          this.screenDir = 1;
+        } else {
+          this.screenDir = 0;
+        }
+        console.log("this.screenDir", this.screenDir);
+      }, 50);
+    },
     nativeCopyCallbackWrite(str) {
       if (!str) {
         return;
@@ -263,7 +296,7 @@ body {
   touch-action: none;
   user-select: none;
   width: 100%;
-  height: 300px;
+  height: 35%;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -271,92 +304,99 @@ body {
   padding: 5px 0;
   user-select: none;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  &.hs-key-board-box {
+    height: 60%;
+    max-height: 300px;
+  }
   .key-board-box-head {
-    height: 50px;
+    height: 40px;
     background: #eee;
   }
-  .key-board-box-body {
-  }
-  .key-board-box-item-wrap {
-    display: flex;
-    & + .key-board-box-item-wrap {
-      margin-top: 5px;
-    }
-  }
-  .key-board-box-item {
-    background: rgba(255, 255, 255, 0.6);
-    opacity: 0.8;
-    font-size: 14px;
-    padding: 5px 0;
-    height: 30px;
-    flex: 1;
-    border-radius: 4px;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    transition: 0.5s;
-    color: #000;
-    span {
-      line-height: 30px;
-      font-size: 14px;
-      white-space: nowrap;
-    }
-    &.fn-text {
-      span {
-        font-size: 12px;
-      }
-    }
-    &:active {
-      background: rgba(255, 255, 255, 1);
-      opacity: 0.2;
-      color: #666;
-    }
-    & + .key-board-box-item {
-      margin-left: 5px;
-    }
-  }
+  // .key-board-box-body {
+  // }
+  // .key-board-box-item-wrap {
+  //   display: flex;
+  //   & + .key-board-box-item-wrap {
+  //     margin-top: 5px;
+  //   }
+  // }
+  // .key-board-box-item {
+  //   background: rgba(255, 255, 255, 0.6);
+  //   opacity: 0.8;
+  //   font-size: 14px;
+  //   padding: 5px 0;
+  //   height: 30px;
+  //   flex: 1;
+  //   border-radius: 4px;
+  //   display: flex;
+  //   justify-content: center;
+  //   align-content: center;
+  //   transition: 0.5s;
+  //   color: #000;
+  //   span {
+  //     line-height: 30px;
+  //     font-size: 14px;
+  //     white-space: nowrap;
+  //   }
+  //   &.fn-text {
+  //     span {
+  //       font-size: 12px;
+  //     }
+  //   }
+  //   &:active {
+  //     background: rgba(255, 255, 255, 1);
+  //     opacity: 0.2;
+  //     color: #666;
+  //   }
+  //   & + .key-board-box-item {
+  //     margin-left: 5px;
+  //   }
+  // }
 }
-.key-board-box-head-op {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  .icon-route {
-    transform: rotate(90deg);
-  }
-  .head-op-icon {
-    height: 40px;
-    font-size: 14px;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &.active {
-      color: orange;
-    }
-  }
-  &.zh-text-list-box {
-    justify-content: flex-start;
-    align-items: flex-start;
-    flex-direction: column;
-    .scroll-box-wrap {
-      width: 100%;
-      overflow: auto;
-    }
-    .scroll-box {
-      display: flex;
-    }
-    .zh-text-item {
-      padding: 0 10px;
-      white-space: nowrap;
-      &.active {
-        color: orange;
-      }
-    }
-  }
-  span {
-    & + span {
-      margin-left: 5px;
-    }
-  }
-}
+// .key-board-box-head-op {
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   height: 40px;
+//   .icon-route {
+//     transform: rotate(90deg);
+//   }
+//   .head-op-icon {
+//     height: 40px;
+//     font-size: 14px;
+//     flex: 1;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     &.active {
+//       color: orange;
+//     }
+//   }
+//   &.zh-text-list-box {
+//     justify-content: flex-start;
+//     align-items: flex-start;
+//     flex-direction: column;
+//     .scroll-box-wrap {
+//       width: 100%;
+//       overflow: auto;
+//     }
+//     .scroll-box {
+//       display: flex;
+//     }
+//     .zh-text-item {
+//       padding: 0 10px;
+//       white-space: nowrap;
+//       &.active {
+//         color: orange;
+//       }
+//     }
+//   }
+//   span {
+//     & + span {
+//       margin-left: 5px;
+//     }
+//   }
+// }
 </style>

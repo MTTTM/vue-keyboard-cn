@@ -209,8 +209,7 @@ export default {
 </script>
 <style lang="scss" >
 .operation-wrap {
-  height: 230px;
-  padding: 10px;
+  padding: 10px 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -266,7 +265,7 @@ export default {
 
     .operation-wrap-right-item {
       width: 60px;
-      height: 40px;
+      height: 35px;
       background: rgba(255, 255, 255, 0.7);
       color: #333;
       border-radius: 4px;

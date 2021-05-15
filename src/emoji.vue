@@ -1,17 +1,19 @@
 <template>
-  <div class="emoji-wrap" @touchmove.stop.prevent>
+  <div class="emoji-wrap">
     <div class="emoj-wrap-body">
-      <div class="emoj-wrap-body-inner" @touchmove.stop>
-        <div
-          class="emoj-wrap-body-item"
-          v-for="item in currEmojList"
-          :key="item.key"
-          @click.stop.prevent="appendItem(item)"
-        >
+      <div class="emoj-wrap-body-inner">
+        <div class="emoji-item-wrap">
           <div
-            :style="{ 'background-image': `url(${item.path})` }"
-            class="img"
-          />
+            class="emoj-wrap-body-item"
+            v-for="item in currEmojList"
+            :key="item.key"
+            @click.stop.prevent="appendItem(item)"
+          >
+            <div
+              :style="{ 'background-image': `url(${item.path})` }"
+              class="img"
+            />
+          </div>
         </div>
       </div>
       <span
@@ -79,12 +81,30 @@ export default {
 .emoji-wrap {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  position: relative;
 }
 
 .emoj-wrap-body {
+  flex: 1;
   position: relative;
-  height: 208px;
-  overflow: auto;
+  .emoj-wrap-body-inner {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    // display: flex;
+    // flex-wrap: wrap;
+  }
+  // height: 150px;
+
+  .emoji-item-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 50px;
+  }
   .emoji-delete {
     position: absolute;
     right: 5px;
@@ -99,14 +119,7 @@ export default {
     align-items: center;
     border-radius: 4px;
   }
-  .emoj-wrap-body-inner {
-    position: relative;
-    max-height: 158px;
-    overflow: auto;
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0 5px 50px;
-  }
+
   .emoj-wrap-body-item {
     max-height: 50px;
     width: 12%;
