@@ -290,6 +290,7 @@ export default {
       if (
         e.operate == "back" &&
         this.getInputInfo &&
+        this.getInputInfo.type === "number" &&
         !this.getInputInfo.canSwitchOtherBoard
       ) {
         return false;
