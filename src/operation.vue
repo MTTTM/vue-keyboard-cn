@@ -90,6 +90,7 @@
 <script>
 import EventKeys from "./eventKeys";
 import { getCopyLocalStorage, nativeCopyString } from "./copyPaste.js";
+import inputFilterRegx from "./inputFilterRegx";
 let timer;
 export default {
   data() {
@@ -106,9 +107,20 @@ export default {
       type: String,
       required: true,
     },
+    getInputInfo: {
+      type: Object,
+      required: true,
+    },
+  },
+  watch: {
+    getInputInfo: {
+      handler() {
+        this.getCopyLocalStorage();
+      },
+      immediate: true,
+    },
   },
   created() {
-    this.getCopyLocalStorage();
     // //监听原生复制
     this.$root.$on(
       EventKeys["vue-keyboard-cn-natice-copy"],
@@ -164,7 +176,15 @@ export default {
     },
     getCopyLocalStorage() {
       this.copyTextArray = getCopyLocalStorage();
-      console.log("this.copyTextArray", this.copyTextArray);
+      if (
+        this.getInputInfo &&
+        this.getInputInfo.type &&
+        typeof inputFilterRegx[this.getInputInfo.type] === "function"
+      ) {
+        this.copyTextArray = this.copyTextArray.filter((item) =>
+          inputFilterRegx[this.getInputInfo.type](item)
+        );
+      }
     },
     deleteFn() {
       this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);

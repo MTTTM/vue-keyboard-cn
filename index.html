@@ -17,20 +17,13 @@
     <li>hello</li>
 </ul>
   <script>
-    window.onload=function(){
-      var elt=document.getElementById('mts');
-      //去掉换行的空格
+  function checkChinese (str) {
+    var reg = new RegExp("^([\u4E00-\u9FFF]|[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\uff01\u3010\u3011\uffe5])+$","g");
+    console.log("reg",reg)
+    return reg.test(str);
+}
 
-      var b =elt.parentNode.childNodes;
-      var childNodes=[];
-      for(var i=0; i<b.length;i++){
-        if(b[i].tagName&&b[i].nodeName !== "#text"){
-          childNodes.push(b[i]);
-        }
-    }
-      console.log("index",childNodes.indexOf(elt),"childNodes",childNodes);
-    }
-
+console.log("nxxx",checkChinese("你好啊"))
 </script>
 
 </body>

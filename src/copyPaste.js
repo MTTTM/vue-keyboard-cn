@@ -37,7 +37,7 @@ export const saveCopyList=(array=[],isClean=false)=>{
       let storeParse = JSON.parse(store);
       //
       if (Array.isArray(storeParse)) {
-        copyTextArray = storeParse;
+        copyTextArray = storeParse.filter(item=>item);
       } else {
         copyTextArray = [];
       }

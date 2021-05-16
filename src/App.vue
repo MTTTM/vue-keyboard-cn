@@ -11,7 +11,7 @@
     </div>
     <p v-html="value"></p>
     <ky-input v-model="value" />
-    <p>init</p>
+    <p>int</p>
     <ky-input v-model="intValue" type="int" />
     <p>float</p>
     <ky-input v-model="floatValue" type="float" />

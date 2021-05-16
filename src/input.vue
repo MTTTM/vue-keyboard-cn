@@ -12,6 +12,7 @@
 </template>
 <script>
 import EventKeys from "./eventKeys";
+import inputFilterRegx from "./inputFilterRegx";
 import {
   splitStringToArray,
   getElementIndexOnParent,
@@ -197,47 +198,24 @@ export default {
     //mix(所有）int(整数)，float(小数) zh,cn //展示键盘输入方式，默认中文，和键盘相对应
     canPushItem(text) {
       let returnValue = false;
-      let reg;
-      console.log("this.regx", this, this.regx);
       if (this.regx !== "-1" && this.regx) {
-        console.log("canPushItem regx");
         return new RegExp(`${this.regx}`, "g").test(text);
       }
-      console.log("this.type", this.type);
       switch (this.type) {
         case "float":
-          reg = /^[0-9]+.?[0-9]*$/;
-          if (this.decimal && !isNaN(Number(this.decimal))) {
-            reg = new RegExp(`^[0-9]+.?[0-9]{0,${this.decimal}}$`, "g");
-          }
-          console.log("canPushItem float", `${this.value}${text}`, "reg", reg);
-          returnValue = reg.test(`${this.value}${text}`);
+          returnValue = inputFilterRegx.float(`${this.value}${text}`);
           break;
         case "int":
-          returnValue = /^[0-9]*$/.test(text);
-          console.log("canPushItem int");
+          returnValue = inputFilterRegx.int(`${this.value}${text}`);
           break;
         case "cn":
-          /* [\u4E00-\u9FFF] 用于判断汉字
-           * [\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\uff01\u3010\u3011\uffe5]
-           * 用于判断中文标点 。；，：“”（）、？《》！【】￥
-           * 可以查询对应的unicode码
-           *原文链接：https://blog.csdn.net/TheJormangund/article/details/107379449
-           */
-          reg = new RegExp(
-            "^([\u4E00-\u9FFF]|[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\uff01\u3010\u3011\uffe5])$",
-            "g"
-          );
-          returnValue = reg.test(text);
-          console.log("canPushItem cn");
+          returnValue = inputFilterRegx.cn(`${this.value}${text}`);
           break;
         case "en":
-          returnValue = /^[A-Za-z]+$/.test(text);
-          console.log("canPushItem en");
+          returnValue = inputFilterRegx.en(`${this.value}${text}`);
           break;
         default:
           returnValue = true;
-          console.log("canPushItem default");
           break;
       }
       return returnValue;
