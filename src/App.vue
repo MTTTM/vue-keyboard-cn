@@ -17,7 +17,15 @@
     <ky-input v-model="floatValue" type="float" />
     <ky-input v-model="cnValue" type="cn" />
     <ky-input v-model="enValue" type="en" />
-    <key-board :value="value" :emojiMap="emoji" />
+    <key-board :emojiMap="emoji" />
+    <p v-html="value"></p>
+    <p>指定 键盘</p>
+    <ky-input
+      v-model="floatValue"
+      type="float"
+      :keyBoard="$refs['secondKeyBoard']"
+    />
+    <key-board :emojiMap="emoji" ref="secondKeyBoard" />
     <div style="height: 800px"></div>
   </div>
 </template>
@@ -36,7 +44,7 @@ export default {
       },
       value: "4w000000000102",
       intValue: "1099",
-      floatValue: "",
+      floatValue: "1.99",
       cnValue: "你好啊",
       enValue: "helloguy",
     };

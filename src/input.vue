@@ -47,6 +47,9 @@ export default {
       type: String,
       default: () => "-1",
     },
+    keyBoard: {
+      type: Object,
+    },
   },
   model: {
     prop: "value",
@@ -272,8 +275,7 @@ export default {
     },
     focus(bool = false) {
       this.isFocus = bool;
-
-      this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], {
+      let obj = {
         isFocus: bool,
         value: this.valueArr,
         tmpValueNoFlash: this.tmpValueNoFlash,
@@ -281,7 +283,14 @@ export default {
         canSwitchOtherBoard: this.canSwitchOtherBoard,
         inputId: this.inputId,
         showZh: this.showZh,
-      });
+      };
+      if (this.keyBoard && this.keyBoard.$attrs) {
+        //this.keyBoard.$set("getInputInfo", obj);
+        this.keyBoard.getInputInfo = obj;
+        this.keyBoard.show = true;
+      } else {
+        this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], obj);
+      }
     },
   },
 };
