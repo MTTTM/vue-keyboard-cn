@@ -11,7 +11,10 @@
     </div>
     <p v-html="value"></p>
     <ky-input v-model="value" />
-    <ky-input v-model="numberValue" type="number" />
+    <p>init</p>
+    <ky-input v-model="intValue" type="int" />
+    <p>float</p>
+    <ky-input v-model="floatValue" type="float" />
     <ky-input v-model="cnValue" type="cn" />
     <ky-input v-model="enValue" type="en" />
     <key-board :value="value" :emojiMap="emoji" />
@@ -32,7 +35,8 @@ export default {
         symbo,
       },
       value: "4w000000000102",
-      numberValue: "1099",
+      intValue: "1099",
+      floatValue: "",
       cnValue: "你好啊",
       enValue: "helloguy",
     };

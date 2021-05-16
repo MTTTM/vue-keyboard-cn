@@ -54,7 +54,7 @@ export default {
     return {
       show: false,
       currentView: "",
-      operationActiveIndex: 2, //切换列表高亮索引
+      operationActiveIndex: 0, //切换列表高亮索引
       operationList: [
         {
           classs: "icon iconfont icon-keyboard-26",

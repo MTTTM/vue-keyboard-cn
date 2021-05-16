@@ -47,7 +47,7 @@
               canSwitchOther(el) ? '' : 'key-board-box-item-disabled',
             ]"
             :key="index + '_' + i"
-            @touchstart.stop.prevent="press(el)"
+            @click.stop.prevent="press(el)"
           >
             <span>{{ getItemText(el) }}</span>
           </div>
@@ -144,7 +144,9 @@ export default {
     // },
     getInputInfo: {
       handler(newV) {
-        if (newV.type === "number") {
+        //mix(所有）int(整数)，float(小数) zh,cn //展示键盘输入方式，默认中文，和键盘相对应
+        //showZh
+        if (newV.type === "int" || newV.type === "float") {
           this.changeNumberFn();
         } else if (newV.type === "cn") {
           this.curr = "text";
@@ -400,6 +402,7 @@ export default {
      * 按键按下
      */
     press(val) {
+      console.log("press", val);
       if (!this.canSwitchOther(val)) {
         return;
       }
