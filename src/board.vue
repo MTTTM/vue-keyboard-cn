@@ -62,7 +62,7 @@ import boardMaps from "./boardMaps";
 import { getPingMatchObjKey } from "./tools.js";
 import { matchHotPingying, setPingying } from "./memory.js";
 import EventKeys from "./eventKeys";
-getPingMatchObjKey("xijingpin", zhKeys);
+// getPingMatchObjKey("xijingpin", zhKeys);
 export default {
   props: {
     type: {
