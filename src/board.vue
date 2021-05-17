@@ -57,12 +57,12 @@
   </div>
 </template>
 <script>
-import ZH from "./zh";
+import ZH, { zhKeysArray as zhKeys } from "./zh";
 import boardMaps from "./boardMaps";
-const zhKeys = Object.keys(ZH);
 import { getPingMatchObjKey } from "./tools.js";
 import { matchHotPingying, setPingying } from "./memory.js";
 import EventKeys from "./eventKeys";
+getPingMatchObjKey("xijingpin", zhKeys);
 export default {
   props: {
     type: {
@@ -123,25 +123,6 @@ export default {
     };
   },
   watch: {
-    // value: {
-    //   handler(newV, oldV) {
-    //     this.valueArr = this.value.split("");
-    //     if (!oldV && this.show) {
-    //       this.valueArr.push('<span class="key-board-flash"></span>');
-    //     }
-    //   },
-    //   immediate: true,
-    // },
-    // show(newV) {
-    //   this.valueArr = this.value.split("");
-    //   if (newV) {
-    //     this.valueArr.push('<span class="key-board-flash"></span>');
-    //   } else {
-    //     this.valueArr = this.valueArr.filter(
-    //       (item) => item != '<span class="key-board-flash"></span>'
-    //     );
-    //   }
-    // },
     getInputInfo: {
       handler(newV) {
         //mix(所有）int(整数)，float(小数) zh,cn //展示键盘输入方式，默认中文，和键盘相对应
@@ -167,11 +148,8 @@ export default {
         this.zhSearchList = matchStr.split("");
       } else {
         //如果没有匹配，就需要做分词处理
-        // let memoryResult = matchHotPingying(this.tmpPingying);
         this.getHotzhSearchList(); //根据历史输入，获取可能待选的中文列表
         let matchResult = getPingMatchObjKey(this.tmpPingying, this.zhKeys);
-        // console.log("matchResult", matchResult, this.tmpPingying);
-
         let group = {};
         matchResult.forEach((item) => {
           if (!group[item.index]) {
@@ -321,9 +299,9 @@ export default {
     //       break;
     //   }
     // },
-    fouseFn() {
-      this.show = true;
-    },
+    // fouseFn() {
+    //   this.show = true;
+    // },
     /**
      * 键盘展示字符串
      */
@@ -470,57 +448,6 @@ export default {
 };
 </script>
 <style lang="scss" >
-@font-face {
-  font-family: "iconfont"; /* Project id 2524527 */
-  src: url("./assets/font/iconfont.woff2?t=1619945697477") format("woff2"),
-    url("./assets/font/iconfont.woff?t=1619945697477") format("woff"),
-    url("./assets/font/iconfont.ttf?t=1619945697477") format("truetype");
-}
-
-.iconfont {
-  font-family: "iconfont" !important;
-  font-size: 16px;
-  font-style: normal;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.icon-delete:before {
-  content: "\e66a";
-}
-
-.icon-keyboard-26:before {
-  content: "\e675";
-}
-
-.icon-operation:before {
-  content: "\e679";
-}
-
-.icon-smile:before {
-  content: "\e67e";
-}
-
-.icon-setting:before {
-  content: "\e67d";
-}
-
-.icon-arrow-up-filling:before {
-  content: "\e688";
-}
-
-.icon-arrow-down-filling:before {
-  content: "\e689";
-}
-
-.icon-arrow-left-filling:before {
-  content: "\e68a";
-}
-
-.icon-arrow-right-filling:before {
-  content: "\e68b";
-}
-
 .input {
   max-width: 600px;
   height: 300px;
@@ -639,6 +566,15 @@ export default {
     align-items: center;
     &.active {
       color: orange;
+      &.disabled {
+        opacity: 0.9;
+        color: #999;
+      }
+    }
+    &.disabled {
+      opacity: 0.9;
+      color: #999;
+      pointer-events: none;
     }
   }
   &.zh-text-list-box {

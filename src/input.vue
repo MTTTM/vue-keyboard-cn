@@ -17,6 +17,7 @@ import {
   splitStringToArray,
   getElementIndexOnParent,
   labelStringRemoveLabel,
+  uuid,
 } from "./tools.js";
 import { copyEventListener } from "./copyPaste.js";
 import { cursorStr, moveToFn, moveTo } from "./cursor.js";
@@ -66,7 +67,7 @@ export default {
   computed: {
     inputId() {
       let tString = new Date().getTime();
-      return `input-id-${tString}`;
+      return `input-id-${tString}-${uuid()}`;
     },
     //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {

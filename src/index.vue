@@ -9,8 +9,11 @@
         class="head-op-icon"
         v-for="(item, index) in operationList"
         :key="item.id"
-        @click.prevent.stop="operateBtnFn(index)"
-        :class="[operationActiveIndex == index ? 'active' : '']"
+        @click.prevent.stop="operateBtnFn(index, item)"
+        :class="[
+          operationActiveIndex == index ? 'active' : '',
+          isDisabled(item) ? 'disabled' : '',
+        ]"
       >
         <span :class="item.classs"></span>
       </span>
@@ -63,6 +66,7 @@ export default {
         {
           classs: "icon iconfont icon-smile",
           id: 2,
+          type: "smile",
         },
         {
           classs: "icon iconfont icon-operation",
@@ -81,6 +85,11 @@ export default {
       screenDir: 0, //竖屏 0 横屏1
       getInputInfo: {}, //当前获取焦点的input的信息
     };
+  },
+  computed: {
+    isMix() {
+      return this.getInputInfo && this.getInputInfo.type === "mix";
+    },
   },
   watch: {
     show: {
@@ -107,6 +116,10 @@ export default {
   mounted() {
     this.changeView();
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
+      // //如果没有显示，直接过滤
+      // if (!this.show) {
+      //   return;
+      // }
       let { isFocus, tmpValueNoFlash } = data;
       this.show = isFocus;
       this.value = tmpValueNoFlash; //直接引用
@@ -140,6 +153,13 @@ export default {
     window.removeEventListener("resize", this.windowChangeCallbackBind);
   },
   methods: {
+    isDisabled(item) {
+      if (item && item.type === "smile" && !this.isMix) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     windowChange() {
       clearTimeout(this.windowChangeTimer);
       this.windowChangeTimer = setTimeout(() => {
@@ -155,6 +175,10 @@ export default {
       }, 50);
     },
     nativeCopyCallbackWrite(str) {
+      //如果没有显示，直接过滤
+      if (!this.show) {
+        return;
+      }
       if (!str) {
         return;
       }
@@ -163,7 +187,10 @@ export default {
     changeView(path = "board") {
       this.currentView = path;
     },
-    operateBtnFn(index) {
+    operateBtnFn(index, item) {
+      if (this.isDisabled(item)) {
+        return;
+      }
       if (index != 3) {
         this.operationActiveIndex = index;
       }

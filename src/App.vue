@@ -10,7 +10,7 @@
       />dsfsdfds
     </div>
     <p v-html="value"></p>
-    <ky-input v-model="value" />
+    <ky-input v-model="value" type="mix" />
     <p>int</p>
     <ky-input v-model="intValue" type="int" />
     <p>float</p>
@@ -20,12 +20,12 @@
     <key-board :emojiMap="emoji" />
     <p v-html="value"></p>
     <p>指定 键盘</p>
-    <ky-input
+    <!-- <ky-input
       v-model="floatValue"
       type="float"
       :keyBoard="$refs['secondKeyBoard']"
     />
-    <key-board :emojiMap="emoji" ref="secondKeyBoard" />
+    <key-board :emojiMap="emoji" ref="secondKeyBoard" /> -->
     <div style="height: 800px"></div>
   </div>
 </template>

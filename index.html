@@ -17,13 +17,32 @@
     <li>hello</li>
 </ul>
   <script>
-  function checkChinese (str) {
-    var reg = new RegExp("^([\u4E00-\u9FFF]|[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\uff01\u3010\u3011\uffe5])+$","g");
-    console.log("reg",reg)
-    return reg.test(str);
+var a=[{key:"ooo",index:3},{key:"ji",index:2},{key:"j",index:2},{key:"bb",index:0}]
+var tmp={};
+var result=[];
+for(let t=0;t<a.length;t++){
+  let item=a[t];
+  let index=item.index;
+  if(!tmp[index]){
+    tmp[index]=a[t];
+  }
+  else if(tmp[index].index==item.index&&item.key.length>tmp[index].key.length){
+    //如果索引相同，那就保留key长队最大的
+    tmp[index]=a[t];
+  }
 }
+for(let key in tmp){
+  result.push(tmp[key]);
+}
+console.log("result",result.sort((a,b)=>a.index-b.index))
+//||(a.some((state) => state.index === item.index&&state.key.length<item.key.length))
+// a= a.filter(
+//         item =>{
+//                     return (a.some(state=> state.index !== item.index&&state.key!=item.key))
+//             }
+//       );
+console.log(a)
 
-console.log("nxxx",checkChinese("你好啊"))
 </script>
 
 </body>

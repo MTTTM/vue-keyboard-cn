@@ -1,20 +1,48 @@
 /**
- * 查找一个字符串中所有子串的位置
+ * 查找字符串在字符中出现的位置
  * @param {*} str 
  * @param {*} subStr 
- * @returns 
+ * @returns Array
  */
-export const getAllIndex=(str,subStr)=>{
+export const getIndexInArray=(str,subStr)=>{
   var positions = new Array();
-  function searchSubStr(str,subStr){
       var pos = str.indexOf(subStr);
-      while(pos>-1){
-          positions.push(pos);
-          pos = str.indexOf(subStr,pos+1);
-      }
-  }
-  searchSubStr(str,subStr);
+        if(pos>-1){
+          positions.push({
+            index:pos,
+            text:subStr
+          });
+        }
   return positions;
+}
+
+function matchPinyin(pinyin="",objKeys=[],matchResult){
+  console.log('受到的pingying',pinyin)
+  //遍历词库的key，得到可能存在的分词组合,
+    for (let i = 0; i < objKeys.length; i++) {
+      let item = objKeys[i];
+      let indexArr = getIndexInArray(pinyin, item);
+      if(indexArr[0]){
+        matchResult.push({
+          index: indexArr[0].index,
+          key: item,
+        });
+      }
+      let validStr=pinyin.replace("_","");
+      if(indexArr[0]&&indexArr[0].index>-1&&validStr.length){
+        let arr=pinyin.split("");
+        let index=indexArr[0].index;
+        let len=indexArr[0].text.length;
+        //直接把匹配到的字符串替换为_
+        for(let i=index;i<(index+len);i++){
+          arr[i]="_";
+        }
+        let endStr=arr.join("");
+        // console.log("pinyinfsadfsdfdfsd",pinyin,"new",endStr)
+        matchPinyin(endStr,objKeys,matchResult)
+        break;
+      }
+    }
 }
 /**
  * 词拼音在用户输入的拼音之中，分词
@@ -22,26 +50,13 @@ export const getAllIndex=(str,subStr)=>{
  * @param {*} objKeys 
  * @returns 
  */
+ 
 export const getPingMatchObjKey=(pingyingStr="",objKeys=[])=>{
    //如果没有匹配，就需要做分词处理
    let matchResult = [];
-   //遍历词库的key，得到可能存在的分词组合,
-   //如果当前输入的拼音有对应山的，返回它在字符串中的索引index，否则为-1
-   for (let i = 0; i < objKeys.length - 1; i++) {
-     let item = objKeys[i];
-     let indexArr = getAllIndex(pingyingStr, item);
-     indexArr.forEach((elIndex) => {
-       if(elIndex>-1){
-        matchResult.push({
-          index: elIndex,
-          key: item,
-        });
-       }
-      
-     });
-   }
-   //过滤结果集中不符合条件的元素
-  // matchResult = matchResult.filter((el) => el.index != -1);
+   matchPinyin(pingyingStr,objKeys,matchResult);
+   matchResult=matchResult.sort((a,b)=>a.index-b.index)
+  console.log("匹配到的词",matchResult)
    return matchResult;
 }
 /**
@@ -132,4 +147,14 @@ export const labelStringRemoveLabel=(labelStr="")=>{
  */
 export const labelStringRemoveLabelExceptImg=(labelStr="")=>{
   return labelStr.replace(/<[^(img attr\-img=""vue\-keyboard\-cn\-emoji")>]+>/g,"");
+}
+/**
+ * 提供uuid
+ * @returns 
+ */
+ export const uuid=()=>{
+  function S4() {
+      return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  }
+  return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }

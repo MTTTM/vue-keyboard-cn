@@ -1,8 +1,10 @@
 import { getFullPingMatchObjKey } from "./tools.js";
 const localStoreKey = "vue-keyboard-cn-store";
+const clearTimeString="__$lastClearTime";//保存`清除热度小于2的词的时间戳`key
 /**
  * 存储的格式入:
  * {
+ *  __$lastClearTime:"时间戳",
  *  nihao:[
  *    {
  *      zh:"你好",
@@ -30,6 +32,22 @@ export const getItem=()=>{
 }
 export const setItem=(obj={})=>{
   let jsonStr="";
+  //如果没有清除时间
+  if(!obj[clearTimeString]){
+    obj[clearTimeString]=new Date().getTime();
+  }
+  else if(obj[clearTimeString]){
+    try{
+      //距离上一次清除热度小于2的时间间隔超过7天
+      if(new Date().getTime()-Number(obj[clearTimeString])>(86400*7)){
+        for(let key in obj){
+          obj[key]=obj[key].filter(item=>item.order<=2);
+        }
+      }
+    }catch(e){
+      console.log("删除 热度小于2的词失败",e.getMessage());
+    }
+  }
   try{
     jsonStr=JSON.stringify(obj);
     localStorage.setItem(localStoreKey,jsonStr)
