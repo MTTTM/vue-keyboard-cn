@@ -22,6 +22,7 @@ import {
 import { copyEventListener } from "./copyPaste.js";
 import { cursorStr, moveToFn, moveTo } from "./cursor.js";
 export default {
+  name: "input",
   props: {
     value: {
       type: String,

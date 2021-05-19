@@ -553,6 +553,7 @@ const dictionary = {
   zuo: '作做坐左座昨佐琢乍凿唑嘬怍撮柞砟祚笮胙迮酢阼',
 }
 const zhKeys = Object.keys(dictionary);
-//安装拼音长度排序（长的在前面）
-export const zhKeysArray=zhKeys.sort((a, b)=>b.length - a.length);
+//安装拼音长度排序（长的在前面，缓存起来
+zhKeys.sort((a, b)=>b.length - a.length);
+export const zhKeysArray=zhKeys;
 export default dictionary

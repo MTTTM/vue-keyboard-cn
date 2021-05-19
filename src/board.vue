@@ -64,6 +64,7 @@ import { matchHotPingying, setPingying } from "./memory.js";
 import EventKeys from "./eventKeys";
 // getPingMatchObjKey("xijingpin", zhKeys);
 export default {
+  name: "board",
   props: {
     type: {
       type: [String],

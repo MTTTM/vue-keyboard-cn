@@ -1,201 +1,202 @@
+const pathStr="https://raw.githubusercontent.com/MTTTM/vue-keyboard-cn/main/src/assets/images/";
 export const person={
    text:"人物",
    list:[
     {
-      path:require("./assets/images/person/1_smile.png"),
+      path:`${pathStr}/person/1_smile.png`,
       key:"smile"
     },
     {
-      path:require("./assets/images/person/3_grinning.png"),
+      path:`${pathStr}/person/3_grinning.png`,
       key:"grinning"
     },
     {
-      path:require("./assets/images/person/4_blush.png"),
+      path:`${pathStr}/person/4_blush.png`,
       key:"blush"
     },
     {
-      path:require("./assets/images/person/6_wink.png"),
+      path:`${pathStr}/person/6_wink.png`,
       key:"wink"
     },
     {
-      path:require("./assets/images/person/7_heart_eyes.png"),
+      path:`${pathStr}/person/7_heart_eyes.png`,
       key:"heart_eyes"
     },
     {
-      path:require("./assets/images/person/8_kissing_heart.png"),
+      path:`${pathStr}/person/8_kissing_heart.png`,
       key:"kissing_heart"
     },
     {
-      path:require("./assets/images/person/9_kissing_closed_eyes.png"),
+      path:`${pathStr}/person/9_kissing_closed_eyes.png`,
       key:"kissing_closed_eyes"
     },
     {
-      path:require("./assets/images/person/10_disappointed.png"),
+      path:`${pathStr}/person/10_disappointed.png`,
       key:"disappointed"
     },
     {
-      path:require("./assets/images/person/10_kissing.png"),
+      path:`${pathStr}/person/10_kissing.png`,
       key:"kissing"
     },
     {
-      path:require("./assets/images/person/11_kissing_smiling_eyes.png"),
+      path:`${pathStr}/person/11_kissing_smiling_eyes.png`,
       key:"kissing_smiling_eyes"
     },
     {
-      path:require("./assets/images/person/12_stuck_out_tongue_winking_eye.png"),
+      path:`${pathStr}/person/12_stuck_out_tongue_winking_eye.png`,
       key:"stuck_out_tongue_winking_eye"
     },
     {
-      path:require("./assets/images/person/13_stuck_out_tongue_closed_eyes.png"),
+      path:`${pathStr}/person/13_stuck_out_tongue_closed_eyes.png`,
       key:"13_stuck_out_tongue_closed_eyes"
     },
     {
-      path:require("./assets/images/person/14_stuck_out_tongue.png"),
+      path:`${pathStr}/person/14_stuck_out_tongue.png`,
       key:"14_stuck_out_tongue"
     },
     {
-      path:require("./assets/images/person/15_flushed.png"),
+      path:`${pathStr}/person/15_flushed.png`,
       key:"15_flushed"
     },
     {
-      path:require("./assets/images/person/16_grin.png"),
+      path:`${pathStr}/person/16_grin.png`,
       key:"16_grin"
     },
     {
-      path:require("./assets/images/person/17_pensive.png"),
+      path:`${pathStr}/person/17_pensive.png`,
       key:"17_pensive"
     },
     {
-      path:require("./assets/images/person/18_relieved.png"),
+      path:`${pathStr}/person/18_relieved.png`,
       key:"18_relieved"
     },
     {
-      path:require("./assets/images/person/19_unamused.png"),
+      path:`${pathStr}/person/19_unamused.png`,
       key:"19_unamused"
     },
     {
-      path:require("./assets/images/person/20_fearful.png"),
+      path:`${pathStr}/person/20_fearful.png`,
       key:"20_fearful"
     },
     {
-      path:require("./assets/images/person/20_persevere.png"),
+      path:`${pathStr}/person/20_persevere.png`,
       key:"20_persevere"
     },
  
     {
-      path:require("./assets/images/person/22_joy.png"),
+      path:`${pathStr}/person/22_joy.png`,
       key:"22_joy"
     },
     {
-      path:require("./assets/images/person/23_sob.png"),
+      path:`${pathStr}/person/23_sob.png`,
       key:"23_sob"
     },
     {
-      path:require("./assets/images/person/24_sleepy.png"),
+      path:`${pathStr}/person/24_sleepy.png`,
       key:"24_sleepy"
     },
     {
-      path:require("./assets/images/person/25_cold_sweat.png"),
+      path:`${pathStr}/person/25_cold_sweat.png`,
       key:"25_cold_sweat"
     },
     {
-      path:require("./assets/images/person/25_disappointed_relieved.png"),
+      path:`${pathStr}/person/25_disappointed_relieved.png`,
       key:"25_disappointed_relieved"
     },
     {
-      path:require("./assets/images/person/26_sweat_smile.png"),
+      path:`${pathStr}/person/26_sweat_smile.png`,
       key:"26_sweat_smile"
     },
     {
-      path:require("./assets/images/person/27_sweat.png"),
+      path:`${pathStr}/person/27_sweat.png`,
       key:"27_sweat"
     },
     {
-      path:require("./assets/images/person/28_weary.png"),
+      path:`${pathStr}/person/28_weary.png`,
       key:"28_weary"
     },
     {
-      path:require("./assets/images/person/29_tired_face.png"),
+      path:`${pathStr}/person/29_tired_face.png`,
       key:"29_tired_face"
     },
     {
-      path:require("./assets/images/person/30_scream.png"),
+      path:`${pathStr}/person/30_scream.png`,
       key:"30_scream"
     },
     {
-      path:require("./assets/images/person/31_angry.png"),
+      path:`${pathStr}/person/31_angry.png`,
       key:"31_angry"
     },
     {
-      path:require("./assets/images/person/32_rage.png"),
+      path:`${pathStr}/person/32_rage.png`,
       key:"32_rage"
     },
     {
-      path:require("./assets/images/person/33_triumph.png"),
+      path:`${pathStr}/person/33_triumph.png`,
       key:"33_triumph"
     },
     {
-      path:require("./assets/images/person/34_laughing.png"),
+      path:`${pathStr}/person/34_laughing.png`,
       key:"34_laughing"
     },
     {
-      path:require("./assets/images/person/35_yum.png"),
+      path:`${pathStr}/person/35_yum.png`,
       key:"35_yum"
     },
     {
-      path:require("./assets/images/person/36_mask.png"),
+      path:`${pathStr}/person/36_mask.png`,
       key:"36_mask"
     },
     {
-      path:require("./assets/images/person/37_sunglasses.png"),
+      path:`${pathStr}/person/37_sunglasses.png`,
       key:"37_sunglasses"
     },
     {
-      path:require("./assets/images/person/38_sleeping.png"),
+      path:`${pathStr}/person/38_sleeping.png`,
       key:"38_sleeping"
     },
     {
-      path:require("./assets/images/person/39_dizzy_face.png"),
+      path:`${pathStr}/person/39_dizzy_face.png`,
       key:"39_dizzy_face"
     },
     {
-      path:require("./assets/images/person/40_astonished.png"),
+      path:`${pathStr}/person/40_astonished.png`,
       key:"40_astonished"
     },
     {
-      path:require("./assets/images/person/41_worried.png"),
+      path:`${pathStr}/person/41_worried.png`,
       key:"41_worried"
     },
     {
-      path:require("./assets/images/person/42_frowning.png"),
+      path:`${pathStr}/person/42_frowning.png`,
       key:"42_frowning"
     },
     {
-      path:require("./assets/images/person/43_anguished.png"),
+      path:`${pathStr}/person/43_anguished.png`,
       key:"43_anguished"
     },
     {
-      path:require("./assets/images/person/44_neutral_face.png"),
+      path:`${pathStr}/person/44_neutral_face.png`,
       key:"44_neutral_face"
     },
     {
-      path:require("./assets/images/person/45_confused.png"),
+      path:`${pathStr}/person/45_confused.png`,
       key:"45_confused"
     },
     {
-      path:require("./assets/images/person/46_no_mouth.png"),
+      path:`${pathStr}/person/46_no_mouth.png`,
       key:"46_no_mouth"
     },
     {
-      path:require("./assets/images/person/47_innocent.png"),
+      path:`${pathStr}/person/47_innocent.png`,
       key:"47_innocent"
     },
     {
-      path:require("./assets/images/person/48_smirk.png"),
+      path:`${pathStr}/person/48_smirk.png`,
       key:"48_smirk"
     },
     {
-      path:require("./assets/images/person/49_expressionless.png"),
+      path:`${pathStr}/person/49_expressionless.png`,
       key:"49_expressionless"
     }
   ]
@@ -204,67 +205,67 @@ export const hearts={
   text:"有爱",
   list:[
     {
-      path:require("./assets/images/hearts/1_yellow_heart.png"),
+      path:`${pathStr}/hearts/1_yellow_heart.png`,
       key:"1_yellow_heart"
     },
     {
-      path:require("./assets/images/hearts/2_blue_heart.png"),
+      path:`${pathStr}/hearts/2_blue_heart.png`,
       key:"2_blue_heart"
     },
     {
-      path:require("./assets/images/hearts/3_purple_heart.png"),
+      path:`${pathStr}/hearts/3_purple_heart.png`,
       key:"3_purple_heart"
     },
     {
-      path:require("./assets/images/hearts/4_green_heart.png"),
+      path:`${pathStr}/hearts/4_green_heart.png`,
       key:"4_green_heart"
     },
     {
-      path:require("./assets/images/hearts/5_heart.png"),
+      path:`${pathStr}/hearts/5_heart.png`,
       key:"5_heart"
     },
     {
-      path:require("./assets/images/hearts/6_broken_heart.png"),
+      path:`${pathStr}/hearts/6_broken_heart.png`,
       key:"6_broken_heart"
     },
     {
-      path:require("./assets/images/hearts/7_heartpulse.png"),
+      path:`${pathStr}/hearts/7_heartpulse.png`,
       key:"7_heartpulse"
     },
     {
-      path:require("./assets/images/hearts/8_heartbeat.png"),
+      path:`${pathStr}/hearts/8_heartbeat.png`,
       key:"8_heartbeat"
     },
     {
-      path:require("./assets/images/hearts/9_two_hearts.png"),
+      path:`${pathStr}/hearts/9_two_hearts.png`,
       key:"9_two_hearts"
     },
     {
-      path:require("./assets/images/hearts/10_sparkling_heart.png"),
+      path:`${pathStr}/hearts/10_sparkling_heart.png`,
       key:"10_sparkling_heart"
     },
     {
-      path:require("./assets/images/hearts/11_revolving_hearts.png"),
+      path:`${pathStr}/hearts/11_revolving_hearts.png`,
       key:"11_revolving_hearts"
     },
     {
-      path:require("./assets/images/hearts/12_cupid.png"),
+      path:`${pathStr}/hearts/12_cupid.png`,
       key:"12_cupid"
     },
     {
-      path:require("./assets/images/hearts/13_love_letter.png"),
+      path:`${pathStr}/hearts/13_love_letter.png`,
       key:"13_love_letter"
     },
     {
-      path:require("./assets/images/hearts/14_kiss.png"),
+      path:`${pathStr}/hearts/14_kiss.png`,
       key:"14_kiss"
     },
     {
-      path:require("./assets/images/hearts/15_ring.png"),
+      path:`${pathStr}/hearts/15_ring.png`,
       key:"15_ring"
     },
     {
-      path:require("./assets/images/hearts/16_gem.png"),
+      path:`${pathStr}/hearts/16_gem.png`,
       key:"16_gem"
     },
   ]
@@ -273,63 +274,63 @@ export const symbo={
   text:"符号",
   list:[
     {
-      path:require("./assets/images/symbol/1_one.png"),
+      path:`${pathStr}/symbol/1_one.png`,
       key:"1_one"
     },
     {
-      path:require("./assets/images/symbol/2_two.png"),
+      path:`${pathStr}/symbol/2_two.png`,
       key:"2_two"
     },
     {
-      path:require("./assets/images/symbol/3_three.png"),
+      path:`${pathStr}/symbol/3_three.png`,
       key:"3_three"
     },
     {
-      path:require("./assets/images/symbol/4_four.png"),
+      path:`${pathStr}/symbol/4_four.png`,
       key:"4_four"
     },
     {
-      path:require("./assets/images/symbol/5_five.png"),
+      path:`${pathStr}/symbol/5_five.png`,
       key:"5_five"
     },
     {
-      path:require("./assets/images/symbol/6_six.png"),
+      path:`${pathStr}/symbol/6_six.png`,
       key:"6_six"
     },
     {
-      path:require("./assets/images/symbol/7_seven.png"),
+      path:`${pathStr}/symbol/7_seven.png`,
       key:"7_seven"
     },
     {
-      path:require("./assets/images/symbol/8_eight.png"),
+      path:`${pathStr}/symbol/8_eight.png`,
       key:"8_eight"
     },
     {
-      path:require("./assets/images/symbol/9_zero.png"),
+      path:`${pathStr}/symbol/9_zero.png`,
       key:"9_zero"
     },
     {
-      path:require("./assets/images/symbol/10_ten.png"),
+      path:`${pathStr}/symbol/10_ten.png`,
       key:"10_ten"
     },
     {
-      path:require("./assets/images/symbol/11_x.png"),
+      path:`${pathStr}/symbol/11_x.png`,
       key:"11_x"
     },
     {
-      path:require("./assets/images/symbol/12_bangbang.png"),
+      path:`${pathStr}/symbol/12_bangbang.png`,
       key:"12_bangbang"
     },
     {
-      path:require("./assets/images/symbol/13_interrobang.png"),
+      path:`${pathStr}/symbol/13_interrobang.png`,
       key:"13_interrobang"
     },
     {
-      path:require("./assets/images/symbol/14_exclamation.png"),
+      path:`${pathStr}/symbol/14_exclamation.png`,
       key:"14_exclamation"
     },
     {
-      path:require("./assets/images/symbol/15_question.png"),
+      path:`${pathStr}/symbol/15_question.png`,
       key:"15_question"
     },
     

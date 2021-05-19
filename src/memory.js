@@ -43,6 +43,7 @@ export const setItem=(obj={})=>{
         for(let key in obj){
           obj[key]=obj[key].filter(item=>item.order<=2);
         }
+        obj[clearTimeString]=new Date().getTime();
       }
     }catch(e){
       console.log("删除 热度小于2的词失败",e.getMessage());

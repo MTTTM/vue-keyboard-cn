@@ -1,7 +1,7 @@
 <template>
   <div class="emoji-wrap">
     <div class="emoj-wrap-body">
-      <div class="emoj-wrap-body-inner">
+      <div class="emoj-wrap-body-inner" ref="scrollBox">
         <div class="emoji-item-wrap">
           <div
             class="emoj-wrap-body-item"
@@ -9,10 +9,7 @@
             :key="item.key"
             @click.stop.prevent="appendItem(item)"
           >
-            <div
-              :style="{ 'background-image': `url(${item.path})` }"
-              class="img"
-            />
+            <EmojiItem :path="item.path" />
           </div>
         </div>
       </div>
@@ -37,7 +34,10 @@
 </template>
 <script>
 import EventKeys from "./eventKeys";
+import EmojiItem from "./emojiItem";
 export default {
+  name: "emoji",
+  components: { EmojiItem },
   props: {
     emojiMap: {
       type: Object,
@@ -64,6 +64,9 @@ export default {
   methods: {
     setKey(item) {
       this.key = item;
+      if (this.$refs["scrollBox"]) {
+        this.$refs["scrollBox"].scrollTo(0, 0);
+      }
     },
     appendItem(item) {
       this.$root.$emit(
@@ -95,11 +98,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow: auto;
-    // display: flex;
-    // flex-wrap: wrap;
   }
-  // height: 150px;
-
   .emoji-item-wrap {
     display: flex;
     flex-wrap: wrap;

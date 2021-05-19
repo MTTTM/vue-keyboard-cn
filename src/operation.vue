@@ -93,6 +93,7 @@ import { getCopyLocalStorage, nativeCopyString } from "./copyPaste.js";
 import inputFilterRegx from "./inputFilterRegx";
 let timer;
 export default {
+  name: "operation",
   data() {
     return {
       isselectAll: false,

@@ -35,19 +35,13 @@ export const saveCopyList=(array=[],isClean=false)=>{
     console.log("store",store)
     if (store) {
       let storeParse = JSON.parse(store);
-      //
       if (Array.isArray(storeParse)) {
         copyTextArray = storeParse.filter(item=>item);
-      } else {
-        copyTextArray = [];
-      }
+      } 
     }
-    else{
-      copyTextArray = [];
-    }
+    
   } catch (e) {
     console.error("解析复制列表不报错",e)
-    copyTextArray = [];
   }
   return  copyTextArray;
 };
