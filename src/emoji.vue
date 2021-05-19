@@ -91,6 +91,7 @@ export default {
 .emoj-wrap-body {
   flex: 1;
   position: relative;
+
   .emoj-wrap-body-inner {
     position: absolute;
     left: 0;
@@ -98,6 +99,8 @@ export default {
     width: 100%;
     height: 100%;
     overflow: auto;
+    touch-action: pan-y;
+    user-select: none;
   }
   .emoji-item-wrap {
     display: flex;

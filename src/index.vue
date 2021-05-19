@@ -3,7 +3,7 @@
     :class="['key-board-box', screenDir == 1 ? 'hs-key-board-box' : '']"
     v-show="show"
   >
-    <div class="key-board-box-head-op">
+    <div class="key-board-box-head-op" @touchstart.stop>
       <!-- 键盘设置列表 -->
       <span
         class="head-op-icon"
@@ -116,14 +116,13 @@ export default {
   mounted() {
     this.changeView();
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
-      // //如果没有显示，直接过滤
-      // if (!this.show) {
-      //   return;
-      // }
+      //这个所有键盘都会受到影响！！
       let { isFocus, tmpValueNoFlash } = data;
       this.show = isFocus;
       this.value = tmpValueNoFlash; //直接引用
       this.getInputInfo = data;
+      this.changeView("board");
+      this.operationActiveIndex = 0;
     });
     //监听键盘关闭事件
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
