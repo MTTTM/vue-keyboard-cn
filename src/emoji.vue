@@ -101,6 +101,7 @@ export default {
     overflow: auto;
     touch-action: pan-y;
     user-select: none;
+    scroll-snap-type: y mandatory;
   }
   .emoji-item-wrap {
     display: flex;

@@ -1,83 +1,7 @@
-export default {
-  numberMap: [
-    [
-      {
-        text: "%"
-      },
-      {
-        text: 1
-      },
-      {
-        text: 2
-      },
-      {
-        text: 3
-      },
-      {
-        text: "delete",
-        zhText: "删除",
-        enText: "delete",
-        operate: "delete"
-      }
-    ],
-    [
-      {
-        text: "+"
-      },
-      {
-        text: "4"
-      },
-      {
-        text: 5
-      },
-      {
-        text: 6
-      },
-      {
-        text: "."
-      }
-    ],
-    [
-      {
-        text: "-"
-      },
-      {
-        text: 7
-      },
-      {
-        text: 8
-      },
-      {
-        text: 9
-      },
-      {
-        text: "@"
-      }
-    ],
-    [
-      {
-        text: "/"
-      },
-      {
-        text: "返回",
-        zhText: "返回",
-        enText: "back",
-        operate: "back"
-      },
-      {
-        text: 0
-      },
-      {
-        text: " "
-      },
-      {
-        text: "搜索",
-        zhText: "搜索",
-        enText: "search"
-      }
-    ]
-  ],
-  textMap: [
+
+const textMap=(lan="cn")=>{
+  //&nbsp;
+  let t=[
     [
       {
         text: "Q",
@@ -165,7 +89,7 @@ export default {
         enText: "capital",
         zhLowText: "小写",
         enLowText: "low",
-        operate: "changeCapital"
+        operate: "changeCapital",
       },
       {
         text: "Z",
@@ -214,32 +138,35 @@ export default {
         operate: "changeNumber"
       },
       {
-        text: ",",
-        zhText: "，",
-        enText: ","
+        text: function(){
+          return lan=='cn'?'，':','
+        },
       },
       {
-        text: " "
+        text: "&nbsp;",//解析html时候会有问题
+        classString:"icon iconfont icon-Spacebar",
+        hideText:true
       },
       {
-        text: "。",
-        zhText: "。",
-        enText: "."
+        text: function(){
+          return lan=='cn'?'。':'.'
+        },
       },
       {
-        text: "中/英",
         operate: "changeLan",
-        zhText: "中/英",
-        enText: "zh/en"
+        classString:"icon iconfont icon-theearth2diqiu",
       },
       {
-        text: "搜索",
         operate: "search",
-        zhText: "搜索",
-        enText: "search"
+        classString:"icon iconfont icon-enter"
       }
     ]
-  ],
+  ]
+  return t;
+}
+export default {
+  cnMap: textMap("cn"),
+  enMap:textMap("en"),
   cnSymbolMap: [
     [
       {
@@ -364,5 +291,208 @@ export default {
         enConfirmText: "Confirm"
       }
     ]
-  ]
+  ],
+  enSymbolMap: [
+    [
+      {
+        text: "【"
+      },
+      {
+        text: "】"
+      },
+      {
+        text: "{"
+      },
+      {
+        text: "}"
+      },
+      {
+        text: "#"
+      },
+      {
+        text: "%"
+      },
+      {
+        text: "^"
+      },
+      {
+        text: "*"
+      },
+      {
+        text: "+"
+      },
+      {
+        text: "="
+      }
+    ],
+    [
+      {
+        text: "_"
+      },
+      {
+        text: "-"
+      },
+      {
+        text: "\\"
+      },
+      {
+        text: "|"
+      },
+      {
+        text: "~"
+      },
+      {
+        text: "@"
+      },
+      {
+        text: "《"
+      },
+      {
+        text: "》"
+      },
+      {
+        text: "￥"
+      },
+      {
+        text: "$"
+      },
+      {
+        text: "&"
+      },
+      {
+        text: "."
+      }
+    ],
+    [
+      {
+        text: "123",
+        operate: "changeNumber"
+      },
+      {
+        text: "..."
+      },
+      {
+        text: ","
+      },
+
+      {
+        text: "^_^"
+      },
+      {
+        text: "?"
+      },
+      {
+        text: "!"
+      },
+      {
+        text: "“"
+      },
+      {
+        text: "”"
+      },
+      {
+        text: "delete",
+        zhText: "删除",
+        enText: "delete",
+        operate: "delete"
+      }
+    ],
+    [
+      {
+        text: "返回",
+        zhText: "返回",
+        enText: "back",
+        operate: "back"
+      },
+      {
+        text: " "
+      },
+      {
+        text: "搜索",
+        operate: "search",
+        zhText: "搜索",
+        enText: "search",
+        zhConfirmText: "确认",
+        enConfirmText: "Confirm"
+      }
+    ]
+  ],
+  numberMap: [
+    [
+      {
+        text: "%"
+      },
+      {
+        text: 1
+      },
+      {
+        text: 2
+      },
+      {
+        text: 3
+      },
+      {
+        text: "delete",
+        zhText: "删除",
+        enText: "delete",
+        operate: "delete"
+      }
+    ],
+    [
+      {
+        text: "+"
+      },
+      {
+        text: "4"
+      },
+      {
+        text: 5
+      },
+      {
+        text: 6
+      },
+      {
+        text: "."
+      }
+    ],
+    [
+      {
+        text: "-"
+      },
+      {
+        text: 7
+      },
+      {
+        text: 8
+      },
+      {
+        text: 9
+      },
+      {
+        text: "@"
+      }
+    ],
+    [
+      {
+        text: "/"
+      },
+      {
+        text: "返回",
+        zhText: "返回",
+        enText: "back",
+        operate: "back"
+      },
+      {
+        text: 0
+      },
+      {
+        text: " "
+      },
+      {
+        text: "搜索",
+        zhText: "搜索",
+        enText: "search"
+      }
+    ]
+  ],
 };

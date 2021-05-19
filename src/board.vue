@@ -44,12 +44,21 @@
             :class="[
               'key-board-box-item',
               el.operate ? 'fn-text' : '',
+
               canSwitchOther(el) ? '' : 'key-board-box-item-disabled',
             ]"
             :key="index + '_' + i"
             @click.stop.prevent="press(el)"
           >
-            <span>{{ getItemText(el) }}</span>
+            <span
+              v-html="getItemText(el)"
+              :class="[el.classString ? el.classString : '', 'span-text']"
+            ></span>
+            <span
+              v-if="el.operate == 'changeLan'"
+              class="key-board-box-item-curr-text"
+              >{{ switchLangShow[curr] }}</span
+            >
           </div>
         </template>
       </div>
@@ -90,7 +99,8 @@ export default {
       pingyingMap: { ...ZH },
       tmpPingying: "", //临时中文输入
       valueArr: [], //已填入的字符串转数组
-      curr: "text",
+      curr: "cn",
+      prev: "", //切换键盘时候记录
       isLower: false, //键盘显示小写(如果是英文模式就是输入小写)
       newLang: "",
       mainKeyBoardType: "",
@@ -103,6 +113,10 @@ export default {
       matchedKeyArrSelectedIndex: 0, //已匹配拼音key对应的索引
       showZhMatchArr: [], //展示的选中后的中文和未选中的拼音
       operationActiveIndex: 0, //切换列表高亮索引
+      switchLangShow: {
+        cn: "中",
+        en: "en",
+      },
       operationList: [
         {
           classs: "icon iconfont icon-keyboard-26",
@@ -130,13 +144,14 @@ export default {
         //showZh
         if (newV.type === "int" || newV.type === "float") {
           this.changeNumberFn();
-        } else if (newV.type === "cn") {
-          this.curr = "text";
-          this.newLang = "zh";
         } else {
-          this.curr = "text";
-          this.newLang = "en";
+          this.curr = newV.type;
+          // this.newLang = "zh";
         }
+        // else {
+        //   this.curr = "text";
+        //   this.newLang = "en";
+        // }
       },
       immediate: true,
     },
@@ -308,12 +323,21 @@ export default {
      */
     getItemText(el) {
       let end = el.text;
+      if (typeof end === "function") {
+        return end();
+      }
+      //如果不显示文字
+      if (el.hideText) {
+        end = "";
+      }
+
       if (el.operate == "changeCapital") {
         if (this.isLower) {
           end = el[`${this.newLang}LowText`];
           return end;
         }
       }
+
       if (el[this.newLang + "Text"]) {
         end = el[this.newLang + "Text"];
       }
@@ -386,7 +410,7 @@ export default {
         return;
       }
       //中文输入特殊处理
-      if (val.isText && this.newLang == "zh") {
+      if (val.isText && this.curr == "cn") {
         this.tmpPingying += val.text.toLowerCase();
         return;
       }
@@ -410,11 +434,7 @@ export default {
       }
     },
     changeLanFn() {
-      if (this.newLang == "zh") {
-        this.newLang = "en";
-      } else {
-        this.newLang = "zh";
-      }
+      this.curr = this.curr == "cn" ? "en" : "cn";
     },
     changeCapitalFn() {
       this.isLower = !this.isLower;
@@ -476,6 +496,8 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
+  position: relative;
+  z-index: 30;
 }
 .key-board-box {
   // width: 100%;
@@ -525,7 +547,7 @@ export default {
     &.key-board-box-item-disabled {
       color: #999;
     }
-    span {
+    .span-text {
       line-height: 1.4;
       font-size: 14px;
       white-space: nowrap;
@@ -533,6 +555,22 @@ export default {
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+    }
+    .key-board-box-item-curr-text {
+      position: absolute;
+      bottom: 2px;
+      right: 5px;
+      font-size: 12px;
+      color: #666;
+      z-index: 10;
+      transform: scale(0.8);
+    }
+    .icon-theearth2diqiu {
+      font-size: 20px !important;
+    }
+    .icon-Spacebar {
+      font-size: 20px !important;
+      transform: translate(-50%, -50%) scaleX(1.2) scaleY(0.9);
     }
     &.fn-text {
       span {
@@ -553,6 +591,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  z-index: 30;
   .pingying-box {
     font-size: 14px;
     padding: 0 5px;

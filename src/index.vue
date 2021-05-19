@@ -235,6 +235,7 @@ export default {
   margin: 0;
   padding: 0;
 }
+
 .iconfont {
   font-family: "iconfont" !important;
   font-size: 16px;
@@ -243,24 +244,16 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-iconfontsvgnext:before {
-  content: "\e629";
+.icon-Spacebar:before {
+  content: "\e6d8";
+}
+
+.icon-theearth2diqiu:before {
+  content: "\e62a";
 }
 
 .icon-bg-next:before {
   content: "\e649";
-}
-
-.icon-24gf-previous:before {
-  content: "\ea88";
-}
-
-.icon-bg-previous:before {
-  content: "\e645";
-}
-
-.icon-skip-previous:before {
-  content: "\e8d7";
 }
 
 .icon-enter:before {
