@@ -145,7 +145,7 @@ export default {
         if (newV.type === "int" || newV.type === "float") {
           this.changeNumberFn();
         } else {
-          this.curr = newV.type;
+          this.curr = newV.type == "mix" ? "cn" : newV.type;
           // this.newLang = "zh";
         }
         // else {
@@ -329,6 +329,8 @@ export default {
       //如果不显示文字
       if (el.hideText) {
         end = "";
+      } else if (!end) {
+        return "";
       }
 
       if (el.operate == "changeCapital") {
@@ -434,20 +436,26 @@ export default {
       }
     },
     changeLanFn() {
+      this.prev = this.curr;
       this.curr = this.curr == "cn" ? "en" : "cn";
+      // console.log("this.prev", this.prev, "this.curr", this.curr);
     },
     changeCapitalFn() {
       this.isLower = !this.isLower;
     },
     changeNumberFn() {
+      this.prev = this.curr;
       this.curr = "number";
       this.tmpPingying = "";
     },
     backFn() {
-      this.curr = "text";
+      let t = this.prev;
+      this.prev = this.curr;
+      this.curr = t;
       this.tmpPingying = "";
     },
     symbolFn() {
+      this.prev = this.curr;
       this.curr = "cnSymbol";
       this.tmpPingying = "";
     },
@@ -496,8 +504,8 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
-  position: relative;
-  z-index: 30;
+  // position: relative;
+  // z-index: 30;
 }
 .key-board-box {
   // width: 100%;
@@ -516,7 +524,7 @@ export default {
     overflow: hidden;
     top: 0;
     left: 0;
-    z-index: 20;
+    z-index: 35;
   }
   .key-board-box-body {
     padding: 0 5px;

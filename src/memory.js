@@ -41,12 +41,15 @@ export const setItem=(obj={})=>{
       //距离上一次清除热度小于2的时间间隔超过7天
       if(new Date().getTime()-Number(obj[clearTimeString])>(86400*7)){
         for(let key in obj){
-          obj[key]=obj[key].filter(item=>item.order<=2);
+          //因为__$lastClearTime，对应的是时间戳，不用处理
+          if(Array.isArray(obj[key])){
+            obj[key]=obj[key].filter(item=>item.order<=2);
+          }
         }
         obj[clearTimeString]=new Date().getTime();
       }
     }catch(e){
-      console.log("删除 热度小于2的词失败",e.getMessage());
+      console.log("删除 热度小于2的词失败",e);
     }
   }
   try{

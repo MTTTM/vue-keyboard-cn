@@ -128,9 +128,7 @@ const textMap=(lan="cn")=>{
     ],
     [
       {
-        text: "符",
-        zhText: "符",
-        enText: "symbol",
+        text: "!?#",
         operate: "symbol"
       },
       {
