@@ -84,11 +84,11 @@ const textMap=(lan="cn")=>{
     ],
     [
       {
+        hideText:true,
+        isBigBtn:true,
+        classString:"icon iconfont icon-editor-to-lowercase",
+        activeClassString:"icon iconfont icon-editor-to-capitalize",
         text: "大写",
-        zhText: "大写",
-        enText: "capital",
-        zhLowText: "小写",
-        enLowText: "low",
         operate: "changeCapital",
       },
       {
@@ -121,8 +121,9 @@ const textMap=(lan="cn")=>{
       },
       {
         text: "删除",
-        zhText: "删除",
-        enText: "delete",
+        isBigBtn:true,
+        classString:"icon iconfont icon-delete",
+        hideText:true,
         operate: "delete"
       }
     ],
@@ -200,7 +201,7 @@ export default {
     ],
     [
       {
-        text: "_"
+        text: "："
       },
       {
         text: "-"
@@ -227,27 +228,17 @@ export default {
         text: "￥"
       },
       {
-        text: "$"
-      },
-      {
         text: "&"
       },
-      {
-        text: "."
-      }
+      
     ],
     [
       {
-        text: "123",
-        operate: "changeNumber"
+        text: "（",
       },
       {
-        text: "..."
+        text: "）",
       },
-      {
-        text: ","
-      },
-
       {
         text: "^_^"
       },
@@ -265,38 +256,41 @@ export default {
       },
       {
         text: "delete",
-        zhText: "删除",
-        enText: "delete",
+        classString:"icon iconfont icon-delete",
+        hideText:true,
+        isBigBtn:true,
         operate: "delete"
       }
     ],
     [
       {
         text: "返回",
-        zhText: "返回",
-        enText: "back",
+        hideText:true,
+        classString:"icon iconfont icon-back",
         operate: "back"
       },
       {
-        text: " "
+        text: "，"
+      },
+      {
+        text: "。"
       },
       {
         text: "搜索",
         operate: "search",
-        zhText: "搜索",
-        enText: "search",
-        zhConfirmText: "确认",
-        enConfirmText: "Confirm"
+        hideText:true,
+        classString:"icon iconfont icon-enter",
+
       }
     ]
   ],
   enSymbolMap: [
     [
       {
-        text: "【"
+        text: "["
       },
       {
-        text: "】"
+        text: "]"
       },
       {
         text: "{"
@@ -343,38 +337,30 @@ export default {
         text: "@"
       },
       {
-        text: "《"
+        text: "<"
       },
       {
-        text: "》"
-      },
-      {
-        text: "￥"
+        text: ">"
       },
       {
         text: "$"
       },
       {
-        text: "&"
+        text: "/"
       },
       {
-        text: "."
+        text: "&"
       }
     ],
     [
       {
-        text: "123",
-        operate: "changeNumber"
+        text: "(",
       },
       {
-        text: "..."
+        text: ")",
       },
       {
-        text: ","
-      },
-
-      {
-        text: "^_^"
+        text: ":"
       },
       {
         text: "?"
@@ -383,35 +369,38 @@ export default {
         text: "!"
       },
       {
-        text: "“"
+        text: "\""
       },
       {
-        text: "”"
+        text: "\""
       },
       {
         text: "delete",
-        zhText: "删除",
-        enText: "delete",
+        classString:"icon iconfont icon-delete",
+        hideText:true,
+        isBigBtn:true,
         operate: "delete"
       }
     ],
     [
       {
         text: "返回",
-        zhText: "返回",
-        enText: "back",
+        hideText:true,
+        classString:"icon iconfont icon-back",
         operate: "back"
       },
+     
       {
-        text: " "
+        text: ","
+      },
+      {
+        text: "."
       },
       {
         text: "搜索",
         operate: "search",
-        zhText: "搜索",
-        enText: "search",
-        zhConfirmText: "确认",
-        enConfirmText: "Confirm"
+        hideText:true,
+        classString:"icon iconfont icon-enter",
       }
     ]
   ],
@@ -431,8 +420,8 @@ export default {
       },
       {
         text: "delete",
-        zhText: "删除",
-        enText: "delete",
+        classString:"icon iconfont icon-delete",
+        hideText:true,
         operate: "delete"
       }
     ],
@@ -467,7 +456,7 @@ export default {
         text: 9
       },
       {
-        text: "@"
+        text: "="
       }
     ],
     [
@@ -476,20 +465,22 @@ export default {
       },
       {
         text: "返回",
-        zhText: "返回",
-        enText: "back",
+        hideText:true,
+        classString:"icon iconfont icon-back",
         operate: "back"
       },
       {
-        text: 0
+        text: "0"
       },
       {
-        text: " "
+        text: "&nbsp;",//解析html时候会有问题
+        classString:"icon iconfont icon-Spacebar",
+        hideText:true
       },
       {
         text: "搜索",
-        zhText: "搜索",
-        enText: "search"
+        hideText:true,
+        classString:"icon iconfont icon-enter",
       }
     ]
   ],

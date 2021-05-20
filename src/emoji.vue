@@ -141,6 +141,8 @@ export default {
   }
 }
 .emoji-wrap-head {
+  position: relative;
+  z-index: 20;
   height: 40px;
   width: 100%;
   overflow: auto;

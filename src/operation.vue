@@ -81,7 +81,7 @@
         <div style="height: 50px"></div>
       </div>
       <span
-        class="copy-back icon iconfont icon-delete"
+        class="copy-back icon iconfont icon-back"
         @click="showCopyBox = false"
       ></span>
     </div>
@@ -230,6 +230,7 @@ export default {
 </script>
 <style lang="scss" >
 .operation-wrap {
+  height: 100%;
   padding: 10px 10px;
   display: flex;
   justify-content: center;

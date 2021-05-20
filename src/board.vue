@@ -44,7 +44,7 @@
             :class="[
               'key-board-box-item',
               el.operate ? 'fn-text' : '',
-
+              el.isBigBtn ? 'big-btn' : '',
               canSwitchOther(el) ? '' : 'key-board-box-item-disabled',
             ]"
             :key="index + '_' + i"
@@ -52,7 +52,7 @@
           >
             <span
               v-html="getItemText(el)"
-              :class="[el.classString ? el.classString : '', 'span-text']"
+              :class="[getItemClass(el), 'span-text']"
             ></span>
             <span
               v-if="el.operate == 'changeLan'"
@@ -282,6 +282,14 @@ export default {
     // });
   },
   methods: {
+    getItemClass(el) {
+      el.classString ? el.classString : "";
+      if (el.operate === "changeCapital") {
+        return this.isLower ? el.activeClassString : el.classString;
+      } else {
+        return el.classString ? el.classString : "";
+      }
+    },
     canSwitchOther(e) {
       if (
         e.operate == "back" &&
@@ -456,7 +464,12 @@ export default {
     },
     symbolFn() {
       this.prev = this.curr;
-      this.curr = "cnSymbol";
+      if (this.curr == "cn") {
+        this.curr = "cnSymbol";
+      } else if (this.curr == "en") {
+        this.curr = "enSymbol";
+      }
+
       this.tmpPingying = "";
     },
     searchFn() {
@@ -550,19 +563,20 @@ export default {
     display: flex;
     justify-content: center;
     align-content: center;
-    transition: 0.5s;
+    transition: opacity 0.5s;
     color: #000;
     &.key-board-box-item-disabled {
       color: #999;
     }
     .span-text {
       line-height: 1.4;
-      font-size: 14px;
+      font-size: 18px;
       white-space: nowrap;
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
+      color: #333;
     }
     .key-board-box-item-curr-text {
       position: absolute;
@@ -573,16 +587,33 @@ export default {
       z-index: 10;
       transform: scale(0.8);
     }
-    .icon-theearth2diqiu {
-      font-size: 20px !important;
-    }
-    .icon-Spacebar {
-      font-size: 20px !important;
-      transform: translate(-50%, -50%) scaleX(1.2) scaleY(0.9);
+    &.big-btn {
+      flex: 1.5;
     }
     &.fn-text {
       span {
         font-size: 12px;
+      }
+      .icon-theearth2diqiu {
+        font-size: 20px !important;
+      }
+      .icon-Spacebar {
+        font-size: 20px !important;
+        transform: translate(-50%, -50%) scaleX(1.2) scaleY(0.9);
+      }
+      .icon-delete {
+        font-size: 24px;
+      }
+      .icon-editor-to-lowercase,
+      .icon-editor-to-capitalize {
+        font-size: 16px;
+      }
+      .icon-enter {
+        font-size: 20px;
+      }
+      .icon-back {
+        font-size: 20px;
+        color: #000;
       }
     }
     &:active {
@@ -613,6 +644,9 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    .iconfont {
+      font-size: 20px;
+    }
     &.active {
       color: orange;
       &.disabled {

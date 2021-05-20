@@ -244,6 +244,22 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-back:before {
+  content: "\e8f4";
+}
+
+.icon-back1:before {
+  content: "\e601";
+}
+
+.icon-editor-to-capitalize:before {
+  content: "\e96b";
+}
+
+.icon-editor-to-lowercase:before {
+  content: "\e96c";
+}
+
 .icon-Spacebar:before {
   content: "\e6d8";
 }
