@@ -344,12 +344,6 @@ export default {
       if (typeof end === "function") {
         return end();
       }
-      //如果不显示文字
-      // if (el.hideText) {
-      //   end = "";
-      // } else if (!end) {
-      //   return "";
-      // }
       if (end === "&nbsp;" || end === "\r\n") {
         return end;
       }

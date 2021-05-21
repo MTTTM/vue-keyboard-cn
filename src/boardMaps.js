@@ -277,10 +277,9 @@ export default {
         text: "。"
       },
       {
-        text: "搜索",
-        operate: "search",
+        text:"\r\n",
         hideText:true,
-        classString:"icon iconfont icon-enter",
+        classString:"icon iconfont icon-enter"
 
       }
     ]
@@ -398,10 +397,9 @@ export default {
         text: "."
       },
       {
-        text: "搜索",
-        operate: "search",
+        text:"\r\n",
         hideText:true,
-        classString:"icon iconfont icon-enter",
+        classString:"icon iconfont icon-enter"
       }
     ]
   ],
@@ -479,9 +477,9 @@ export default {
         hideText:true
       },
       {
-        text: "搜索",
+        text:"\r\n",
         hideText:true,
-        classString:"icon iconfont icon-enter",
+        classString:"icon iconfont icon-enter"
       }
     ]
   ],

@@ -53,4 +53,8 @@ export default {
 </script>
 
 <style>
+p {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
 </style>

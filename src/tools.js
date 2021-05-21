@@ -83,13 +83,19 @@ export const getPingMatchObjKey=(pingyingStr="",objKeys=[])=>{
   return matchResult;
 }
 /**
+ * 包裹单个字符串元素
+ */
+export const wrapStringSingleItem=(str)=>{
+  return `<span class="vue-keyboard-text-item"  tabindex="0">${str}</span>`;
+}
+/**
  * 解析字符串为数组
  * @param {*} str 
  * @returns 
  */
 export const splitStringToArray=(str)=>{
   if(String(str).length==1){
-    return [String(str)];
+    return [wrapStringSingleItem(str)];
   }
   var tmpArr = str.split("");
   var endArr = [];
@@ -100,7 +106,7 @@ export const splitStringToArray=(str)=>{
     if (item == "<") {
       findFlash = true;
     } else if (!findFlash) {
-      endArr.push(`<span class="vue-keyboard-text-item">${item}</span>`);
+      endArr.push(wrapStringSingleItem(item));
     }
 
     if (findFlash) {

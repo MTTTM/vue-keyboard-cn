@@ -1,13 +1,13 @@
 <template>
   <div class="vue-keyboard-input" @click="focus(true)">
-    <span
-      tabindex="0"
+    <div
+      tabindex="-1"
       class="vue-keyboard-input-text"
       v-html="tmpValue"
       ref="input"
       @click="getClickElement"
       :id="inputId"
-    ></span>
+    ></div>
   </div>
 </template>
 <script>
@@ -18,6 +18,7 @@ import {
   getElementIndexOnParent,
   labelStringRemoveLabel,
   uuid,
+  wrapStringSingleItem,
 } from "./tools.js";
 import { copyEventListener } from "./copyPaste.js";
 import { cursorStr, moveToFn, moveTo } from "./cursor.js";
@@ -147,7 +148,7 @@ export default {
         return;
       }
       if (text === "&nbsp;") {
-        this.appendItem(text);
+        this.appendItem(wrapStringSingleItem(text));
       } else if (text === "\r\n") {
         this.appendItem("<br/>");
       } else {
@@ -244,6 +245,14 @@ export default {
       }
     },
     getClickElement(e) {
+      console.log("点击元素", e.target);
+      if (
+        e.target &&
+        e.target.classList &&
+        e.target.classList.contains("vue-keyboard-input-text")
+      ) {
+        return;
+      }
       let index = getElementIndexOnParent(e.target);
       let movedData = moveTo(this.valueArr, index);
       if (Array.isArray(movedData.arr)) {
@@ -307,10 +316,18 @@ export default {
 .vue-keyboard-input {
   max-width: 600px;
   height: 300px;
+  overflow: auto;
   line-height: 30px;
   border: 1px solid #eee;
   padding: 5px;
   word-wrap: break-word;
+  white-space: pre-wrap;
+  .vue-keyboard-text-item {
+    display: inline-block;
+  }
+  .vue-keyboard-text-item-br {
+    display: block;
+  }
   @keyframes flash {
     0% {
       opacity: 1;
