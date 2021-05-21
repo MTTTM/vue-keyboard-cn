@@ -146,8 +146,14 @@ export default {
       if (!bool) {
         return;
       }
-      let textArray = splitStringToArray(text); //分割内容为数组
-      textArray.forEach((item) => this.appendItem(item));
+      if (text === "&nbsp;") {
+        this.appendItem(text);
+      } else if (text === "\r\n") {
+        this.appendItem("<br/>");
+      } else {
+        let textArray = splitStringToArray(text); //分割内容为数组
+        textArray.forEach((item) => this.appendItem(item));
+      }
     });
     //删除
     this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {

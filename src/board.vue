@@ -51,7 +51,7 @@
             @click.stop.prevent="press(el)"
           >
             <span
-              v-html="getItemText(el)"
+              v-html="getShowItemText(el)"
               :class="[getItemClass(el), 'span-text']"
             ></span>
             <span
@@ -309,27 +309,7 @@ export default {
     zhSelectedAreaItem(item) {
       return item.text;
     },
-    // operateBtnFn(index) {
-    //   switch (index) {
-    //     case 0:
-    //       break;
-    //     case 1:
-    //       break;
-    //     case 2:
-    //       break;
-    //     case 3:
-    //       this.show = false;
-    //       this.$root.$emit(EventKeys["vue-keyboard-cn-show"], false);
-    //       break;
-    //   }
-    // },
-    // fouseFn() {
-    //   this.show = true;
-    // },
-    /**
-     * 键盘展示字符串
-     */
-    getItemText(el) {
+    getShowItemText(el) {
       let end = el.text;
       if (typeof end === "function") {
         return end();
@@ -341,6 +321,38 @@ export default {
         return "";
       }
 
+      if (el.operate == "changeCapital") {
+        if (this.isLower) {
+          end = el[`${this.newLang}LowText`];
+          return end;
+        }
+      }
+
+      if (el[this.newLang + "Text"]) {
+        end = el[this.newLang + "Text"];
+      }
+      if (this.isLower) {
+        end = String(end).toLowerCase();
+      }
+      return end;
+    },
+    /**
+     * 键盘展示字符串
+     */
+    getItemText(el) {
+      let end = el.text;
+      if (typeof end === "function") {
+        return end();
+      }
+      //如果不显示文字
+      // if (el.hideText) {
+      //   end = "";
+      // } else if (!end) {
+      //   return "";
+      // }
+      if (end === "&nbsp;" || end === "\r\n") {
+        return end;
+      }
       if (el.operate == "changeCapital") {
         if (this.isLower) {
           end = el[`${this.newLang}LowText`];

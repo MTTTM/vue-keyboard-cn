@@ -156,7 +156,8 @@ const textMap=(lan="cn")=>{
         classString:"icon iconfont icon-theearth2diqiu",
       },
       {
-        operate: "search",
+        text:"\r\n",
+        hideText:true,
         classString:"icon iconfont icon-enter"
       }
     ]
