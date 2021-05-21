@@ -344,6 +344,11 @@ export default {
       if (typeof end === "function") {
         return end();
       }
+      //如果存在待选的中文，换行按钮就是确认按钮
+      if (end === "\r\n" && this.showZhText) {
+        this.searchFn();
+        return;
+      }
       if (end === "&nbsp;" || end === "\r\n") {
         return end;
       }
@@ -380,7 +385,8 @@ export default {
      * 点击中文待选列表文字
      */
     clickCnTextItem(text) {
-      console.log("hellow", text);
+      console.log("hellow", text, this.matchedKeyArr);
+      //if (this.matchedKeyArr.length == 0) {
       if (this.matchedKeyArr.length == 0) {
         this.appendStringItem(text);
       } else if (
@@ -479,11 +485,8 @@ export default {
       this.tmpPingying = "";
     },
     searchFn() {
-      if (
-        this.curr === "text" &&
-        this.zhSearchList.length &&
-        this.newLang == "zh"
-      ) {
+      if (this.zhSearchList.length) {
+        console.log("xxxxxxxxxxxxxx");
         //已匹配待选的中文元素是字符串
         if (this.zhSearchList && this.zhSearchList[0]) {
           this.clickCnTextItem(this.zhSearchList[0]);
