@@ -142,7 +142,7 @@ const textMap=(lan="cn")=>{
         },
       },
       {
-        text: "&nbsp;",//解析html时候会有问题
+        text: " ",//解析html时候会有问题
         classString:"icon iconfont icon-Spacebar",
         hideText:true
       },

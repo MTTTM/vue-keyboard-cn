@@ -16,7 +16,7 @@ import inputFilterRegx from "./inputFilterRegx";
 import {
   splitStringToArray,
   getElementIndexOnParent,
-  labelStringRemoveLabel,
+  labelStringRemoveLabelExceptImg,
   uuid,
   wrapStringSingleItem,
 } from "./tools.js";
@@ -83,9 +83,7 @@ export default {
       let t = "";
       let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.forEach((e) => {
-        if (/<span/gi.test(e)) {
-          e = labelStringRemoveLabel(e); //移除普通文本包裹的标签
-        }
+        e = labelStringRemoveLabelExceptImg(e); //移除普通文本包裹的标签
         t += e;
       });
       return t;
@@ -147,7 +145,7 @@ export default {
       if (!bool) {
         return;
       }
-      if (text === "&nbsp;") {
+      if (text === " ") {
         this.appendItem(wrapStringSingleItem(text));
       } else if (text === "\r\n") {
         this.appendItem("<br/>");
@@ -273,12 +271,6 @@ export default {
       this.valueArr = tmpArray;
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
-    // nativeCopyCallback(str) {
-    //   if (!this.isFocus) {
-    //     return;
-    //   }
-    //   onNaticeCopyEvent(str); //已经做去重处理
-    // },
     deleteFn() {
       if (this.cursorIndex <= 0) {
         this.cursorIndex = 0;
@@ -302,7 +294,6 @@ export default {
         showZh: this.showZh,
       };
       if (this.keyBoard && this.keyBoard.$attrs) {
-        //this.keyBoard.$set("getInputInfo", obj);
         this.keyBoard.getInputInfo = obj;
         this.keyBoard.show = true;
       } else {

@@ -11,12 +11,13 @@
     </div>
     <p v-html="value"></p>
     <ky-input v-model="value" type="mix" />
-    <p>int</p>
+    <!-- <p>int</p>
     <ky-input v-model="intValue" type="int" />
     <p>float</p>
     <ky-input v-model="floatValue" type="float" />
     <ky-input v-model="cnValue" type="cn" />
     <ky-input v-model="enValue" type="en" />
+    -->
     <key-board :emojiMap="emoji" />
     <p v-html="value"></p>
     <p>指定 键盘</p>
@@ -42,7 +43,7 @@ export default {
         hearts,
         symbo,
       },
-      value: "4w000000000102",
+      value: "4w000000000102\r\n999",
       intValue: "1099",
       floatValue: "1.99",
       cnValue: "你好啊",

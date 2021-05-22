@@ -240,8 +240,6 @@ export default {
       //用户没有做选择前
       //用户输入的拼音和历史记忆匹配的key完全相等时候
       //才显示推荐的历史输入
-      //  let key = this.zhMemoryResult[0] ? this.zhMemoryResult[0].key : "";
-      //  console.log("xxx", this.zhMemoryResult, "pingyinglen", pingyinglen);
       if (
         zhMatchItem &&
         zhMatchItem.text === zhMatchItem.key &&
@@ -273,13 +271,6 @@ export default {
   },
   mounted() {
     this.mainKeyBoardType = this.newLang = this.lang;
-    // console.log("zhKeys", this.zhKeys);
-    // this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
-    //   console.log("data", data);
-    //   let { isFocus, value } = data;
-    //   this.show = isFocus;
-    //   this.valueArr = value; //直接引用
-    // });
   },
   methods: {
     getItemClass(el) {
@@ -349,7 +340,8 @@ export default {
         this.searchFn();
         return;
       }
-      if (end === "&nbsp;" || end === "\r\n") {
+      //空格和换行符处理
+      if (end === " " || end === "\r\n") {
         return end;
       }
       if (el.operate == "changeCapital") {

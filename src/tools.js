@@ -101,15 +101,35 @@ export const splitStringToArray=(str)=>{
   var endArr = [];
   var tmpStr = "";
   var findFlash = false;
+  var findEnterStr=false;//换行符号，回车符发现
   for (let i = 0; i < tmpArr.length; i++) {
     let item = tmpArr[i];
-    if (item == "<") {
+    //图片标签处理
+    if (item == "<"&&tmpArr[i+1]=="i") {
       findFlash = true;
-    } else if (!findFlash) {
+    } 
+    //匹配换行符  \r  \n 或者 
+    //\r\n,\r \n 会被split当做一个字符处理
+    else if(item=="\r"||item=="\n"){
+      findEnterStr=true;
+      if(tmpArr[i+1]=="\n"){
+        if(item==="\n"){
+          endArr.push("<br/>");
+          findEnterStr=false;
+          tmpStr = "";
+        }
+      }
+      else{
+          endArr.push("<br/>");
+          findEnterStr=false;
+          tmpStr = "";
+      }
+    }
+    else if (!findFlash&&!findEnterStr) {
       endArr.push(wrapStringSingleItem(item));
     }
 
-    if (findFlash) {
+    if (findFlash||findEnterStr) {
       tmpStr += item;
     }
     if (tmpArr[i - 1] && tmpArr[i - 1] == "/" && item == ">") {
@@ -144,7 +164,8 @@ export const getElementIndexOnParent=(childElement)=>{
  * @returns 
  */
 export const labelStringRemoveLabel=(labelStr="")=>{
-  return labelStr.replace(/<[^>]+>/g,"")
+  let t=labelStr.replace(/<br\/>/ig,"\r\n");
+  return t.replace(/<[^>]+>/g,"")
 }
 /**
  * 移除字符串里面的html标签(除了键盘自定义的img标签)
@@ -152,7 +173,9 @@ export const labelStringRemoveLabel=(labelStr="")=>{
  * @returns 
  */
 export const labelStringRemoveLabelExceptImg=(labelStr="")=>{
-  return labelStr.replace(/<[^(img attr\-img=""vue\-keyboard\-cn\-emoji")>]+>/g,"");
+  let t=labelStr.replace(/(<br(\/)?>)/ig,"\r\n");
+  t=t.replace(/<[^(img)]?[^>]+>/g,"");
+  return t;
 }
 /**
  * 提供uuid

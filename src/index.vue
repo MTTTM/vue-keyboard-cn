@@ -112,10 +112,9 @@ export default {
       EventKeys["vue-keyboard-cn-natice-copy"],
       this.nativeCopyCallbackWrite
     );
-  },
-  mounted() {
     this.changeView();
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
+      console.log("获取焦点！！！！！键盘");
       //这个所有键盘都会受到影响！！
       let { isFocus, tmpValueNoFlash } = data;
       this.show = isFocus;
@@ -140,6 +139,7 @@ export default {
       window.addEventListener("resize", this.windowChangeCallbackBind);
     }
   },
+  mounted() {},
   beforeDestroy() {
     this.$root.$off(
       EventKeys["vue-keyboard-cn-natice-copy"],
