@@ -145,6 +145,7 @@ export default {
         value: this.value,
         el: this.$refs["vueKeyboardInput"],
       });
+      this.isFocus = false;
     });
     //监听键盘内容输入
     this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
