@@ -97,9 +97,11 @@ export default {
     show: {
       handler(newV) {
         this.fixedBg();
-        this.$emit("show", {
-          show: newV,
-          el: this.$refs["key-board-box"],
+        this.$nextTick(() => {
+          this.$emit("show", {
+            show: newV,
+            el: this.$refs["key-board-box"],
+          });
         });
       },
       immediate: true,
