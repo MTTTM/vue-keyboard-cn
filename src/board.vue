@@ -71,6 +71,7 @@ import boardMaps from "./boardMaps";
 import { getPingMatchObjKey } from "./tools.js";
 import { matchHotPingying, setPingying } from "./memory.js";
 import EventKeys from "./eventKeys";
+import { getCaseItem, setCaseItem } from "./lowercaseMemory";
 // getPingMatchObjKey("xijingpin", zhKeys);
 export default {
   name: "board",
@@ -269,6 +270,9 @@ export default {
       return this.tmpPingying.length && this.newLang == "zh";
     },
   },
+  created() {
+    this.isLower = getCaseItem() == "lowercase" ? true : false;
+  },
   mounted() {
     this.mainKeyBoardType = this.newLang = this.lang;
   },
@@ -442,18 +446,16 @@ export default {
         let len = this.tmpPingying.length - 1;
         this.tmpPingying = this.tmpPingying.slice(0, len);
       } else {
-        // let len = this.valueArr.length - 2;
-        // this.valueArr.splice(len, 2, '<span class="key-board-flash"></span>');
         this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);
       }
     },
     changeLanFn() {
       this.prev = this.curr;
       this.curr = this.curr == "cn" ? "en" : "cn";
-      // console.log("this.prev", this.prev, "this.curr", this.curr);
     },
     changeCapitalFn() {
       this.isLower = !this.isLower;
+      setCaseItem(this.isLower ? 1 : 0);
     },
     changeNumberFn() {
       this.prev = this.curr;
@@ -478,7 +480,6 @@ export default {
     },
     searchFn() {
       if (this.zhSearchList.length) {
-        console.log("xxxxxxxxxxxxxx");
         //已匹配待选的中文元素是字符串
         if (this.zhSearchList && this.zhSearchList[0]) {
           this.clickCnTextItem(this.zhSearchList[0]);
@@ -486,7 +487,6 @@ export default {
       }
       return;
     },
-    //
   },
 };
 </script>
