@@ -2,6 +2,7 @@
   <div
     :class="['key-board-box', screenDir == 1 ? 'hs-key-board-box' : '']"
     v-show="show"
+    ref="key-board-box"
   >
     <div class="key-board-box-head-op" @touchstart.stop>
       <!-- 键盘设置列表 -->
@@ -23,7 +24,7 @@
       :emojiMap="emojiMap"
       :inputValue="value"
       :getInputInfo="getInputInfo"
-      @show="(e) => (show = e)"
+      @show="triggerShow"
     ></component>
   </div>
 </template>
@@ -94,8 +95,12 @@ export default {
   },
   watch: {
     show: {
-      handler() {
+      handler(newV) {
         this.fixedBg();
+        this.$emit("show", {
+          show: newV,
+          el: this.$refs["key-board-box"],
+        });
       },
       immediate: true,
     },
@@ -140,7 +145,6 @@ export default {
       window.addEventListener("resize", this.windowChangeCallbackBind);
     }
   },
-  mounted() {},
   beforeDestroy() {
     this.$root.$off(
       EventKeys["vue-keyboard-cn-natice-copy"],
@@ -153,6 +157,9 @@ export default {
     window.removeEventListener("resize", this.windowChangeCallbackBind);
   },
   methods: {
+    triggerShow(bool) {
+      this.show = bool;
+    },
     isDisabled(item) {
       if (item && item.type === "smile" && !this.isMix) {
         return true;

@@ -11,7 +11,7 @@
     </div>
     <p v-html="value"></p>
     <p>默认不允许回车键，这种情况，回车会触发input的@submit按键</p>
-    <ky-input v-model="value" type="mix" @submit="submitFn" class="hahahha" />
+    <ky-input v-model="value1" type="mix" @submit="submitFn" class="hahahha" />
     <p>开放回车</p>
     <ky-input v-model="value" type="mix" :allowEnter="true" />
     <!-- <p>int</p>
@@ -21,7 +21,7 @@
     <ky-input v-model="cnValue" type="cn" />
     <ky-input v-model="enValue" type="en" />
     -->
-    <key-board :emojiMap="emoji" />
+    <key-board :emojiMap="emoji" @show="showStatus" />
     <p v-html="value"></p>
     <p>指定 键盘</p>
     <!-- <ky-input
@@ -46,6 +46,7 @@ export default {
         hearts,
         symbo,
       },
+      value1: "4w000000000102",
       value: "4w000000000102\r\n999",
       intValue: "1099",
       floatValue: "1.99",
@@ -55,7 +56,10 @@ export default {
   },
   methods: {
     submitFn(val) {
-      console.log("submit", val);
+      console.log("input 的submit事件", val);
+    },
+    showStatus(data) {
+      console.log("监听键盘显示隐藏", data);
     },
   },
 };
