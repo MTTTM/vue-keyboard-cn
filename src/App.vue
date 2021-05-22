@@ -10,7 +10,10 @@
       />dsfsdfds
     </div>
     <p v-html="value"></p>
-    <ky-input v-model="value" type="mix" />
+    <p>默认不允许回车键，这种情况，回车会触发input的@submit按键</p>
+    <ky-input v-model="value" type="mix" @submit="submitFn" />
+    <p>开放回车</p>
+    <ky-input v-model="value" type="mix" :allowEnter="true" />
     <!-- <p>int</p>
     <ky-input v-model="intValue" type="int" />
     <p>float</p>
@@ -49,6 +52,11 @@ export default {
       cnValue: "你好啊",
       enValue: "helloguy",
     };
+  },
+  methods: {
+    submitFn(val) {
+      console.log("submit", val);
+    },
   },
 };
 </script>

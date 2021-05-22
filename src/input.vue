@@ -1,5 +1,5 @@
 <template>
-  <div class="vue-keyboard-input" @click="focus(true)">
+  <div class="vue-keyboard-input" @click="focus(true)" ref="vueKeyboardInput">
     <div
       tabindex="-1"
       class="vue-keyboard-input-text"
@@ -52,6 +52,10 @@ export default {
     },
     keyBoard: {
       type: Object,
+    },
+    allowEnter: {
+      type: Boolean,
+      default: () => false, //是否允许回车键，默认否
     },
   },
   model: {
@@ -132,6 +136,16 @@ export default {
     this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
       this.isFocus = bool;
     });
+    //监听回车事件
+    this.$root.$on(EventKeys["vue-keyboard-cn-submit"], () => {
+      if (!this.isFocus) {
+        return false;
+      }
+      this.$emit("submit", {
+        value: this.value,
+        el: this.$refs["vueKeyboardInput"],
+      });
+    });
     //监听键盘内容输入
     this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
       if (!this.isFocus) {
@@ -148,7 +162,14 @@ export default {
       if (text === " ") {
         this.appendItem(wrapStringSingleItem(text));
       } else if (text === "\r\n") {
+        // if (this.allowEnter) {
         this.appendItem("<br/>");
+        // } else {
+        //   this.$emit("submit", {
+        //     value: this.value,
+        //     el: this.$refs["vueKeyboardInput"],
+        //   });
+        // }
       } else {
         let textArray = splitStringToArray(text); //分割内容为数组
         textArray.forEach((item) => this.appendItem(item));
@@ -292,6 +313,7 @@ export default {
         canSwitchOtherBoard: this.canSwitchOtherBoard,
         inputId: this.inputId,
         showZh: this.showZh,
+        allowEnter: this.allowEnter,
       };
       if (this.keyBoard && this.keyBoard.$attrs) {
         this.keyBoard.getInputInfo = obj;

@@ -23,6 +23,7 @@
       :emojiMap="emojiMap"
       :inputValue="value"
       :getInputInfo="getInputInfo"
+      @show="(e) => (show = e)"
     ></component>
   </div>
 </template>

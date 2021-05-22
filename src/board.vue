@@ -421,10 +421,26 @@ export default {
     },
     /***
      * 按键按下
+     * 这个函数需要优化！！！！！！！
      */
     press(val) {
       console.log("press", val);
       if (!this.canSwitchOther(val)) {
+        return;
+      }
+      /**
+       * 不允许输入回车键
+       * && 不存在待选的中文
+       * 时候按回车键触发 input的submit事件
+       */
+      if (
+        this.getInputInfo &&
+        this.getInputInfo.allowEnter == false &&
+        !this.showZhText &&
+        val.text === "\r\n"
+      ) {
+        this.$root.$emit(EventKeys["vue-keyboard-cn-submit"], "");
+        this.$emit("show", false);
         return;
       }
       //中文输入特殊处理
@@ -437,6 +453,7 @@ export default {
         this[val.operate + "Fn"](val);
         return;
       }
+
       //常规处理
       let text = this.getItemText(val);
       this.appendStringItem(text);
