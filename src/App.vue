@@ -36,7 +36,7 @@
 
 <script>
 // import Keyboard from "./index";
-import { person, hearts, symbo } from "./emojiImages.js";
+import { person, hearts, symbo } from "./dev/emojiImages.js";
 export default {
   name: "App",
   data() {

@@ -237,9 +237,9 @@ export default {
 <style lang="scss" >
 @font-face {
   font-family: "iconfont"; /* Project id 2524527 */
-  src: url("./assets/font/iconfont.woff2?t=1620317185581") format("woff2"),
-    url("./assets/font/iconfont.woff?t=1620317185581") format("woff"),
-    url("./assets/font/iconfont.ttf?t=1620317185581") format("truetype");
+  src: url("assets/font/iconfont.woff2?t=1620317185581") format("woff2"),
+    url("assets/font/iconfont.woff?t=1620317185581") format("woff"),
+    url("assets/font/iconfont.ttf?t=1620317185581") format("truetype");
 }
 * {
   margin: 0;
