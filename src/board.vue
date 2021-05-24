@@ -82,10 +82,6 @@ export default {
       required: false,
       default: "number", //zh,en,number
     },
-    // value: {
-    //   type: String,
-    //   required: true,
-    // },
     lang: {
       type: String,
       default: "zh",
@@ -370,8 +366,6 @@ export default {
      * 点击中文待选列表文字
      */
     clickCnTextItem(text) {
-      console.log("hellow", text, this.matchedKeyArr);
-      //if (this.matchedKeyArr.length == 0) {
       if (this.matchedKeyArr.length == 0) {
         this.appendStringItem(text);
       } else if (
@@ -389,8 +383,6 @@ export default {
       } else {
         this.showZhMatchArr[this.matchedKeyArrSelectedIndex].text = text;
         this.showZhMatchArr = [...this.showZhMatchArr];
-
-        console.log(" this.showZhMatchArr", this.showZhMatchArr);
       }
 
       this.matchedKeyArrSelectedIndex++;
@@ -404,10 +396,6 @@ export default {
       this.appendStringItem(item.zh);
       this.matchedKeyArrSelectedIndex = 0;
     },
-    // appendStringItem(text) {
-    //   this.tmpPingying = "";
-    //   this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
-    // },
     /***
      * 按键按下
      * 这个函数需要优化！！！！！！！
@@ -478,6 +466,7 @@ export default {
 };
 </script>
 <style lang="scss" >
+$keyboardHeaderHeight: 30px;
 .input {
   max-width: 600px;
   height: 300px;
@@ -505,20 +494,10 @@ export default {
   display: flex;
   flex-direction: column;
   flex: 1;
-  // position: relative;
-  // z-index: 30;
 }
 .key-board-box {
-  // width: 100%;
-  // position: fixed;
-  // left: 0;
-  // bottom: 0;
-  // background: #eee;
-  // padding: 5px 0;
-  // user-select: none;
-  // box-sizing: border-box;
   .key-board-box-head {
-    height: 40px;
+    height: $keyboardHeaderHeight;
     background: #eee;
     position: absolute;
     width: 100%;
@@ -629,7 +608,7 @@ export default {
     background: rgba(238, 238, 238, 0.9);
   }
   .head-op-icon {
-    height: 40px;
+    height: $keyboardHeaderHeight;
     font-size: 14px;
     flex: 1;
     display: flex;
@@ -657,15 +636,15 @@ export default {
     flex-direction: column;
     .scroll-box-wrap {
       width: 100%;
-      height: 40px;
-      line-height: 40px;
+      height: $keyboardHeaderHeight;
+      line-height: $keyboardHeaderHeight;
       overflow: auto;
       overflow: overlay;
     }
     .scroll-box {
       display: flex;
       padding: 0 5px;
-      height: 40px;
+      height: $keyboardHeaderHeight;
       display: flex;
       align-items: center;
     }

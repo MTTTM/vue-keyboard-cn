@@ -356,7 +356,6 @@ export default {
     max-height: 300px;
   }
   .key-board-box-head {
-    height: 50px;
     background: #eee;
   }
   .icon-route {
