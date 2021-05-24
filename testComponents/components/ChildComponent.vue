@@ -4,6 +4,8 @@
 <script>
 export default {
   name: "ChildComponent",
-  data() {},
+  data() {
+    return {};
+  },
 };
 </script>
