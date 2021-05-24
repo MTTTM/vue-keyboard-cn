@@ -72,9 +72,10 @@ import { getPingMatchObjKey } from "./tools.js";
 import { matchHotPingying, setPingying } from "./memory.js";
 import EventKeys from "./eventKeys";
 import { getCaseItem, setCaseItem } from "./lowercaseMemory";
-// getPingMatchObjKey("xijingpin", zhKeys);
+import EnterBtnCallBack from "./mixins/btnPress";
 export default {
   name: "board",
+  mixins: [EnterBtnCallBack],
   props: {
     type: {
       type: [String],
@@ -88,10 +89,6 @@ export default {
     lang: {
       type: String,
       default: "zh",
-    },
-    getInputInfo: {
-      type: Object,
-      require: true,
     },
   },
   data() {
@@ -147,12 +144,7 @@ export default {
           this.changeNumberFn();
         } else {
           this.curr = newV.type == "mix" ? "cn" : newV.type;
-          // this.newLang = "zh";
         }
-        // else {
-        //   this.curr = "text";
-        //   this.newLang = "en";
-        // }
       },
       immediate: true,
     },
@@ -304,6 +296,9 @@ export default {
     zhSelectedAreaItem(item) {
       return item.text;
     },
+    /**
+     * 键盘展示字
+     */
     getShowItemText(el) {
       let end = el.text;
       if (typeof end === "function") {
@@ -332,20 +327,15 @@ export default {
       return end;
     },
     /**
-     * 键盘展示字符串
+     * 键盘操作，输出值
      */
     getItemText(el) {
       let end = el.text;
       if (typeof end === "function") {
         return end();
       }
-      //如果存在待选的中文，换行按钮就是确认按钮
-      if (end === "\r\n" && this.showZhText) {
-        this.searchFn();
-        return;
-      }
-      //空格和换行符处理
-      if (end === " " || end === "\r\n") {
+      //空格和换行符处理,这里不再需要处理"\r\n"，确定按钮已经抽出去了
+      if (end === " ") {
         return end;
       }
       if (el.operate == "changeCapital") {
@@ -363,7 +353,6 @@ export default {
       }
       return end;
     },
-    computedZhSearhList() {},
     /**
      * 更新，待选中文列表
      */
@@ -415,10 +404,10 @@ export default {
       this.appendStringItem(item.zh);
       this.matchedKeyArrSelectedIndex = 0;
     },
-    appendStringItem(text) {
-      this.tmpPingying = "";
-      this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
-    },
+    // appendStringItem(text) {
+    //   this.tmpPingying = "";
+    //   this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
+    // },
     /***
      * 按键按下
      * 这个函数需要优化！！！！！！！
@@ -428,19 +417,9 @@ export default {
       if (!this.canSwitchOther(val)) {
         return;
       }
-      /**
-       * 不允许输入回车键
-       * && 不存在待选的中文
-       * 时候按回车键触发 input的submit事件
-       */
-      if (
-        this.getInputInfo &&
-        this.getInputInfo.allowEnter == false &&
-        !this.showZhText &&
-        val.text === "\r\n"
-      ) {
-        this.$root.$emit(EventKeys["vue-keyboard-cn-submit"], "");
-        this.$emit("show", false);
+      //回车键处理
+      let enterHandle = this.enterBtnCallback(val);
+      if (enterHandle.handle) {
         return;
       }
       //中文输入特殊处理
@@ -495,15 +474,6 @@ export default {
 
       this.tmpPingying = "";
     },
-    searchFn() {
-      if (this.zhSearchList.length) {
-        //已匹配待选的中文元素是字符串
-        if (this.zhSearchList && this.zhSearchList[0]) {
-          this.clickCnTextItem(this.zhSearchList[0]);
-        }
-      }
-      return;
-    },
   },
 };
 </script>
@@ -548,11 +518,10 @@ export default {
   // user-select: none;
   // box-sizing: border-box;
   .key-board-box-head {
-    height: 50px;
+    height: 40px;
     background: #eee;
     position: absolute;
     width: 100%;
-    overflow: hidden;
     top: 0;
     left: 0;
     z-index: 35;
@@ -651,9 +620,13 @@ export default {
   position: relative;
   z-index: 30;
   .pingying-box {
-    font-size: 14px;
+    font-size: 16px;
     padding: 0 5px;
-    line-height: 1.6;
+    line-height: 32px;
+    position: absolute;
+    top: -32px;
+    left: 0;
+    background: rgba(238, 238, 238, 0.9);
   }
   .head-op-icon {
     height: 40px;
@@ -684,17 +657,22 @@ export default {
     flex-direction: column;
     .scroll-box-wrap {
       width: 100%;
-
+      height: 40px;
+      line-height: 40px;
       overflow: auto;
+      overflow: overlay;
     }
     .scroll-box {
       display: flex;
       padding: 0 5px;
+      height: 40px;
+      display: flex;
+      align-items: center;
     }
     .zh-text-item {
       padding-right: 10px;
       white-space: nowrap;
-      font-size: 13px;
+      font-size: 16px;
       line-height: 1.6;
       &.active {
         color: orange;

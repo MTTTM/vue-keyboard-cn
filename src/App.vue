@@ -14,9 +14,9 @@
     <ky-input v-model="value1" type="mix" @submit="submitFn" class="hahahha" />
     <p>开放回车</p>
     <ky-input v-model="value" type="mix" :allowEnter="true" />
-    <!-- <p>int</p>
+    <!-- <p>int</p>  -->
     <ky-input v-model="intValue" type="int" />
-    <p>float</p>
+    <!--<p>float</p>
     <ky-input v-model="floatValue" type="float" />
     <ky-input v-model="cnValue" type="cn" />
     <ky-input v-model="enValue" type="en" />

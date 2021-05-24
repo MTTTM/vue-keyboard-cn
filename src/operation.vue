@@ -50,10 +50,12 @@
       <div class="operation-wrap-right-inner">
         <div
           class="operation-wrap-right-item icon iconfont icon-delete"
-          @touchstart.stop.prevent
-          @touchend.stop.prevent="deleteFn"
+          @click.stop.prevent="deleteFn"
         ></div>
-        <div class="operation-wrap-right-item icon iconfont icon-enter"></div>
+        <div
+          class="operation-wrap-right-item icon iconfont icon-enter"
+          @click.stop.prevent="enterBtn"
+        ></div>
         <div
           class="operation-wrap-right-item"
           @click.stop.prevent="showCopyBox = true"
@@ -91,9 +93,11 @@
 import EventKeys from "./eventKeys";
 import { getCopyLocalStorage, nativeCopyString } from "./copyPaste.js";
 import inputFilterRegx from "./inputFilterRegx";
+import EnterBtnCallBack from "./mixins/btnPress";
 let timer;
 export default {
   name: "operation",
+  mixins: [EnterBtnCallBack],
   data() {
     return {
       isselectAll: false,
@@ -106,10 +110,6 @@ export default {
   props: {
     inputValue: {
       type: String,
-      required: true,
-    },
-    getInputInfo: {
-      type: Object,
       required: true,
     },
   },
@@ -161,10 +161,15 @@ export default {
         timer = setTimeout(() => (this.showToast = false), 1500);
       }
     },
-    appendStringItem(text) {
-      this.tmpPingying = "";
-      this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
+    //回车键处理
+    enterBtn() {
+      console.log("回车");
+      this.enterBtnCallback({ text: "\r\n" });
     },
+    // appendStringItem(text) {
+    //   this.tmpPingying = "";
+    //   this.$root.$emit(EventKeys["vue-keyboard-cn-append-item"], text);
+    // },
     removeFn(index) {
       this.copyTextArray.splice(index, 1);
       this.saveCopyLocalStorage();
@@ -188,6 +193,7 @@ export default {
       }
     },
     deleteFn() {
+      console.log("删除");
       this.$root.$emit(EventKeys["vue-keyboard-cn-append-delete"]);
     },
     selectAll() {
@@ -295,6 +301,8 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
+      touch-action: none;
+      user-select: none;
 
       & + .operation-wrap-right-item {
         margin-top: 10px;
@@ -391,6 +399,8 @@ export default {
     justify-content: center;
     align-items: center;
     text-align: center;
+    touch-action: none;
+    user-select: none;
     &:active {
       color: #000;
     }
