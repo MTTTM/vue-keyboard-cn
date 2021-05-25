@@ -1,4 +1,4 @@
-const pathStr="https://raw.githubusercontent.com/MTTTM/vue-keyboard-cn/main/src/assets/images/";
+const pathStr="https://raw.githubusercontent.com/MTTTM/vue-keyboard-cn/main/src/dev/assets/images/";
 export const person={
    text:"人物",
    list:[

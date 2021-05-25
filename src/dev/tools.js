@@ -56,7 +56,6 @@ export const getPingMatchObjKey=(pingyingStr="",objKeys=[])=>{
    let matchResult = [];
    matchPinyin(pingyingStr,objKeys,matchResult);
    matchResult=matchResult.sort((a,b)=>a.index-b.index)
-  console.log("匹配到的词",matchResult)
    return matchResult;
 }
 /**
@@ -173,8 +172,10 @@ export const labelStringRemoveLabel=(labelStr="")=>{
  * @returns 
  */
 export const labelStringRemoveLabelExceptImg=(labelStr="")=>{
+  console.log("接受参数",labelStr)
   let t=labelStr.replace(/(<br(\/)?>)/ig,"\r\n");
-  t=t.replace(/<[^(img)]?[^>]+>/g,"");
+  t=t.replace(/<[^(img)][^>]+>/g,"");
+  console.log("接受参数 返回",t)
   return t;
 }
 /**

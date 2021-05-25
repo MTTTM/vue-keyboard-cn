@@ -281,6 +281,7 @@ export default {
       }
     },
     appendItem(text = "") {
+      console.log("input插入的text", text);
       if (!text) {
         return;
       }
@@ -291,6 +292,7 @@ export default {
       let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.splice(this.cursorIndex, 0, cursorStr);
       this.valueArr = tmpArray;
+      console.log("input 插入值", this.tmpValueNoFlash);
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
     },
     deleteFn() {
