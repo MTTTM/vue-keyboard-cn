@@ -96,6 +96,7 @@ export const splitStringToArray=(str)=>{
   if(String(str).length==1){
     return [wrapStringSingleItem(str)];
   }
+  console.log("splitStringToArray get",str)
   var tmpArr = str.split("");
   var endArr = [];
   var tmpStr = "";
@@ -137,6 +138,7 @@ export const splitStringToArray=(str)=>{
       tmpStr = "";
     }
   }
+  console.log("splitStringToArray end",endArr)
   return endArr;
 }
 /**
@@ -158,7 +160,7 @@ export const getElementIndexOnParent=(childElement)=>{
       
 }
 /**
- * 移除字符串里面的html标签，留下html标签里面的文字
+ * 移除字符串里面的html标签，留下html标签里面的文字 废弃
  * @param {*} labelStr 
  * @returns 
  */

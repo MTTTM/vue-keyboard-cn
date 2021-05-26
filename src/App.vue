@@ -11,11 +11,11 @@
     </div>
     <p v-html="value"></p>
     <p>默认不允许回车键，这种情况，回车会触发input的@submit按键</p>
-    <ky-input v-model="value1" type="mix" @submit="submitFn" class="hahahha" />
+    <!-- <ky-input v-model="value1" type="mix" @submit="submitFn" class="hahahha" /> -->
     <p>开放回车</p>
     <ky-input v-model="value" type="mix" :allowEnter="true" />
     <!-- <p>int</p>  -->
-    <ky-input v-model="intValue" type="int" />
+    <!-- <ky-input v-model="intValue" type="int" /> -->
     <!--<p>float</p>
     <ky-input v-model="floatValue" type="float" />
     <ky-input v-model="cnValue" type="cn" />
@@ -47,7 +47,7 @@ export default {
         symbo,
       },
       value1: "4w000000000102",
-      value: "4w000000000102\r\n999",
+      value: "0\r\n2",
       intValue: "1099",
       floatValue: "1.99",
       cnValue: "你好啊",

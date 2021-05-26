@@ -16,10 +16,7 @@ export default{
       * 可以查询对应的unicode码
       *原文链接：https://blog.csdn.net/TheJormangund/article/details/107379449
     */
-    let reg = new RegExp(
-      "^([\u4E00-\u9FFF]|[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\uff01\u3010\u3011\uffe5])+$",
-      "g"
-    );
+    let reg = new RegExp("^([\u4E00-\u9FFF]|[.])+$","g");
     return reg.test(text);
    },
    "en":(text)=>{
