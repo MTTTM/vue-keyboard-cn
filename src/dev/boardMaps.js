@@ -143,6 +143,7 @@ const textMap=(lan="cn")=>{
       },
       {
         text: " ",//解析html时候会有问题
+        otherText:"space",
         classString:"icon iconfont icon-Spacebar",
         hideText:true
       },
@@ -157,8 +158,10 @@ const textMap=(lan="cn")=>{
       },
       {
         text:"\r\n",
+        otherText:"enter",
         hideText:true,
-        classString:"icon iconfont icon-enter"
+        classString:"icon iconfont icon-enter",
+       
       }
     ]
   ]
@@ -278,6 +281,7 @@ export default {
       },
       {
         text:"\r\n",
+        otherText:"enter",
         hideText:true,
         classString:"icon iconfont icon-enter"
 
@@ -398,6 +402,7 @@ export default {
       },
       {
         text:"\r\n",
+        otherText:"enter",
         hideText:true,
         classString:"icon iconfont icon-enter"
       }
@@ -478,6 +483,7 @@ export default {
       },
       {
         text:"\r\n",
+        otherText:"enter",
         hideText:true,
         classString:"icon iconfont icon-enter"
       }

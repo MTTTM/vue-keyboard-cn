@@ -45,6 +45,7 @@
               'key-board-box-item',
               el.operate ? 'fn-text' : '',
               el.isBigBtn ? 'big-btn' : '',
+              btnConfigClass(el),
               canSwitchOther(el) ? '' : 'key-board-box-item-disabled',
             ]"
             :key="index + '_' + i"
@@ -265,6 +266,20 @@ export default {
     this.mainKeyBoardType = this.newLang = this.lang;
   },
   methods: {
+    /**
+     * 按照 文字或者函数 或者 特殊表意的class名
+     */
+    btnConfigClass(item) {
+      if (item.otherText) {
+        return "key-board-btn-" + item.otherText;
+      } else if (item.operate) {
+        return "key-board-btn-" + item.operate;
+      } else if (item.text) {
+        let text = typeof item.text === "function" ? item.text() : item.text;
+        return "key-board-btn-" + text;
+      }
+      return "";
+    },
     getItemClass(el) {
       el.classString ? el.classString : "";
       if (el.operate === "changeCapital") {
