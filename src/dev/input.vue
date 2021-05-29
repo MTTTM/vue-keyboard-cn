@@ -205,7 +205,7 @@ export default {
         return;
       }
       let movedData = moveToFn(this.valueArr, str);
-      console.log("this.cursorIndex111", this.cursorIndex);
+      console.log("movedData", movedData);
       if (Array.isArray(movedData.arr)) {
         this.valueArr = movedData.arr;
         this.cursorIndex = movedData.index;

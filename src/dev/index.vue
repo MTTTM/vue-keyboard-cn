@@ -25,6 +25,7 @@
       :inputValue="value"
       :getInputInfo="getInputInfo"
       @show="triggerShow"
+      ref="dynamicComponent"
     ></component>
   </div>
 </template>
@@ -122,7 +123,12 @@ export default {
     );
     this.changeView();
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
-      console.log("获取焦点！！！！！键盘");
+      console.log(
+        "获取焦点！！！！！键盘",
+        data,
+        "dynamicComponent",
+        this.$refs["dynamicComponent"]
+      );
       //这个所有键盘都会受到影响！！
       let { isFocus, tmpValueNoFlash } = data;
       this.show = isFocus;

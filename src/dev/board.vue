@@ -451,6 +451,7 @@ export default {
     changeLanFn() {
       this.prev = this.curr;
       this.curr = this.curr == "cn" ? "en" : "cn";
+      this.tmpPingying = "";
     },
     changeCapitalFn() {
       this.isLower = !this.isLower;
