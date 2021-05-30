@@ -67,7 +67,7 @@
   </div>
 </template>
 <script>
-import ZH, { zhKeysArray as zhKeys } from "./zh";
+import ZH, { zhKeysArray as zhKeys } from "./zh.js";
 import boardMaps from "./boardMaps";
 import { getPingMatchObjKey } from "./tools.js";
 import { matchHotPingying, setPingying } from "./memory.js";
@@ -483,14 +483,14 @@ export default {
 </script>
 <style lang="scss" >
 $keyboardHeaderHeight: 30px;
-.input {
-  max-width: 600px;
-  height: 300px;
-  line-height: 30px;
-  border: 1px solid #eee;
-  padding: 5px;
-  word-wrap: break-word;
-}
+// .input {
+//   max-width: 600px;
+//   height: 300px;
+//   line-height: 30px;
+//   border: 1px solid #eee;
+//   padding: 5px;
+//   word-wrap: break-word;
+// }
 @keyframes flash {
   0% {
     opacity: 1;

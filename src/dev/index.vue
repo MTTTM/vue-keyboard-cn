@@ -186,8 +186,7 @@ export default {
         } else {
           this.screenDir = 0;
         }
-        console.log("this.screenDir", this.screenDir);
-      }, 50);
+      }, 200);
     },
     nativeCopyCallbackWrite(str) {
       //如果没有显示，直接过滤
@@ -320,14 +319,14 @@ export default {
   content: "\e68b";
 }
 
-.input {
-  max-width: 600px;
-  height: 300px;
-  line-height: 30px;
-  border: 1px solid #eee;
-  padding: 5px;
-  word-wrap: break-word;
-}
+// .input {
+//   max-width: 600px;
+//   height: 300px;
+//   line-height: 30px;
+//   border: 1px solid #eee;
+//   padding: 5px;
+//   word-wrap: break-word;
+// }
 @keyframes flash {
   0% {
     opacity: 1;

@@ -15,27 +15,26 @@
     <p>开放回车</p>
     <ky-input v-model="value" type="mix" :allowEnter="true" />
     <!-- <p>int</p>  -->
-    <ky-input v-model="intValue" type="int" />
+    <!-- <ky-input v-model="intValue" type="int" /> -->
     <!--<p>float</p>
     <ky-input v-model="floatValue" type="float" />
     <ky-input v-model="cnValue" type="cn" />
     <ky-input v-model="enValue" type="en" />
     -->
-    <key-board :emojiMap="emoji" @show="showStatus" />
-    <p v-html="value"></p>
+    <!-- <key-board :emojiMap="emoji" @show="showStatus" />
+    <p v-html="value"></p> -->
     <p>指定 键盘</p>
-    <!-- <ky-input
+    <ky-input
       v-model="floatValue"
       type="float"
       :keyBoard="$refs['secondKeyBoard']"
     />
-    <key-board :emojiMap="emoji" ref="secondKeyBoard" /> -->
+    <key-board :emojiMap="emoji" ref="secondKeyBoard" />
     <div style="height: 800px"></div>
   </div>
 </template>
 
 <script>
-// import Keyboard from "./index";
 import { person, hearts, symbo } from "./dev/emojiImages.js";
 export default {
   name: "App",

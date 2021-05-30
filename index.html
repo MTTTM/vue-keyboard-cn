@@ -1,50 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-
-<body>
-  <ul >
-    <li>hello</li>
-    <li>hello</li>
-    <p>00</p>  
-    <li id="mts">hello</li>
-    <li>hello</li>
-</ul>
-  <script>
-var a=[{key:"ooo",index:3},{key:"ji",index:2},{key:"j",index:2},{key:"bb",index:0}]
-var tmp={};
-var result=[];
-for(let t=0;t<a.length;t++){
-  let item=a[t];
-  let index=item.index;
-  if(!tmp[index]){
-    tmp[index]=a[t];
-  }
-  else if(tmp[index].index==item.index&&item.key.length>tmp[index].key.length){
-    //如果索引相同，那就保留key长队最大的
-    tmp[index]=a[t];
-  }
-}
-for(let key in tmp){
-  result.push(tmp[key]);
-}
-console.log("result",result.sort((a,b)=>a.index-b.index))
-//||(a.some((state) => state.index === item.index&&state.key.length<item.key.length))
-// a= a.filter(
-//         item =>{
-//                     return (a.some(state=> state.index !== item.index&&state.key!=item.key))
-//             }
-//       );
-console.log(a)
-
-</script>
-
-</body>
-
+  <head>
+    <meta charset="utf-8">
+    <title>vue-test-utils-karma-example</title>
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="/dist/build.js"></script>
+  </body>
 </html>
