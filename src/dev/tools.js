@@ -174,7 +174,7 @@ export const labelStringRemoveLabel=(labelStr="")=>{
  */
 export const labelStringRemoveLabelExceptImg=(labelStr="")=>{
   let t=labelStr.replace(/(<br(\/)?>)/ig,"\r\n");
-  t=t.replace(/<[^(img)]?[^>]+>/g,"");
+  t=t.replace(/<[^(img)][^>]+>/g,"");
   return t;
 }
 /**

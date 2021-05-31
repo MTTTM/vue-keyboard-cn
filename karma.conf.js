@@ -13,8 +13,6 @@ module.exports = function(config) {
       '**/*.spec.js': ['webpack', 'sourcemap'],
       'src/dev/**/*.js':['webpack', 'sourcemap','coverage'],
     },
-    //  reporters: ['coverage'],
-
     webpack: webpackConfig,
 
     reporters: ['progress', 'coverage'],
