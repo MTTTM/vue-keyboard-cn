@@ -5,23 +5,22 @@ module.exports = function(config) {
     frameworks: ['mocha'],
 
     files: [
-      'test/**/*.spec.js'
+      'test/**/*.spec.js',
+      'src/dev/**/*.js'
     ],
 
     preprocessors: {
-      '**/*.spec.js': ['webpack', 'sourcemap']
+      '**/*.spec.js': ['webpack', 'sourcemap'],
+      'src/dev/**/*.js':['webpack', 'sourcemap','coverage'],
     },
+    //  reporters: ['coverage'],
 
     webpack: webpackConfig,
 
-    reporters: ['spec', 'coverage'],
-
+    reporters: ['progress', 'coverage'],
     coverageReporter: {
-      dir: './coverage',
-      reporters: [
-        { type: 'lcov', subdir: '.' },
-        { type: 'text-summary' }
-      ]
+      type : 'html',
+      dir : 'coverage/'
     },
 
     browsers: ['Chrome'],
