@@ -2,9 +2,10 @@ export default{
    "float":(text,decimal=2)=>{
     let reg = /^[0-9]+.?[0-9]*$/;
     if (decimal && !isNaN(Number(decimal))) {
-      reg = new RegExp(`^[0-9]+.?[0-9]{0,${decimal}}$`, "g");
+      reg = new RegExp(`^[0-9]+.+[0-9]{${decimal}}$`, "g");
     }
-    return reg.test(`${text}`);
+    let t=String(text);
+    return reg.test(t);
    },
    "int":(text)=>{
       return /^[0-9]*$/.test(text);
@@ -17,7 +18,7 @@ export default{
       *原文链接：https://blog.csdn.net/TheJormangund/article/details/107379449
     */
     let reg = new RegExp(
-      "^([\u4E00-\u9FFF]|[\u3002\uff1b\uff0c\uff1a\u201c\u201d\uff08\uff09\u3001\uff1f\u300a\u300b\uff01\u3010\u3011\uffe5])+$",
+      "^([\u4E00-\u9FFF]|·)+$",
       "g"
     );
     return reg.test(text);
