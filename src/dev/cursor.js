@@ -6,7 +6,7 @@ export const getNoCursorArr=(arr)=>arr.filter(item=>item!=cursorStr);//获取灭
  * @param {*} arr 
  * @returns 
  */
- const first=(arr=[])=>{
+ export const first=(arr=[])=>{
   arr.unshift(cursorStr);
   return {
     index:0,
@@ -18,7 +18,7 @@ export const getNoCursorArr=(arr)=>arr.filter(item=>item!=cursorStr);//获取灭
  * @param {*} arr 
  * @returns 
  */
-const last=(arr=[])=>{
+ export const last=(arr=[])=>{
   if(arr[arr.lenght-1]==cursorStr){
     return {
       index:arr.length-1,
