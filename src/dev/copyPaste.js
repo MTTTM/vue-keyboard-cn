@@ -101,7 +101,7 @@ export const onNaticeCopyEvent=(strx)=>{
 /**
  * 用原生复制功能复制字符串
  * @param {*} str 
- * @returns 
+ * @returns bool
  */
 export const nativeCopyString=(str)=>{
   const input = document.createElement("input");
