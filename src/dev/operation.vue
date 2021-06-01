@@ -203,16 +203,24 @@ export default {
       this.$root.$emit(EventKeys["vue-keyboard-cn-select-all"], true);
     },
     appendCopyArrayItem(str) {
+      console.log("添加剂复制内容", str);
       //限制只存20条
       if (this.copyTextArray.length > 20) {
         this.copyTextArray.pop();
       }
       this.copyTextArray.unshift(str);
     },
-    onCopyCallback() {
-      let copyText = nativeCopyString(this.inputValue);
+    async onCopyCallback() {
+      let copyText = await nativeCopyString(this.inputValue);
       if (copyText) {
-        this.onCopy({ e: copyText });
+        this.onCopy();
+        //如果是navigator.clipboard.writeText复制的，需要手动添加到列表
+        if (
+          Object.prototype.toString.call(copyText) == "[object Object]" &&
+          copyText.text
+        ) {
+          this.appendCopyArrayItem(copyText.text);
+        }
       } else {
         this.onError();
       }
@@ -220,7 +228,6 @@ export default {
     onCopy() {
       this.toastText = "复制成功";
       this.showToast = true;
-      //因为触发的是原生的复制事件，所以不要再这里再处理一遍
       clearTimeout(timer);
       timer = setTimeout(() => (this.showToast = false), 1500);
     },

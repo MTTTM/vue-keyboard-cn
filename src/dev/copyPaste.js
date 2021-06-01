@@ -98,23 +98,46 @@ export const onNaticeCopyEvent=(strx)=>{
   copylist.unshift(str);
   saveCopyList(copylist);
 }
+const copyToClipboard = str => {
+  return new Promise((resolve)=>{
+    if(!navigator.clipboard||!navigator.clipboard.writeText){
+      console.log("进来这里了?")
+      resolve(false);
+    }
+    else{
+      navigator.clipboard.writeText(str).then(function() {
+        resolve({text:str,suss:true});
+      }, function() {
+        resolve(false);
+      });
+    }
+  })
+};
 /**
  * 用原生复制功能复制字符串
  * @param {*} str 
  * @returns bool
  */
-export const nativeCopyString=(str)=>{
-  const input = document.createElement("input");
-  input.readOnly = 'readonly';
-  input.value = str;
-  input.style.width="1px";
-  input.style.height="1px";
-  input.style.opacity=0;
-  input.style.position="absolute";
-  document.body.appendChild(input);
-  input.select();
-  input.setSelectionRange(0, input.value.length);
-  var t=document.execCommand('copy');
-  document.body.removeChild(input);
-  return t;
+export const nativeCopyString=async (str)=>{
+  //未来兼容处理了
+  if(typeof document.execCommand!=="function"){
+     let t=await copyToClipboard(str);
+     return t;
+   }
+  else{
+    const input = document.createElement("input");
+    input.readOnly = 'readonly';
+    input.value = str;
+    input.style.width="1px";
+    input.style.height="1px";
+    input.style.opacity=0;
+    input.style.position="absolute";
+    document.body.appendChild(input);
+    input.select();
+    input.setSelectionRange(0, input.value.length);
+    var t=document.execCommand('copy');
+    document.body.removeChild(input);
+    return Promise.resolve(t);
+  }
+
 }
