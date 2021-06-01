@@ -2,6 +2,36 @@ import { getFullPingMatchObjKey } from "./tools.js";
 const localStoreKey = "vue-keyboard-cn-store";
 const clearTimeString="__$lastClearTime";//保存`清除热度小于2的词的时间戳`key
 /**
+ * 返回清除超过7天并且热度小于2的词，后返回最新结果
+ * @param {*} objx 
+ * @returns 
+ */
+const clearMemory=(objx={})=>{
+    let obj=objx?objx:{}
+    //如果没有清除时间
+    if(!obj[clearTimeString]){
+      obj[clearTimeString]=new Date().getTime();
+    }
+    else if(obj[clearTimeString]){
+      try{
+        //距离上一次清除热度小于2的时间间隔超过7天
+        if(new Date().getTime()-Number(obj[clearTimeString])>(86400*7)){
+          for(let key in obj){
+            //因为__$lastClearTime，对应的是时间戳，不用处理
+            if(Array.isArray(obj[key])){
+              obj[key]=obj[key].filter(item=>item.order>=2);
+              
+            }
+          }
+          obj[clearTimeString]=new Date().getTime();
+        }
+      }catch(e){
+        console.log("删除 热度小于2的词失败",e);
+      }
+    }
+    return obj;
+}
+/**
  * 存储的格式入:
  * {
  *  __$lastClearTime:"时间戳",
@@ -26,38 +56,17 @@ export const getItem=(key=undefined)=>{
   let store={};
   try{
     store=JSON.parse(storeStr);
+    store=clearMemory(store);
   }catch(e){}
   let t=store?store:{};
-  if(key&&t[key]){
-    t=t[key];
+  if(key){
+    t=t[key]&&t[key].length>0?t[key]:{};
   }
   return  t;
 }
 const setItem=(obj={})=>{
-  let jsonStr="";
-  //如果没有清除时间
-  if(!obj[clearTimeString]){
-    obj[clearTimeString]=new Date().getTime();
-  }
-  else if(obj[clearTimeString]){
-    try{
-      //距离上一次清除热度小于2的时间间隔超过7天
-      if(new Date().getTime()-Number(obj[clearTimeString])>(86400*7)){
-        for(let key in obj){
-          //因为__$lastClearTime，对应的是时间戳，不用处理
-          if(Array.isArray(obj[key])){
-            obj[key]=obj[key].filter(item=>item.order<=2);
-          }
-        }
-        obj[clearTimeString]=new Date().getTime();
-      }
-    }catch(e){
-      console.log("删除 热度小于2的词失败",e);
-    }
-  }
-  try{
-    console.log("要存储的json",obj)
-    jsonStr=JSON.stringify(obj);
+ try{
+    let jsonStr=JSON.stringify(obj);
     localStorage.setItem(localStoreKey,jsonStr)
   }catch(e){
     console.warn(e);
