@@ -101,7 +101,6 @@ export const onNaticeCopyEvent=(strx)=>{
 const copyToClipboard = str => {
   return new Promise((resolve)=>{
     if(!navigator.clipboard||!navigator.clipboard.writeText){
-      console.log("进来这里了?")
       resolve(false);
     }
     else{
