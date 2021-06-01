@@ -21,16 +21,19 @@ const clearTimeString="__$lastClearTime";//保存`清除热度小于2的词的�
  * @returns 
  */
 
-export const getItem=()=>{
-  let store= localStorage.getItem(localStoreKey);
+export const getItem=(key=undefined)=>{
+  let storeStr= localStorage.getItem(localStoreKey);
+  let store={};
   try{
-    store=JSON.parse(store);
-  }catch(e){
-    store={};
+    store=JSON.parse(storeStr);
+  }catch(e){}
+  let t=store?store:{};
+  if(key&&t[key]){
+    t=t[key];
   }
-  return store?store:{};
+  return  t;
 }
-export const setItem=(obj={})=>{
+const setItem=(obj={})=>{
   let jsonStr="";
   //如果没有清除时间
   if(!obj[clearTimeString]){
@@ -53,6 +56,7 @@ export const setItem=(obj={})=>{
     }
   }
   try{
+    console.log("要存储的json",obj)
     jsonStr=JSON.stringify(obj);
     localStorage.setItem(localStoreKey,jsonStr)
   }catch(e){
