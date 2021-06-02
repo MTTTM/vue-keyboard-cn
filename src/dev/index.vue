@@ -59,7 +59,7 @@ export default {
   data() {
     return {
       show: false,
-      currentView: "",
+      currentView: "board",
       operationActiveIndex: 0, //切换列表高亮索引
       operationList: [
         {
@@ -121,7 +121,7 @@ export default {
       EventKeys["vue-keyboard-cn-natice-copy"],
       this.nativeCopyCallbackWrite
     );
-    this.changeView();
+    // this.changeView();
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
       console.log(
         "获取焦点！！！！！键盘",
