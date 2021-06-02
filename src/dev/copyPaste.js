@@ -120,8 +120,7 @@ const copyToClipboard = str => {
 export const nativeCopyString=async (str)=>{
   //未来兼容处理了
   if(typeof document.execCommand!=="function"){
-     let t=await copyToClipboard(str);
-     return t;
+     return  copyToClipboard(str);
    }
   else{
     const input = document.createElement("input");

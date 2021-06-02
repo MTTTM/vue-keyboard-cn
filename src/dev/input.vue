@@ -39,8 +39,8 @@ export default {
       default: true,
     },
     canSwitchOtherBoard: {
-      type: Boolean, //输入框是否能切换输入其他方式输入，默认否
-      default: () => false,
+      type: Boolean, //输入框是否能切换输入其他方式输入，默认true
+      default: () => true,
     },
     decimal: {
       type: Number, //只有type等于float时候才有效,小数个数

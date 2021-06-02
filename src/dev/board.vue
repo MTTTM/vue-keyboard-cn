@@ -290,9 +290,10 @@ export default {
     },
     canSwitchOther(e) {
       if (
-        e.operate == "back" &&
+        (e.operate == "back" ||
+          e.operate == "changeNumber" ||
+          e.operate == "symbol") &&
         this.getInputInfo &&
-        this.getInputInfo.type === "number" &&
         !this.getInputInfo.canSwitchOtherBoard
       ) {
         return false;
@@ -548,7 +549,17 @@ $keyboardHeaderHeight: 30px;
     transition: opacity 0.5s;
     color: #000;
     &.key-board-box-item-disabled {
-      color: #999;
+      transition: none;
+      &:active {
+        background: rgba(255, 255, 255, 0.6);
+        opacity: 0.8;
+        .span-text {
+          color: #999;
+        }
+      }
+      .span-text {
+        color: #999;
+      }
     }
     .span-text {
       line-height: 1.4;
