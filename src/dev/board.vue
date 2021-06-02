@@ -83,9 +83,26 @@ export default {
       required: false,
       default: "number", //zh,en,number
     },
-    lang: {
-      type: String,
-      default: "zh",
+    // lang: {
+    //   type: String,
+    //   default: "zh",
+    // },
+    //如果type是mix类型，默认使用的是什么输入法
+    //cn还是en，默认是cn
+    inputLang: {
+      validator: function (value) {
+        return ["cn", "en"].indexOf(value) !== -1;
+      },
+      default: () => "cn",
+    },
+    getInputInfo: {
+      type: [Object],
+    },
+    //是否禁用被input组件更正默认的语言类型
+    //默认否
+    disabledInputUpdateMixKeyBoardLang: {
+      type: Boolean,
+      default: () => false,
     },
   },
   data() {
@@ -141,6 +158,18 @@ export default {
           this.changeNumberFn();
         } else {
           this.curr = newV.type == "mix" ? "cn" : newV.type;
+          if (newV.type == "mix") {
+            //展示的键盘输入类型
+            //如果键盘的props设置了[不禁用]input组件修改【语言类型】，就使用键盘的语言类型
+            //否则更新为input传递过来的【语言类型】
+            if (!this.disabledInputUpdateMixKeyBoardLang) {
+              this.curr = newV.inputLang;
+            } else {
+              this.curr = this.inputLang;
+            }
+          } else {
+            this.curr = newV.type;
+          }
         }
       },
       immediate: true,
@@ -256,14 +285,15 @@ export default {
       return this[this.curr + "Map"];
     },
     showZhText() {
-      return this.tmpPingying.length && this.newLang == "zh";
+      // return this.tmpPingying.length && this.newLang == "zh";
+      return this.tmpPingying.length;
     },
   },
   created() {
     this.isLower = getCaseItem() == "lowercase" ? true : false;
   },
   mounted() {
-    this.mainKeyBoardType = this.newLang = this.lang;
+    //this.mainKeyBoardType = this.newLang = this.lang;
   },
   methods: {
     /**

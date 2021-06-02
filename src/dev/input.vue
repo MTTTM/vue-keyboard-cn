@@ -34,9 +34,13 @@ export default {
       required: false,
       default: "mix", //mix(所有）int(整数)，float(小数) zh,cn //展示键盘输入方式，默认中文，和键盘相对应
     },
-    showZh: {
-      type: Boolean, //是否可切换到中文
-      default: true,
+    //如果type是mix类型，默认使用的是什么输入法
+    //cn还是en，默认是cn
+    inputLang: {
+      validator: function (value) {
+        return ["cn", "en"].indexOf(value) !== -1;
+      },
+      default: () => "cn",
     },
     canSwitchOtherBoard: {
       type: Boolean, //输入框是否能切换输入其他方式输入，默认true
@@ -313,7 +317,7 @@ export default {
         type: this.type,
         canSwitchOtherBoard: this.canSwitchOtherBoard,
         inputId: this.inputId,
-        showZh: this.showZh,
+        inputLang: this.inputLang,
         allowEnter: this.allowEnter,
       };
       if (this.keyBoard && this.keyBoard.$attrs) {
