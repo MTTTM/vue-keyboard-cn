@@ -44,14 +44,6 @@ export default {
       required: false,
       default: "cn", //number,zh,cn //展示键盘输入方式，默认中文，如果是number就无法切换成其他输入法
     },
-    // showEmoji: {
-    //   type: Boolean,
-    //   default: () => false,
-    // },
-    // lang: {
-    //   type: String,
-    //   default: "zh",
-    // },
     emojiMap: {
       type: Object,
       default: () => {},

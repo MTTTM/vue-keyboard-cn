@@ -162,7 +162,7 @@ export default {
             //展示的键盘输入类型
             //如果键盘的props设置了[不禁用]input组件修改【语言类型】，就使用键盘的语言类型
             //否则更新为input传递过来的【语言类型】
-            if (!this.disabledInputUpdateMixKeyBoardLang) {
+            if (!this.disabledInputUpdateMixKeyBoardLang && newV.inputLang) {
               this.curr = newV.inputLang;
             } else {
               this.curr = this.inputLang;

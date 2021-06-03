@@ -107,7 +107,8 @@ describe('splitStringToArray', () => {
   );
   });
   it('splitStringToArray  should be array with 2 element when it no allow enter keyboard',  () => {
-    let t=splitStringToArray(`0\r\n2`,true);
+    let t=splitStringToArray(`0\r\n2`,false);
+    console.log("ttttttttttt",t)
     expect(t).to.be.an('array').
     that.to.have.lengthOf(3).
     that.to.deep.equal(

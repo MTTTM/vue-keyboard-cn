@@ -98,7 +98,6 @@ export const splitStringToArray=(str,alertEnter=false)=>{
   if(String(str).length==1){
     return [wrapStringSingleItem(str)];
   }
-  console.log("str",str)
   var tmpArr = str.split("");
   var endArr = [];
   var tmpStr = "";
