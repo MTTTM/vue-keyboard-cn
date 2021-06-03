@@ -51,8 +51,7 @@ export default {
       default: 2,
     },
     regx: {
-      type: String,
-      default: () => "-1",
+      type: [RegExp],
     },
     keyBoard: {
       type: Object,
@@ -100,7 +99,7 @@ export default {
   watch: {
     value: {
       handler(newV) {
-        let t = splitStringToArray(newV);
+        let t = splitStringToArray(newV, this.allowEnter);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
         console.log("this.valueArr", this.valueArr, labelIndex);
         if (this.isFocus && labelIndex == -1) {
@@ -234,8 +233,8 @@ export default {
     //mix(所有）int(整数)，float(小数) zh,cn //展示键盘输入方式，默认中文，和键盘相对应
     canPushItem(text) {
       let returnValue = false;
-      if (this.regx !== "-1" && this.regx) {
-        return new RegExp(`${this.regx}`, "g").test(text);
+      if (this.regx) {
+        return new RegExp(this.regx).test(text);
       }
       switch (this.type) {
         case "float":

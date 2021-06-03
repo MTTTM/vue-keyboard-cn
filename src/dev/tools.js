@@ -91,12 +91,14 @@ export const wrapStringSingleItem=(str)=>{
 /**
  * 解析字符串为数组
  * @param {*} str 
+ * @params {boolean} alertEnter
  * @returns 
  */
-export const splitStringToArray=(str)=>{
+export const splitStringToArray=(str,alertEnter=false)=>{
   if(String(str).length==1){
     return [wrapStringSingleItem(str)];
   }
+  console.log("str",str)
   var tmpArr = str.split("");
   var endArr = [];
   var tmpStr = "";
@@ -114,13 +116,24 @@ export const splitStringToArray=(str)=>{
       findEnterStr=true;
       if(tmpArr[i+1]=="\n"){
         if(item==="\n"){
-          endArr.push("<br/>");
+          if(alertEnter){
+            endArr.push("<br/>");
+          }
+          else{
+            endArr.push(wrapStringSingleItem(" "));
+          }
+          
           findEnterStr=false;
           tmpStr = "";
         }
       }
       else{
+        if(alertEnter){
           endArr.push("<br/>");
+        }
+        else{
+          endArr.push(wrapStringSingleItem(" "));
+        }
           findEnterStr=false;
           tmpStr = "";
       }

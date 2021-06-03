@@ -11,18 +11,24 @@
     </div>
     <p v-html="value"></p>
     <p>默认不允许回车键，这种情况，回车会触发input的@submit按键</p>
-    <ky-input v-model="value1" type="mix" @submit="submitFn" class="hahahha" />
     <ky-input
+      v-model="value1"
+      :regx="/^[\d%+-/]+$/gi"
+      type="int"
+      @submit="submitFn"
+      class="hahahha"
+    />
+    <!-- <ky-input
       v-model="value1"
       type="mix"
       @submit="submitFn"
       class="hahahha"
       inputLang="en"
-    />
+    /> -->
     <p>开放回车</p>
     <!-- <ky-input v-model="value" type="mix" :allowEnter="true" /> -->
     <!-- <p>int</p>  -->
-    <ky-input v-model="intValue" type="int" />
+    <!-- <ky-input v-model="intValue" type="int" /> -->
     <!--<p>float</p>
     <ky-input v-model="floatValue" type="float" />
     <ky-input v-model="cnValue" type="cn" />
@@ -31,11 +37,11 @@
     <!-- <key-board :emojiMap="emoji" @show="showStatus" />
     <p v-html="value"></p> -->
     <p>指定 键盘</p>
-    <ky-input
+    <!-- <ky-input
       v-model="floatValue"
       type="float"
       :keyBoard="$refs['secondKeyBoard']"
-    />
+    /> -->
     <key-board :emojiMap="emoji" ref="secondKeyBoard" />
     <div style="height: 800px"></div>
   </div>
@@ -52,7 +58,8 @@ export default {
         hearts,
         symbo,
       },
-      value1: "4w000000000102",
+      value1: `1
+3`,
       value: "4w000000000102\r\n999",
       intValue: "1099",
       floatValue: "1.99",
