@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { mount } from '@vue/test-utils'
+import { mount,createWrapper } from '@vue/test-utils'
 import Index from '../src/dev/index.vue'
 import EventKeys from "../src/dev/eventKeys.js"
 
@@ -33,13 +33,118 @@ describe('index.vue 中文输入法测试', () => {
     it('clicked btn W', async () => {
       await wrapper.vm.$nextTick()
       let btn= wrapper.find(".key-board-btn-W")
-      let deleteBtn=wrapper.find(".key-board-btn-delete");
+      let enterBtn=wrapper.find(".key-board-btn-enter");
       await btn.trigger("click");
       let cnDomHtml=wrapper.find(".zh-text-list-box .zh-text-item")
       expect(cnDomHtml.text()).to.equal("我");
-      await deleteBtn.trigger("click");
-      expect(wrapper.find(".zh-text-list-box").exists()).be.equal(false);
-  
+      //输入一个拼音后回车
+      await enterBtn.trigger("click");
+     const rootWrapper = createWrapper(wrapper.vm.$root);
+     const rootAppendEvent=rootWrapper.emitted(EventKeys["vue-keyboard-cn-append-item"]);
+     expect(rootAppendEvent).to.be.deep.include(['我'])
+     
     })
 
+    it('clicked btn N and btn H,then click enter btn', async () => {
+      await wrapper.vm.$nextTick()
+      let enterBtn=wrapper.find(".key-board-btn-enter");
+        //输入两个辅音单词，再回车
+      let btnN= wrapper.find(".key-board-btn-N")
+      let btnH= wrapper.find(".key-board-btn-H")
+      await btnN.trigger("click");
+      await btnH.trigger("click");
+      await enterBtn.trigger("click");
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      const rootAppendEvent=rootWrapper.emitted(EventKeys["vue-keyboard-cn-append-item"]);
+        console.log("event",rootAppendEvent)
+        expect(rootAppendEvent).to.be.deep.include(['nh'])
+    })
+
+    //测试热词
+    it('test hot word menory', async () => {
+      await wrapper.vm.$nextTick()
+      let enterBtn=wrapper.find(".key-board-btn-enter");
+        //输入两个辅音单词，再回车
+      let btnN= wrapper.find(".key-board-btn-N")
+      let btnI= wrapper.find(".key-board-btn-I")
+      let btnH= wrapper.find(".key-board-btn-H")
+      let btnA= wrapper.find(".key-board-btn-A")
+      let btnO= wrapper.find(".key-board-btn-O")
+      //你
+      await btnN.trigger("click");
+      await btnI.trigger("click");
+      //好
+      await btnH.trigger("click");
+      await btnA.trigger("click");
+      await btnO.trigger("click");
+      //中文待选列表
+      await wrapper.find(".zh-text-list-box .zh-text-item").trigger("click");//点击”你“字
+      await wrapper.find(".zh-text-list-box .zh-text-item").trigger("click");//点击”好“字
+
+      await enterBtn.trigger("click");
+
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      const rootAppendEvent=rootWrapper.emitted(EventKeys["vue-keyboard-cn-append-item"]);
+      expect(rootAppendEvent).to.be.deep.include(['你好'])
+
+      /**
+       * 在本地存在热词”你好“的缓存后再次输入nihao
+       * 将会存在可选的”你好“选项
+       *  */  
+       //你
+       await btnN.trigger("click");
+       await btnI.trigger("click");
+       //好
+       await btnH.trigger("click");
+       await btnA.trigger("click");
+       await btnO.trigger("click");
+       //中文待选列表
+       await wrapper.find(".zh-text-list-box .zh-text-item").trigger("click");//点击”你好“字
+       await enterBtn.trigger("click");
+       console.log("event",rootAppendEvent)
+       let matchLength=0;
+       rootAppendEvent.forEach(item=>{
+         if(item&&item[0]=="你好"){
+          matchLength++;
+         }
+       })
+       expect(matchLength).to.be.equal(2);
+
+    })
+
+
+    //输入拼音，选中一部分后，还有未选择中文的拼音时候回车
+    it('inputed nimena,then click enter btn', async () => {
+      await wrapper.vm.$nextTick()
+      let enterBtn=wrapper.find(".key-board-btn-enter");
+        //输入两个辅音单词，再回车
+      let btnN= wrapper.find(".key-board-btn-N")
+      let btnI= wrapper.find(".key-board-btn-I")
+      let btnM= wrapper.find(".key-board-btn-M")
+      let btnE= wrapper.find(".key-board-btn-E")
+      let btnA= wrapper.find(".key-board-btn-A")
+      //你
+      await btnN.trigger("click");
+      await btnI.trigger("click");
+      //们
+      await btnM.trigger("click");
+      await btnE.trigger("click");
+      await btnN.trigger("click");
+      //a
+      await btnA.trigger("click");
+      //中文待选列表
+      await wrapper.find(".zh-text-list-box .zh-text-item").trigger("click");//点击”你“字
+      await wrapper.find(".zh-text-list-box .zh-text-item").trigger("click");//点击”们“字
+
+      await enterBtn.trigger("click");
+
+      const rootWrapper = createWrapper(wrapper.vm.$root);
+      const rootAppendEvent=rootWrapper.emitted(EventKeys["vue-keyboard-cn-append-item"]);
+      expect(rootAppendEvent).to.be.deep.include(['你们a'])
+
+      
+
+    })
+
+   
 })
