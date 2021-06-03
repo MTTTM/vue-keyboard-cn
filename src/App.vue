@@ -11,13 +11,7 @@
     </div>
     <p v-html="value"></p>
     <p>默认不允许回车键，这种情况，回车会触发input的@submit按键</p>
-    <ky-input
-      v-model="value1"
-      :regx="/^[\d%+-/]+$/gi"
-      type="int"
-      @submit="submitFn"
-      class="hahahha"
-    />
+    <ky-input v-model="value1" type="mix" @submit="submitFn" class="hahahha" />
     <!-- <ky-input
       v-model="value1"
       type="mix"
