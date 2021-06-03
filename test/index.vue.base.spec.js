@@ -6,6 +6,8 @@ import EventKeys from "../src/dev/eventKeys.js"
 describe('index.vue', () => {
   let wrapper;
   let data={}
+  // beforeEach(() => alert("Before a test – enter a test"));
+  // afterEach(() => alert("After a test – exit a test"));
   before(async () =>{
      wrapper = mount(Index);
      data={
@@ -23,8 +25,6 @@ describe('index.vue', () => {
   it('index.vue trigger show', async () => {
     let board= wrapper.find(".key-board-box")
     await wrapper.vm.$nextTick()
-    //await wrapper.vm.$refs["dynamicComponent"].$nextTick()
-    console.log("######",wrapper.html())
     expect(board.isVisible()).to.equal(true)
 
   })
