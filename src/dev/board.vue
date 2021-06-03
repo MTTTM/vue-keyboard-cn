@@ -25,7 +25,10 @@
             <span
               v-for="(item, index) in zhSearchList"
               :key="item + index"
-              :class="['zh-text-item', index == 0 ? 'active' : '']"
+              :class="[
+                'zh-text-item',
+                index == 0 && zhMemoryResult.length == 0 ? 'active' : '',
+              ]"
               @click.stop.prevent="clickCnTextItem(item)"
               >{{ item }}</span
             >

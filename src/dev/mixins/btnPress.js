@@ -34,9 +34,25 @@ export default{
             //如果存在待选的中文，换行按钮就是确认按钮
           //把展示区域的拼音或”中文和拼音混合“字符串发送给input
             let t = "";
-            this.showZhMatchArr.forEach((e) => {
-              t += e.text;
-            });
+           
+            //有【拼音完全匹配到的"热词"】，并且没有已选的的中文，就用已匹配的热词
+            let allPingyin=this.showZhMatchArr.every(e=>/^[a-zA-z]+$/.test(e.text)==true);
+            if(allPingyin&& this.zhMemoryResult[0]){
+                t=this.zhMemoryResult[0].zh;
+            }
+            else  if(this.showZhMatchArr.length==0&& this.zhSearchList[0]){
+              //有【拼音完全匹配到的"单字"】，并且没有已选的的中文，就用已匹配的单字
+              t=this.zhSearchList[0];
+            }
+            else if( this.showZhMatchArr.length){
+              //有已选的中文，或用拼音
+              this.showZhMatchArr.forEach((e) => {
+                t += e.text;
+              });
+            }
+            else{
+              t=this.tmpPingying;
+            }
             this.appendStringItem(t);
             result={handle:true};
         }
