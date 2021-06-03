@@ -14,7 +14,10 @@ describe('index.vue 中文输入法测试', () => {
       tmpValueNoFlash: "1 3",
       type: "cn",
     }
-    wrapper.vm.$root.$emit(EventKeys["vue-keyboard-cn-focus"],data)
+    beforeEach(() =>{
+      wrapper.vm.$root.$emit(EventKeys["vue-keyboard-cn-focus"],data)
+    });
+   
   
    //测试中文点击Q键后，删除
   it('clicked btn Q', async () => {
@@ -29,7 +32,8 @@ describe('index.vue 中文输入法测试', () => {
 
   })
 
-  //测试中文点击W键后，切换输入法
+  //测试中文点击W键后，点击待选中文
+  //测试中文点击W键后，点击回车
     it('clicked btn W', async () => {
       await wrapper.vm.$nextTick()
       let btn= wrapper.find(".key-board-btn-W")
@@ -44,6 +48,19 @@ describe('index.vue 中文输入法测试', () => {
      expect(rootAppendEvent).to.be.deep.include(['我'])
      
     })
+      //测试中文点击W键后，切换输入法
+      it('clicked btn W and switch', async () => {
+        await wrapper.vm.$nextTick()
+        let btn= wrapper.find(".key-board-btn-W")
+        let switchBtn=wrapper.find(".key-board-btn-changeLan");
+        await btn.trigger("click");
+        let cnDomHtml=wrapper.find(".zh-text-list-box .zh-text-item")
+        expect(cnDomHtml.text()).to.equal("我");
+        await switchBtn.trigger("click");
+        cnDomHtml=wrapper.find(".zh-text-list-box .zh-text-item");//一定要重新获取，因为之前赋值的可能还没有及时销毁
+        expect(cnDomHtml.exists()).to.equal(false);
+        await switchBtn.trigger("click");//再回复中文输入法，否则后面都会受到影响
+      })
 
     it('clicked btn N and btn H,then click enter btn', async () => {
       await wrapper.vm.$nextTick()
