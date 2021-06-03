@@ -63,8 +63,8 @@ const tabTestFn=(type="cn")=>{
     await board.trigger("click");
     expect(board.classes()).to.be.an('array').that.include("active");
     //操作面板是否存在
-    // let isExists=wrapper.find(".operation-wrap-left-pancel").exists()
-    // expect(isExists).to.equal(false);
+    let isExists=wrapper.find(".operation-wrap-left-pancel").exists()
+    expect(isExists).to.equal(true);
   })
 
 
