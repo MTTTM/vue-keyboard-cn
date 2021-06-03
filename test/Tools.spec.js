@@ -94,14 +94,26 @@ describe('splitStringToArray', () => {
     ]);
   });
 
-  it('splitStringToArray should be array with 2 element',  () => {
-    let t=splitStringToArray(`0\r\n2`);
+  it('splitStringToArray  should be array with 2 element when it allow enter keyboard',  () => {
+    let t=splitStringToArray(`0\r\n2`,true);
     expect(t).to.be.an('array').
     that.to.have.lengthOf(3).
     that.to.deep.equal(
       [
           '<span class="vue-keyboard-text-item"  tabindex="0">0</span>',
           '<br/>',
+         '<span class="vue-keyboard-text-item"  tabindex="0">2</span>'
+      ]
+  );
+  });
+  it('splitStringToArray  should be array with 2 element when it no allow enter keyboard',  () => {
+    let t=splitStringToArray(`0\r\n2`,true);
+    expect(t).to.be.an('array').
+    that.to.have.lengthOf(3).
+    that.to.deep.equal(
+      [
+          '<span class="vue-keyboard-text-item"  tabindex="0">0</span>',
+          '<span class="vue-keyboard-text-item"  tabindex="0"> </span>',
          '<span class="vue-keyboard-text-item"  tabindex="0">2</span>'
       ]
   );

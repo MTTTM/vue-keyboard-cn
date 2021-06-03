@@ -494,7 +494,7 @@ export default {
       this.tmpPingying = "";
     },
     backFn() {
-      let t = this.prev;
+      let t = this.prev ? this.prev : this.inputLang;
       this.prev = this.curr;
       this.curr = t;
       this.tmpPingying = "";
