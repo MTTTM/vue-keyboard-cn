@@ -144,7 +144,8 @@ export const splitStringToArray=(str,alertEnter=false)=>{
     if (findFlash||findEnterStr) {
       tmpStr += item;
     }
-    if (tmpArr[i - 1] && tmpArr[i - 1] == "/" && item == ">") {
+    //tmpArr[i - 1] && tmpArr[i - 1] == "/" &&
+    if (findFlash&&item == ">") {
       endArr.push(tmpStr);
       findFlash = false;
       tmpStr = "";
