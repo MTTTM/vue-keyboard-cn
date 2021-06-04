@@ -1,11 +1,23 @@
 export default{
    "float":(text,decimal=2)=>{
     let reg = /^[0-9]+.?[0-9]*$/;
-    if (decimal && !isNaN(Number(decimal))) {
-      reg = new RegExp(`^[0-9]+.+[0-9]{${decimal}}$`, "g");
-    }
-    let t=String(text);
-    return reg.test(t);
+   let t=String(text);
+   if(!isNaN(Number(decimal))&&decimal>0){
+      let decimalNumber=t.split(".")[1];
+      console.log("decimalNumber.length",decimalNumber,"decimal",decimal)
+      if(decimalNumber&&decimalNumber.length>decimal){
+        
+         return false;
+      }
+      else{
+         return reg.test(t);
+      }
+   }
+   else{
+      return false;
+   }
+    
+    
    },
    "int":(text)=>{
       return /^[0-9]*$/.test(text);

@@ -3,11 +3,11 @@ import Regx from "../src/dev/inputFilterRegx.js"
 
 
 describe('float', () => {
-  it('float params 1 should be false',  () => {
-    expect(Regx.float(1)).to.equal(false);
+  it('float params 1 should be true',  () => {
+    expect(Regx.float(1)).to.equal(true);
   })
-  it('float params 1.1 should be false',  () => {
-    expect(Regx.float(1.1)).to.equal(false);
+  it('float params 1.1 should be true',  () => {
+    expect(Regx.float(1.1)).to.equal(true);
   })
   it('float params "1.10" should be true',  () => {
     //如果最后一个小数是0必须先传递字符串

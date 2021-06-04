@@ -238,7 +238,10 @@ export default {
       }
       switch (this.type) {
         case "float":
-          returnValue = inputFilterRegx.float(`${this.value}${text}`);
+          returnValue = inputFilterRegx.float(
+            `${this.value}${text}`,
+            this.decimal
+          );
           break;
         case "int":
           returnValue = inputFilterRegx.int(`${this.value}${text}`);
