@@ -7,5 +7,29 @@
         "corejs":3
       }
     ]
+    
+  ],
+  "plugins":[
+    "@babel/plugin-transform-modules-commonjs",
+    ["babel-plugin-istanbul",{
+      "extension":[".js",".vue"]
+    }]
+    
   ]
+  ,
+  "env":{
+     "test":{
+      "plugins":[
+        [
+          "istanbul",
+          {
+            "useInlinesSourceMaps":true,
+            "exclude":[
+              "./test/*.spec.js"
+            ]
+          }
+        ]
+      ]
+     }
+  }
 }
