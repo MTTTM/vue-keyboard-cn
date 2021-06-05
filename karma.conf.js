@@ -6,8 +6,8 @@ module.exports = function(config) {
 
     files: [
       'test/**/*.spec.js',
-      'src/dev/**/*.js',
-      'src/dev/**/*.vue'
+      // 'src/dev/**/*.js',
+      // 'src/dev/**/*.vue'
     ],
     /**
      * 我们用到了babel-plugin-istanbul

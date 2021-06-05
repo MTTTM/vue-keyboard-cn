@@ -9,23 +9,24 @@
     ]
     
   ],
-  "plugins":[
-    "@babel/plugin-transform-modules-commonjs",
-    ["babel-plugin-istanbul",{
-      "extension":[".js",".vue"]
-    }]
+  // "plugins":[
+  //   "@babel/plugin-transform-modules-commonjs",
+  //   ["babel-plugin-istanbul",{
+  //     "extension":[".js",".vue"]
+  //   }]
     
-  ]
-  ,
+  // ]
+  // ,
   "env":{
      "test":{
       "plugins":[
+        "@babel/plugin-transform-modules-commonjs",
         [
           "istanbul",
           {
             "useInlinesSourceMaps":true,
             "exclude":[
-              "./test/*.spec.js"
+              "**/*.spec.js"
             ]
           }
         ]
