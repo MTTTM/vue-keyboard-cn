@@ -66,6 +66,7 @@ export default {
       type: Boolean,
       default: () => false, //是否允许回车键，默认否
     },
+    //这个属性没p用
     autoHeight: {
       type: Boolean,
       default: () => true, //是否默认高度自适应，默认是
@@ -159,6 +160,7 @@ export default {
     },
     tmpValue() {
       this.$nextTick(() => {
+        this.fixAutoHeight(); //自适应高度
         this.inputDomScroll();
       });
     },
@@ -170,13 +172,7 @@ export default {
     this.selectAllBlur();
   },
   mounted() {
-    this.$nextTick(() => {
-      //固定高度
-      if (this.autoHeight) {
-        let dom = this.$refs["vueKeyboardInput"];
-        dom.style.height = dom.offsetHeight + "px";
-      }
-    });
+    this.fixAutoHeight(); //自适应高度
   },
   beforeDestroy() {
     document.removeEventListener("click", this.blurMethods);
@@ -186,16 +182,44 @@ export default {
       this.blurMethods = this.inputWillblur.bind(this);
       document.addEventListener("click", this.blurMethods);
     },
+    fixAutoHeight() {
+      // this.$nextTick(() => {
+      //   if (this.autoHeight) {
+      //     let dom = this.$refs["vueKeyboardInput"];
+      //     dom.style.height = dom.scrollHeight + "px";
+      //   }
+      // });
+    },
     inputDomScroll() {
       let dom = this.$refs["vueKeyboardInput"];
       let scrollDisY = 0;
       let scrollDisX = 0;
       let flashDom =
         this.$refs["vueKeyboardInput"].querySelector(".key-board-flash");
+      let styles = window.getComputedStyle(dom);
+      let paddingTop = parseInt(styles["padding-top"])
+        ? parseInt(styles["padding-top"])
+        : 0;
+      let paddingLeft = parseInt(styles["padding-top"])
+        ? parseInt(styles["padding-top"])
+        : 0;
       if (flashDom) {
-        scrollDisY = flashDom.offsetTop;
-        scrollDisX = flashDom.offsetLeft;
+        scrollDisY = flashDom.offsetTop - paddingTop;
+        scrollDisX = flashDom.offsetLeft - paddingLeft;
       }
+
+      // console.log("style", styles["border-width"]);
+      // console.log(
+      //   "domBorderLeft",
+      //   styles["padding-left"],
+      //   "domBorderTop",
+      //   parseInt(styles["padding-top"]),
+      //   "scrollDisX",
+      //   scrollDisX,
+      //   "scrollDisY",
+      //   scrollDisY
+      // );
+
       this.scrollLeft = scrollDisX;
       this.scrollTop = scrollDisY;
       dom.scrollTo(scrollDisX, scrollDisY);

@@ -21,7 +21,7 @@
       @blur="blurFn"
       class="hahahha"
       :allowEnter="true"
-      style="min-height: 100px"
+      style="max-height: 100px"
     />
     <ky-input
       v-model="value1"
