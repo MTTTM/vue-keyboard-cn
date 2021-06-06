@@ -95,17 +95,24 @@ export default {
       });
       return t;
     },
+    //同步给外层事件的值，input blur focus
+    eventParams() {
+      return {
+        value: this.tmpValueNoFlash,
+        el: this.$refs["vueKeyboardInput"],
+      };
+    },
   },
   watch: {
     value: {
       handler(newV) {
         let t = splitStringToArray(newV, this.allowEnter);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
-        console.log("this.valueArr", this.valueArr, labelIndex);
+        // console.log("this.valueArr", this.valueArr, labelIndex);
         if (this.isFocus && labelIndex == -1) {
           t.push(cursorStr);
           this.valueArr = t;
-          console.log("新值 cursorIndex 为0", this.valueArr);
+          // console.log("新值 cursorIndex 为0", this.valueArr);
           this.cursorIndex = this.valueArr.length - 1;
         } else if (!this.isFocus) {
           this.valueArr = t;
@@ -114,7 +121,7 @@ export default {
           this.valueArr = this.valueArr.filter((item) => item != cursorStr);
           //this.cursorIndex就是光标的索引，所以不需要-1
           this.valueArr.splice(this.cursorIndex, 0, cursorStr);
-          console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
+          // console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
         }
         /*向所有组件推送，最新值
          *1.光标控制面板，复制需要用到
@@ -144,10 +151,7 @@ export default {
       if (!this.isFocus) {
         return false;
       }
-      this.$emit("submit", {
-        value: this.value,
-        el: this.$refs["vueKeyboardInput"],
-      });
+      this.$emit("submit", this.eventParams);
       this.isFocus = false;
     });
     //监听键盘内容输入
@@ -203,12 +207,10 @@ export default {
     });
     //监听方向
     this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
-      console.log("this.cursorIndex111", this.isFocus);
       if (!this.isFocus) {
         return;
       }
       let movedData = moveToFn(this.valueArr, str);
-      console.log("this.cursorIndex111", this.cursorIndex);
       if (Array.isArray(movedData.arr)) {
         this.valueArr = movedData.arr;
         this.cursorIndex = movedData.index;
@@ -218,8 +220,16 @@ export default {
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
       if (data.inputId !== this.inputId) {
         this.isFocus = false;
+        this.$emit("blur", this.eventParams);
       } else {
         this.isFocus = true;
+        this.$emit("focus", this.eventParams);
+      }
+    });
+    //监听键盘关闭事件
+    this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
+      if (!bool) {
+        this.$emit("blur", this.eventParams);
       }
     });
     this.blurMethods = this.inputWillblur.bind(this);
@@ -297,7 +307,8 @@ export default {
       let tmpArray = this.valueArr.filter((item) => item != cursorStr);
       tmpArray.splice(this.cursorIndex, 0, cursorStr);
       this.valueArr = tmpArray;
-      this.$emit("change", this.tmpValueNoFlash); //同步给外层
+      this.$emit("change", this.tmpValueNoFlash); //v-model同步数据
+      this.$emit("input", this.eventParams);
     },
     deleteFn() {
       if (this.cursorIndex <= 0) {

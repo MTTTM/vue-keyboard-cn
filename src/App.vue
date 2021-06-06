@@ -13,9 +13,10 @@
     <p>默认不允许回车键，这种情况，回车会触发input的@submit按键</p>
     <ky-input
       v-model="value1"
-      type="float"
-      :decimal="3"
       @submit="submitFn"
+      @input="inputFn"
+      @focus="focusFn"
+      @blur="blurFn"
       class="hahahha"
       :allowEnter="true"
     />
@@ -73,6 +74,15 @@ export default {
     },
     showStatus(data) {
       console.log("监听键盘显示隐藏", data);
+    },
+    inputFn({ el, value }) {
+      console.log("input", el, value);
+    },
+    focusFn({ el, value }) {
+      console.log("focus", el, value);
+    },
+    blurFn({ el, value }) {
+      console.log("blur", el, value);
     },
   },
 };
