@@ -1,5 +1,11 @@
 <template>
-  <div class="vue-keyboard-input" @click="focus(true)" ref="vueKeyboardInput">
+  <div
+    class="vue-keyboard-input"
+    :data-scroll-left="scrollLeft"
+    :data-scroll-top="scrollTop"
+    @click="focus(true)"
+    ref="vueKeyboardInput"
+  >
     <div
       tabindex="-1"
       class="vue-keyboard-input-text"
@@ -75,6 +81,8 @@ export default {
       valueArr: [], //已填入的字符串转数组
       cursorIndex: null, //当前光标的位置，也就是下一次输入内容插入的位置
       blurMethods: null, //点击document失去焦点事件
+      scrollLeft: 0, //容器滚动X距离，只记录程序导致的，用户导致的忽略
+      scrollTop: 0, //容器滚动的Y距离，只记录程序导致的，用户导致的忽略
     };
   },
   computed: {
@@ -188,6 +196,8 @@ export default {
         scrollDisY = flashDom.offsetTop;
         scrollDisX = flashDom.offsetLeft;
       }
+      this.scrollLeft = scrollDisX;
+      this.scrollTop = scrollDisY;
       dom.scrollTo(scrollDisX, scrollDisY);
     },
     addRootEventLister() {
