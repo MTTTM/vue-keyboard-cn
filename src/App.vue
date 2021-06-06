@@ -11,6 +11,18 @@
     </div>
     <p v-html="value"></p>
     <p>默认不允许回车键，这种情况，回车会触发input的@submit按键</p>
+
+    <!-- 设置基础高度的样式 -->
+    <ky-input
+      v-model="value1"
+      @submit="submitFn"
+      @input="inputFn"
+      @focus="focusFn"
+      @blur="blurFn"
+      class="hahahha"
+      :allowEnter="true"
+      style="min-height: 100px"
+    />
     <ky-input
       v-model="value1"
       @submit="submitFn"

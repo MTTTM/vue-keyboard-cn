@@ -60,6 +60,10 @@ export default {
       type: Boolean,
       default: () => false, //是否允许回车键，默认否
     },
+    autoHeight: {
+      type: Boolean,
+      default: () => true, //是否默认高度自适应，默认是
+    },
   },
   model: {
     prop: "value",
@@ -81,6 +85,7 @@ export default {
     //已输出的结果展示值（输入框里面的字符串）
     tmpValue() {
       let t = "";
+      console.log("变了??");
       this.valueArr.forEach((e) => {
         t += e;
       });
@@ -127,118 +132,158 @@ export default {
          *1.光标控制面板，复制需要用到
          */
         this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
+        //输入时候内容滚到指定位置
+        this.$nextTick(() => {
+          this.inputDomScroll();
+        });
       },
       immediate: true,
     },
     isFocus(newV) {
-      this.valueArr = splitStringToArray(this.value);
+      this.valueArr = splitStringToArray(this.value, this.allowEnter);
       if (newV) {
         this.valueArr.push(cursorStr);
       } else {
         this.valueArr = this.valueArr.filter((item) => item != cursorStr);
+        console.log("我是这时候变的么?");
       }
+      this.inputDomScroll();
+    },
+    tmpValue() {
+      this.$nextTick(() => {
+        this.inputDomScroll();
+      });
     },
   },
   created() {
     //监听原生复制事件
     copyEventListener(this);
-    //监听键盘关闭事件
-    this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
-      this.isFocus = bool;
-    });
-    //监听回车事件
-    this.$root.$on(EventKeys["vue-keyboard-cn-submit"], () => {
-      if (!this.isFocus) {
-        return false;
-      }
-      this.$emit("submit", this.eventParams);
-      this.isFocus = false;
-    });
-    //监听键盘内容输入
-    this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
-      if (!this.isFocus) {
-        return false;
-      }
-      if (!text) {
-        return false;
-      }
-      let bool = this.canPushItem(text);
-      console.log("可输入么?", bool, "this.type", this.type, "值:", text);
-      if (!bool) {
-        return;
-      }
-      if (text === " ") {
-        this.appendItem(wrapStringSingleItem(text));
-      } else if (text === "\r\n") {
-        // if (this.allowEnter) {
-        this.appendItem("<br/>");
-        // } else {
-        //   this.$emit("submit", {
-        //     value: this.value,
-        //     el: this.$refs["vueKeyboardInput"],
-        //   });
-        // }
-      } else {
-        let textArray = splitStringToArray(text); //分割内容为数组
-        textArray.forEach((item) => this.appendItem(item));
+    this.addRootEventLister();
+    this.selectAllBlur();
+  },
+  mounted() {
+    this.$nextTick(() => {
+      //固定高度
+      if (this.autoHeight) {
+        let dom = this.$refs["vueKeyboardInput"];
+        dom.style.height = dom.offsetHeight + "px";
       }
     });
-    //删除
-    this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
-      if (!this.isFocus) {
-        return;
-      }
-      this.deleteFn();
-    });
-    //全选按钮
-    this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], () => {
-      if (!this.isFocus || !this.$refs["input"]) {
-        return;
-      }
-      if (
-        this.$refs["input"].classList.contains("vue-keyboard-input-text-focus")
-      ) {
-        this.$refs["input"].blur();
-        this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
-      } else {
-        this.$refs["input"].classList.add("vue-keyboard-input-text-focus");
-        this.$refs["input"].focus();
-      }
-    });
-    //监听方向
-    this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
-      if (!this.isFocus) {
-        return;
-      }
-      let movedData = moveToFn(this.valueArr, str);
-      if (Array.isArray(movedData.arr)) {
-        this.valueArr = movedData.arr;
-        this.cursorIndex = movedData.index;
-      }
-    });
-    //其他input触发获取焦点时候，本input失去焦点
-    this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
-      if (data.inputId !== this.inputId) {
-        this.isFocus = false;
-        this.$emit("blur", this.eventParams);
-      } else {
-        this.isFocus = true;
-        this.$emit("focus", this.eventParams);
-      }
-    });
-    //监听键盘关闭事件
-    this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
-      if (!bool) {
-        this.$emit("blur", this.eventParams);
-      }
-    });
-    this.blurMethods = this.inputWillblur.bind(this);
-    document.addEventListener("click", this.blurMethods);
   },
   beforeDestroy() {
     document.removeEventListener("click", this.blurMethods);
   },
   methods: {
+    selectAllBlur() {
+      this.blurMethods = this.inputWillblur.bind(this);
+      document.addEventListener("click", this.blurMethods);
+    },
+    inputDomScroll() {
+      let dom = this.$refs["vueKeyboardInput"];
+      let scrollDisY = 0;
+      let scrollDisX = 0;
+      let flashDom =
+        this.$refs["vueKeyboardInput"].querySelector(".key-board-flash");
+      if (flashDom) {
+        scrollDisY = flashDom.offsetTop;
+        scrollDisX = flashDom.offsetLeft;
+      }
+      dom.scrollTo(scrollDisX, scrollDisY);
+    },
+    addRootEventLister() {
+      //监听键盘关闭事件
+      this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
+        this.isFocus = bool;
+      });
+      //监听回车事件
+      this.$root.$on(EventKeys["vue-keyboard-cn-submit"], () => {
+        if (!this.isFocus) {
+          return false;
+        }
+        this.$emit("submit", this.eventParams);
+        this.isFocus = false;
+      });
+      //监听键盘内容输入
+      this.$root.$on(EventKeys["vue-keyboard-cn-append-item"], (text) => {
+        if (!this.isFocus) {
+          return false;
+        }
+        if (!text) {
+          return false;
+        }
+        let bool = this.canPushItem(text);
+        console.log("可输入么?", bool, "this.type", this.type, "值:", text);
+        if (!bool) {
+          return;
+        }
+        if (text === " ") {
+          this.appendItem(wrapStringSingleItem(text));
+        } else if (text === "\r\n") {
+          if (this.allowEnter) {
+            this.appendItem("<br/>");
+          } else {
+            this.$emit("submit", {
+              value: this.value,
+              el: this.$refs["vueKeyboardInput"],
+            });
+          }
+        } else {
+          let textArray = splitStringToArray(text, this.allowEnter); //分割内容为数组
+          textArray.forEach((item) => this.appendItem(item));
+        }
+      });
+      //删除
+      this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
+        if (!this.isFocus) {
+          return;
+        }
+        this.deleteFn();
+      });
+      //全选按钮
+      this.$root.$on(EventKeys["vue-keyboard-cn-select-all"], () => {
+        if (!this.isFocus || !this.$refs["input"]) {
+          return;
+        }
+        if (
+          this.$refs["input"].classList.contains(
+            "vue-keyboard-input-text-focus"
+          )
+        ) {
+          this.$refs["input"].blur();
+          this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
+        } else {
+          this.$refs["input"].classList.add("vue-keyboard-input-text-focus");
+          this.$refs["input"].focus();
+        }
+      });
+      //监听方向
+      this.$root.$on(EventKeys["vue-keyboard-cn-cursor-move"], (str) => {
+        if (!this.isFocus) {
+          return;
+        }
+        let movedData = moveToFn(this.valueArr, str);
+        if (Array.isArray(movedData.arr)) {
+          this.valueArr = movedData.arr;
+          this.cursorIndex = movedData.index;
+        }
+      });
+      //其他input触发获取焦点时候，本input失去焦点
+      this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
+        if (data.inputId !== this.inputId) {
+          this.isFocus = false;
+          this.$emit("blur", this.eventParams);
+        } else {
+          this.isFocus = true;
+          this.$emit("focus", this.eventParams);
+        }
+      });
+      //监听键盘关闭事件
+      this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
+        if (!bool) {
+          this.$emit("blur", this.eventParams);
+        }
+      });
+    },
     //是否可以添加内容，根据type来处理
     //mix(所有）int(整数)，float(小数) zh,cn //展示键盘输入方式，默认中文，和键盘相对应
     canPushItem(text) {
@@ -320,6 +365,7 @@ export default {
       //修复光标的坐标
       this.cursorIndex = this.cursorIndex - 1;
       this.$emit("change", this.tmpValueNoFlash); //同步给外层
+      this.$emit("input", this.eventParams);
     },
     focus(bool = false) {
       this.isFocus = bool;
@@ -345,14 +391,16 @@ export default {
 </script>
 <style lang="scss">
 .vue-keyboard-input {
-  max-width: 600px;
-  height: 300px;
+  position: relative; //它是必须的，否则会影响获取容器的滚动
+  min-height: 30px;
   overflow: auto;
+  box-sizing: border-box;
   line-height: 30px;
   border: 1px solid #eee;
   padding: 5px;
   word-wrap: break-word;
   white-space: pre-wrap;
+  -webkit-overflow-scrolling: touch;
   .vue-keyboard-text-item {
     display: inline-block;
   }
@@ -380,6 +428,7 @@ export default {
   }
 }
 .vue-keyboard-input-text {
+  display: inline-block;
   &.vue-keyboard-input-text-focus {
     &:focus {
       background: rgba(135, 206, 235, 0.3);
