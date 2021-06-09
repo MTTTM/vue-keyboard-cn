@@ -22,6 +22,7 @@
       class="hahahha"
       :allowEnter="true"
       style="max-height: 100px"
+      :showFixedInput="true"
     />
     <ky-input
       v-model="value1"

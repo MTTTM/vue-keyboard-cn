@@ -102,6 +102,11 @@ export default {
             show: newV,
             el: this.$refs["key-board-box"],
           });
+          //通知所有组件
+          this.$root.$emit(EventKeys["vue-keyboard-cn-showed"], {
+            show: newV,
+            el: this.$refs["key-board-box"],
+          });
         });
       },
       immediate: true,
@@ -143,14 +148,8 @@ export default {
     this.operateBtnFn(this.operationActiveIndex);
     this.windowChangeCallbackBind = this.windowChange.bind(this);
     this.windowChangeCallbackBind();
-    if ("onorientationchange" in window) {
-      window.addEventListener(
-        "orientationchange",
-        this.windowChangeCallbackBind
-      );
-    } else {
-      window.addEventListener("resize", this.windowChangeCallbackBind);
-    }
+    window.addEventListener("orientationchange", this.windowChangeCallbackBind);
+    window.addEventListener("resize", this.windowChangeCallbackBind);
   },
   beforeDestroy() {
     this.$root.$off(
@@ -186,6 +185,7 @@ export default {
           this.screenDir = 0;
         }
       }, 200);
+      this.$root.$emit(EventKeys["vue-keyboard-cn-show"], false);
     },
     nativeCopyCallbackWrite(str) {
       //如果没有显示，直接过滤
@@ -318,14 +318,6 @@ export default {
   content: "\e68b";
 }
 
-// .input {
-//   max-width: 600px;
-//   height: 300px;
-//   line-height: 30px;
-//   border: 1px solid #eee;
-//   padding: 5px;
-//   word-wrap: break-word;
-// }
 @keyframes flash {
   0% {
     opacity: 1;
@@ -355,6 +347,7 @@ export default {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  z-index: 9999;
   &.hs-key-board-box {
     height: 60%;
     max-height: 300px;

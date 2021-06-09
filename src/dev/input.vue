@@ -14,6 +14,27 @@
       @click="getClickElement"
       :id="inputId"
     ></div>
+    <div
+      class="vue-keyboard-input-fixed-wrap"
+      :data-scroll-left="scrollLeft"
+      :data-scroll-top="scrollTop"
+      @click="focus(true)"
+      :style="fixedInputWrap"
+      v-if="isFocus && showFixedInput"
+    >
+      <slot name="prepend"></slot>
+      <div class="vue-keyboard-input-fixed" ref="vueKeyboardInputFixed">
+        <div
+          tabindex="-1"
+          class="vue-keyboard-input-text"
+          v-html="tmpValue"
+          ref="input"
+          @click="getClickElement"
+          :id="inputId"
+        ></div>
+      </div>
+      <slot name="append"></slot>
+    </div>
   </div>
 </template>
 <script>
@@ -67,9 +88,13 @@ export default {
       default: () => false, //是否允许回车键，默认否
     },
     //这个属性没p用
-    autoHeight: {
+    // autoHeight: {
+    //   type: Boolean,
+    //   default: () => true, //是否默认高度自适应，默认是
+    // },
+    showFixedInput: {
       type: Boolean,
-      default: () => true, //是否默认高度自适应，默认是
+      default: () => false,
     },
   },
   model: {
@@ -84,6 +109,7 @@ export default {
       blurMethods: null, //点击document失去焦点事件
       scrollLeft: 0, //容器滚动X距离，只记录程序导致的，用户导致的忽略
       scrollTop: 0, //容器滚动的Y距离，只记录程序导致的，用户导致的忽略
+      fixedInputWrap: { position: "fixed" },
     };
   },
   computed: {
@@ -160,7 +186,7 @@ export default {
     },
     tmpValue() {
       this.$nextTick(() => {
-        this.fixAutoHeight(); //自适应高度
+        // this.fixAutoHeight(); //自适应高度
         this.inputDomScroll();
       });
     },
@@ -172,7 +198,7 @@ export default {
     this.selectAllBlur();
   },
   mounted() {
-    this.fixAutoHeight(); //自适应高度
+    // this.fixAutoHeight(); //自适应高度
   },
   beforeDestroy() {
     document.removeEventListener("click", this.blurMethods);
@@ -192,6 +218,7 @@ export default {
     },
     inputDomScroll() {
       let dom = this.$refs["vueKeyboardInput"];
+      let FixedDom = this.$refs["vueKeyboardInputFixed"];
       let scrollDisY = 0;
       let scrollDisX = 0;
       let flashDom =
@@ -207,27 +234,30 @@ export default {
         scrollDisY = flashDom.offsetTop - paddingTop;
         scrollDisX = flashDom.offsetLeft - paddingLeft;
       }
-
-      // console.log("style", styles["border-width"]);
-      // console.log(
-      //   "domBorderLeft",
-      //   styles["padding-left"],
-      //   "domBorderTop",
-      //   parseInt(styles["padding-top"]),
-      //   "scrollDisX",
-      //   scrollDisX,
-      //   "scrollDisY",
-      //   scrollDisY
-      // );
-
       this.scrollLeft = scrollDisX;
       this.scrollTop = scrollDisY;
       dom.scrollTo(scrollDisX, scrollDisY);
+      FixedDom && FixedDom.scrollTo(scrollDisX, scrollDisY);
     },
     addRootEventLister() {
       //监听键盘关闭事件
       this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
         this.isFocus = bool;
+      });
+      //监听键盘已显示，或已隐藏
+      this.$root.$on(EventKeys["vue-keyboard-cn-showed"], (data) => {
+        if (data.el && data.show) {
+          this.fixedInputWrap = {};
+          let computedStyle = window.getComputedStyle(data.el);
+          let height = computedStyle["height"];
+          let width = computedStyle["width"];
+          this.fixedInputWrap = {
+            position: "fixed",
+            left: 0,
+            bottom: height,
+            width: width,
+          };
+        }
       });
       //监听回车事件
       this.$root.$on(EventKeys["vue-keyboard-cn-submit"], () => {
@@ -466,6 +496,38 @@ export default {
   &.vue-keyboard-input-text-focus {
     &:focus {
       background: rgba(135, 206, 235, 0.3);
+    }
+  }
+}
+.vue-keyboard-input-fixed-wrap {
+  position: fixed;
+  background: #eee;
+  padding: 5px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+.vue-keyboard-input-fixed {
+  box-sizing: border-box;
+  height: 40px;
+  overflow: auto;
+  background: #fff;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+  .vue-keyboard-input-text {
+    background: #fff;
+    flex: 1;
+    padding: 5px;
+  }
+  .confirm-btn {
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .icon-arrow-right-filling {
+      font-size: 22px;
     }
   }
 }

@@ -4,9 +4,12 @@
       <div class="key-board-box-head-op zh-text-list-box" v-if="showZhText">
         <!-- 展示拼音输入和已选择中文的区域 -->
         <div class="pingying-box">
-          <span v-for="(item, index) in showZhMatchArr" :key="index">{{
-            zhSelectedAreaItem(item, index)
-          }}</span>
+          <span
+            v-for="(item, index) in showZhMatchArr"
+            :key="index"
+            @click="fullInput"
+            >{{ zhSelectedAreaItem(item, index) }}</span
+          >
         </div>
         <!-- 展示待选择的中文列表 -->
         <div class="scroll-box-wrap">
@@ -292,13 +295,16 @@ export default {
       return this.tmpPingying.length;
     },
   },
-  created() {
-    this.isLower = getCaseItem() == "lowercase" ? true : false;
-  },
-  mounted() {
-    //this.mainKeyBoardType = this.newLang = this.lang;
-  },
   methods: {
+    //点击中文拼音展示区域
+    fullInput() {
+      let t = "";
+      this.showZhMatchArr.forEach((e) => {
+        t += e.text;
+      });
+      this.appendStringItem(t);
+      this.tmpPingying = "";
+    },
     /**
      * 按照 文字或者函数 或者 特殊表意的class名
      */
@@ -403,9 +409,10 @@ export default {
      */
     updateWillSelectedZhList() {
       if (this.showZhMatchArr[this.matchedKeyArrSelectedIndex]) {
-        let matchStr = this.pingyingMap[
-          this.showZhMatchArr[this.matchedKeyArrSelectedIndex].key
-        ];
+        let matchStr =
+          this.pingyingMap[
+            this.showZhMatchArr[this.matchedKeyArrSelectedIndex].key
+          ];
         if (matchStr) {
           this.zhSearchList = matchStr.split("");
         }
@@ -602,7 +609,7 @@ $keyboardHeaderHeight: 30px;
       left: 50%;
       top: 50%;
       transform: translate(-50%, -50%);
-      color: #333;
+      color: #000;
     }
     .key-board-box-item-curr-text {
       position: absolute;
