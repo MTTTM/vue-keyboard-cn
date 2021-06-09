@@ -23,6 +23,7 @@
       :allowEnter="true"
       style="max-height: 100px"
       :showFixedInput="true"
+      placeholder="请输入内容"
     />
     <ky-input
       v-model="value1"

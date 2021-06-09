@@ -6,6 +6,9 @@
     @click="focus(true)"
     ref="vueKeyboardInput"
   >
+    <template v-if="placeholder && !value">
+      <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
+    </template>
     <div
       tabindex="-1"
       class="vue-keyboard-input-text"
@@ -14,6 +17,7 @@
       @click="getClickElement"
       :id="inputId"
     ></div>
+
     <div
       class="vue-keyboard-input-fixed-wrap"
       :data-scroll-left="scrollLeft"
@@ -24,6 +28,9 @@
     >
       <slot name="prepend"></slot>
       <div class="vue-keyboard-input-fixed" ref="vueKeyboardInputFixed">
+        <template v-if="placeholder && !value">
+          <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
+        </template>
         <div
           tabindex="-1"
           class="vue-keyboard-input-text"
@@ -95,6 +102,10 @@ export default {
     showFixedInput: {
       type: Boolean,
       default: () => false,
+    },
+    placeholder: {
+      type: String,
+      default: () => "",
     },
   },
   model: {
@@ -493,6 +504,8 @@ export default {
 }
 .vue-keyboard-input-text {
   display: inline-block;
+  position: relative;
+  z-index: 10;
   &.vue-keyboard-input-text-focus {
     &:focus {
       background: rgba(135, 206, 235, 0.3);
@@ -510,6 +523,7 @@ export default {
   overflow: hidden;
 }
 .vue-keyboard-input-fixed {
+  position: relative;
   box-sizing: border-box;
   height: 40px;
   overflow: auto;
@@ -517,7 +531,6 @@ export default {
   -webkit-overflow-scrolling: touch;
   flex: 1;
   .vue-keyboard-input-text {
-    background: #fff;
     flex: 1;
     padding: 5px;
   }
@@ -530,5 +543,13 @@ export default {
       font-size: 22px;
     }
   }
+}
+.vue-keyboard-input-placeholder {
+  color: #999;
+  position: absolute;
+  z-index: 0;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 </style>
