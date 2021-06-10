@@ -1,13 +1,21 @@
 <template>
-  <div id="app">
-    <h2><router-link class="nav-link" to="/home"> < Home</router-link></h2>
-    <hr />
-    <router-view></router-view>
+  <div>
+    <h1>props allowEnter</h1>
+
+    <h2>default false</h2>
+    <p v-html="mixValue"></p>
+    <ky-input v-model="mixValue" placeholder="Any string" />
+
+    <h2>true</h2>
+    <p v-html="mixValue"></p>
+    <ky-input v-model="mixValue" placeholder="Any string" :allowEnter="true" />
+    <key-board :emojiMap="emoji" />
+    <div style="height: 800px"></div>
   </div>
 </template>
 
 <script>
-import { person, hearts, symbo } from "./dev/emojiImages.js";
+import { person, hearts, symbo } from "../dev/emojiImages.js";
 export default {
   name: "App",
   data() {
@@ -17,12 +25,8 @@ export default {
         hearts,
         symbo,
       },
-      value1: "",
-      value: "4w000000000102\r\n999",
-      intValue: "1099",
-      floatValue: "1.99",
-      cnValue: "你好啊",
-      enValue: "helloguy",
+      mixValue: `hello
+,world!!`,
     };
   },
   methods: {
@@ -44,23 +48,10 @@ export default {
   },
 };
 </script>
+
 <style>
-h1 {
-  border-bottom: 1px solid #999;
-  margin-bottom: 10px;
-  padding: 5px 0;
-}
-li {
-  padding-left: 10px;
-  line-height: 30px;
-}
-.hljs {
-  display: block;
-}
-code {
-  width: 100%;
-  overflow: auto;
+p {
+  word-wrap: break-word;
+  white-space: pre-wrap;
 }
 </style>
-
-

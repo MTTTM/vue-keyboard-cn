@@ -1,5 +1,6 @@
 export default{
   "vue-keyboard-cn-focus":"vue-keyboard-cn-focus",//输入框获取焦点，发布通知
+  "vue-keyboard-cn-no-me-will-blur":"vue-keyboard-cn-no-me-will-blur",//输入框获取焦点，发布通知
   "vue-keyboard-cn-update-value":"vue-keyboard-cn-update-value",//推送输入框的最新值,string
   'vue-keyboard-cn-show':'vue-keyboard-cn-show',//键盘隐藏，发起通知
   'vue-keyboard-cn-showed':'vue-keyboard-cn-showed',//键盘已完成显示或隐藏

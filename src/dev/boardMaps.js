@@ -244,7 +244,7 @@ export default {
         text: "）",
       },
       {
-        text: "^_^"
+        text: "·"
       },
       {
         text: "?"

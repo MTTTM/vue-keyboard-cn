@@ -5,6 +5,7 @@
     :data-scroll-top="scrollTop"
     @click="focus(true)"
     ref="vueKeyboardInput"
+    v-disabled-body-scroll
   >
     <template v-if="placeholder && !value">
       <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
@@ -27,7 +28,11 @@
       v-if="isFocus && showFixedInput"
     >
       <slot name="prepend"></slot>
-      <div class="vue-keyboard-input-fixed" ref="vueKeyboardInputFixed">
+      <div
+        class="vue-keyboard-input-fixed"
+        v-disabled-body-scroll
+        ref="vueKeyboardInputFixed"
+      >
         <template v-if="placeholder && !value">
           <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
         </template>
@@ -56,8 +61,12 @@ import {
 } from "./tools.js";
 import { copyEventListener } from "./copyPaste.js";
 import { cursorStr, moveToFn, moveTo } from "./cursor.js";
+import { directive } from "disable-body-scroll";
 export default {
   name: "keyboardInput",
+  directives: {
+    "disabled-body-scroll": { ...directive },
+  },
   props: {
     value: {
       type: String,
@@ -275,7 +284,9 @@ export default {
         if (!this.isFocus) {
           return false;
         }
+        this.$emit("blur", this.eventParams);
         this.$emit("submit", this.eventParams);
+
         this.isFocus = false;
       });
       //监听键盘内容输入
@@ -350,6 +361,14 @@ export default {
         } else {
           this.isFocus = true;
           this.$emit("focus", this.eventParams);
+        }
+      });
+      this.$root.$on(EventKeys["vue-keyboard-cn-no-me-will-blur"], (id) => {
+        if (id !== this.inputId) {
+          this.isFocus = false;
+          if (this.keyBoard) {
+            this.keyBoard.show = false;
+          }
         }
       });
       //监听键盘关闭事件
@@ -454,12 +473,18 @@ export default {
         inputLang: this.inputLang,
         allowEnter: this.allowEnter,
       };
-      if (this.keyBoard && this.keyBoard.$attrs) {
+      console.log("this.keyBoard", this.keyBoard);
+      if (this.keyBoard) {
         this.keyBoard.getInputInfo = obj;
         this.keyBoard.show = true;
       } else {
         this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], obj);
       }
+      //非当前id的input都失去焦点
+      this.$root.$emit(
+        EventKeys["vue-keyboard-cn-no-me-will-blur"],
+        this.inputId
+      );
     },
   },
 };
