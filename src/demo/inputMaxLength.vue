@@ -1,27 +1,13 @@
 <template>
   <div>
-    <p>key-board props disabledInputUpdateMixKeyBoardLang</p>
-    <p>default false</p>
+    <p>input props maxLength</p>
     <ky-input
       v-model="mixValue"
-      placeholder="allow change to en"
-      inputLang="en"
-      :keyBoard="$refs['allowChange']"
+      placeholder="max length 3"
+      :maxLength="3"
+      type="en"
     />
-    <ky-input
-      v-model="mixValue"
-      placeholder="do not allow change to en"
-      inputLang="en"
-      :keyBoard="$refs['disabledChange']"
-    />
-
-    <key-board :emojiMap="emoji" ref="allowChange" />
-
-    <key-board
-      :emojiMap="emoji"
-      ref="disabledChange"
-      :disabledInputUpdateMixKeyBoardLang="true"
-    />
+    <key-board :emojiMap="emoji" />
     <div style="height: 800px"></div>
   </div>
 </template>
@@ -37,8 +23,7 @@ export default {
         hearts,
         symbo,
       },
-      eventName: "----",
-      mixValue: ``,
+      mixValue: `ab`,
     };
   },
   methods: {

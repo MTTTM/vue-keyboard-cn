@@ -6,7 +6,7 @@
     <p v-html="mixValue"></p>
     <ky-input v-model="mixValue" placeholder="Any string" />
 
-    <h2>:style="{ 'max-height': '40px' }"</h2>
+    <h2>false</h2>
     <p v-html="mixValue"></p>
     <ky-input
       v-model="mixValue"

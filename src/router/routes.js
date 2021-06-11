@@ -6,6 +6,7 @@ import EventCom from "../demo//event"
 import DisabledInputUpdateMixKeyBoardLang from "../demo/disabledInputUpdateMixKeyBoardLang.vue"
 import canSwitchOtherBoard from "../demo/canSwitchOtherBoard"
 import showFixedInput from "../demo/showFixedInput"
+import InputMaxLength from "../demo/inputMaxLength.vue"
 export default [
   {
     path: '/',  // 重定向到home页面
@@ -43,6 +44,10 @@ export default [
     path:"/showFixedInput",
     component:showFixedInput
   },
+  {
+    path:"/inputMaxLength",
+    component:InputMaxLength
+  }
   
   
 ]

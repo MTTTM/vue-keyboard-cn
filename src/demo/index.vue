@@ -34,6 +34,11 @@
           >input props showFixedInput</router-link
         >
       </li>
+      <li>
+        <router-link class="nav-link" to="/inputMaxLength"
+          >input props inputMaxLength</router-link
+        >
+      </li>
     </ul>
   </div>
 </template>

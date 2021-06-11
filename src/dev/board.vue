@@ -333,6 +333,7 @@ export default {
       if (
         (e.operate == "back" ||
           e.operate == "changeNumber" ||
+          e.operate == "changeLan" ||
           e.operate == "symbol") &&
         this.getInputInfo &&
         !this.getInputInfo.canSwitchOtherBoard

@@ -103,11 +103,6 @@ export default {
       type: Boolean,
       default: () => false, //是否允许回车键，默认否
     },
-    //这个属性没p用
-    // autoHeight: {
-    //   type: Boolean,
-    //   default: () => true, //是否默认高度自适应，默认是
-    // },
     showFixedInput: {
       type: Boolean,
       default: () => false,
@@ -115,6 +110,9 @@ export default {
     placeholder: {
       type: String,
       default: () => "",
+    },
+    maxLength: {
+      type: Number,
     },
   },
   model: {
@@ -363,14 +361,22 @@ export default {
           this.$emit("focus", this.eventParams);
         }
       });
-      this.$root.$on(EventKeys["vue-keyboard-cn-no-me-will-blur"], (id) => {
-        if (id !== this.inputId) {
-          this.isFocus = false;
-          if (this.keyBoard) {
-            this.keyBoard.show = false;
+      this.$root.$on(
+        EventKeys["vue-keyboard-cn-no-me-will-blur"],
+        ({ inputId, keyBoard }) => {
+          if (inputId !== this.inputId) {
+            this.isFocus = false;
+            //只有指向不是同一个键盘组件，才让当前的键盘隐藏
+            if (this.keyBoard && this.keyBoard !== keyBoard) {
+              this.keyBoard.show = false;
+            }
           }
         }
-      });
+      );
+      // {
+      //     inputId:this.inputId,
+      //     keyBoard:this.keyBoard
+      //   }
       //监听键盘关闭事件
       this.$root.$on(EventKeys["vue-keyboard-cn-show"], (bool) => {
         if (!bool) {
@@ -382,24 +388,29 @@ export default {
     //mix(所有）int(整数)，float(小数) zh,cn //展示键盘输入方式，默认中文，和键盘相对应
     canPushItem(text) {
       let returnValue = false;
+      let endText = `${this.value}${text}`;
+      if (
+        !isNaN(Number(this.maxLength)) &&
+        this.maxLength > 0 &&
+        endText.length > this.maxLength
+      ) {
+        return;
+      }
       if (this.regx) {
         return new RegExp(this.regx).test(text);
       }
       switch (this.type) {
         case "float":
-          returnValue = inputFilterRegx.float(
-            `${this.value}${text}`,
-            this.decimal
-          );
+          returnValue = inputFilterRegx.float(endText, this.decimal);
           break;
         case "int":
-          returnValue = inputFilterRegx.int(`${this.value}${text}`);
+          returnValue = inputFilterRegx.int(endText);
           break;
         case "cn":
-          returnValue = inputFilterRegx.cn(`${this.value}${text}`);
+          returnValue = inputFilterRegx.cn(endText);
           break;
         case "en":
-          returnValue = inputFilterRegx.en(`${this.value}${text}`);
+          returnValue = inputFilterRegx.en(endText);
           break;
         default:
           returnValue = true;
@@ -481,10 +492,10 @@ export default {
         this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], obj);
       }
       //非当前id的input都失去焦点
-      this.$root.$emit(
-        EventKeys["vue-keyboard-cn-no-me-will-blur"],
-        this.inputId
-      );
+      this.$root.$emit(EventKeys["vue-keyboard-cn-no-me-will-blur"], {
+        inputId: this.inputId,
+        keyBoard: this.keyBoard,
+      });
     },
   },
 };
