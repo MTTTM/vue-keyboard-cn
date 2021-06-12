@@ -1,0 +1,4 @@
+{
+  "inputElement":"./packages/exportKbInput.js",
+  "keyBoardElement":"./packages/exportKbBoard.js"
+}
