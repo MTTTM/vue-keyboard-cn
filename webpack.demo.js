@@ -5,7 +5,7 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './docs'),
-    publicPath: '/',
+    publicPath: 'https://mtttm.github.io/vue-keyboard-cn/',
     filename: 'build.js',
     filename: 'build.[chunkHash:8].js'
   },
