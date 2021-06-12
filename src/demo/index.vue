@@ -39,6 +39,11 @@
           >input props inputMaxLength</router-link
         >
       </li>
+      <li>
+        <router-link class="nav-link" to="/customkeyboard">
+          custom keyboard</router-link
+        >
+      </li>
     </ul>
   </div>
 </template>

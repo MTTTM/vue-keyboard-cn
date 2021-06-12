@@ -25,6 +25,7 @@
       :inputValue="value"
       :getInputInfo="getInputInfo"
       :disabledInputUpdateMixKeyBoardLang="disabledInputUpdateMixKeyBoardLang"
+      :keyBoardMaps="keyBoardMaps"
       @show="triggerShow"
       ref="dynamicComponent"
     ></component>
@@ -53,6 +54,23 @@ export default {
     disabledInputUpdateMixKeyBoardLang: {
       type: Boolean,
       default: () => false,
+    },
+    keyBoardMaps: {
+      validator: function (value) {
+        return (
+          String.prototype.slice.call(value) === "[object Object]",
+          "cnMap" in value &&
+            "enMap" in value &&
+            "cnSymbolMap" in value &&
+            "enSymbolMap" in value &&
+            "numberMap" in value &&
+            Array.isArray(value["cnMap"]),
+          Array.isArray(value["enMap"]),
+          Array.isArray(value["cnSymbolMap"]),
+          Array.isArray(value["enSymbolMap"]),
+          Array.isArray(value["numberMap"])
+        );
+      },
     },
   },
   data() {
@@ -96,7 +114,6 @@ export default {
   watch: {
     show: {
       handler(newV) {
-        this.fixedBg();
         this.$nextTick(() => {
           this.$emit("show", {
             show: newV,
@@ -127,12 +144,6 @@ export default {
     );
     // this.changeView();
     this.$root.$on(EventKeys["vue-keyboard-cn-focus"], (data) => {
-      // console.log(
-      //   "获取焦点！！！！！键盘",
-      //   data,
-      //   "dynamicComponent",
-      //   this.$refs["dynamicComponent"]
-      // );
       //这个所有键盘都会受到影响！！
       let { isFocus, tmpValueNoFlash } = data;
       this.show = isFocus;
@@ -222,18 +233,6 @@ export default {
           this.$root.$emit(EventKeys["vue-keyboard-cn-show"], false);
           break;
       }
-    },
-    fixedBg() {
-      // if (this.show) {
-      //   this.top = window.scrollY;
-      //   this.bodyEl.style.position = "fixed";
-      //   this.bodyEl.style.top = -top + "px";
-      //   this.bodyEl.style.width = "100%";
-      // } else {
-      //   this.bodyEl.style.position = "";
-      //   this.bodyEl.style.top = "";
-      //   window.scrollTo(0, top); // 回到原先的top
-      // }
     },
   },
 };

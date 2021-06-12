@@ -7,6 +7,7 @@ import DisabledInputUpdateMixKeyBoardLang from "../demo/disabledInputUpdateMixKe
 import canSwitchOtherBoard from "../demo/canSwitchOtherBoard"
 import showFixedInput from "../demo/showFixedInput"
 import InputMaxLength from "../demo/inputMaxLength.vue"
+import Customkeyboard from "../demo/Customkeyboard.vue"
 export default [
   {
     path: '/',  // 重定向到home页面
@@ -48,6 +49,9 @@ export default [
     path:"/inputMaxLength",
     component:InputMaxLength
   }
-  
+  ,{
+    path:"/customkeyboard",
+    component:Customkeyboard
+  }
   
 ]

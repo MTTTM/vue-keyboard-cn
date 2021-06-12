@@ -78,7 +78,7 @@ import boardMaps from "./boardMaps";
 import { getPingMatchObjKey } from "./tools.js";
 import { matchHotPingying, setPingying } from "./memory.js";
 import EventKeys from "./eventKeys";
-import { getCaseItem, setCaseItem } from "./lowercaseMemory";
+import { setCaseItem } from "./lowercaseMemory";
 import EnterBtnCallBack from "./mixins/btnPress";
 export default {
   name: "board",
@@ -89,10 +89,6 @@ export default {
       required: false,
       default: "number", //zh,en,number
     },
-    // lang: {
-    //   type: String,
-    //   default: "zh",
-    // },
     //如果type是mix类型，默认使用的是什么输入法
     //cn还是en，默认是cn
     inputLang: {
@@ -110,6 +106,23 @@ export default {
       type: Boolean,
       default: () => false,
     },
+    keyBoardMaps: {
+      validator: function (value) {
+        return (
+          String.prototype.slice.call(value) === "[object Object]",
+          "cnMap" in value &&
+            "enMap" in value &&
+            "cnSymbolMap" in value &&
+            "enSymbolMap" in value &&
+            "numberMap" in value &&
+            Array.isArray(value["cnMap"]),
+          Array.isArray(value["enMap"]),
+          Array.isArray(value["cnSymbolMap"]),
+          Array.isArray(value["enSymbolMap"]),
+          Array.isArray(value["numberMap"])
+        );
+      },
+    },
   },
   data() {
     return {
@@ -124,7 +137,6 @@ export default {
       mainKeyBoardType: "",
       zhSearchList: [], //匹配到的可选中文文字列表
       zhMemoryResult: [], //历史记录中，匹配到可选的中文文字列表{key:"nih",order:1,zh:"你好"}
-      ...boardMaps,
       zhKeys, //可匹配到的中文拼音
       selectedTextArr: [], //中文已选，待填入的字
       matchedKeyArr: [], //匹配到的key集合
@@ -261,6 +273,14 @@ export default {
     },
   },
   computed: {
+    //判断最终的keyboardmap数据来源
+    boardMaps() {
+      if (this.keyBoardMaps) {
+        return this.keyBoardMaps;
+      } else {
+        return boardMaps;
+      }
+    },
     showzhMemoryResult() {
       let zhMatchItem = this.showZhMatchArr[0];
       let pingyinglen = this.tmpPingying.length;
@@ -290,7 +310,7 @@ export default {
       return t;
     },
     keyboardMap() {
-      return this[this.curr + "Map"];
+      return this.boardMaps[this.curr + "Map"];
     },
     showZhText() {
       // return this.tmpPingying.length && this.newLang == "zh";
@@ -484,6 +504,11 @@ export default {
       let text = this.getItemText(val);
       this.appendStringItem(text);
     },
+    noThingFn() {
+      /**
+       * no thing
+       */
+    },
     deleteFn() {
       if (this.tmpPingying.length) {
         let len = this.tmpPingying.length - 1;
@@ -527,14 +552,6 @@ export default {
 </script>
 <style lang="scss" >
 $keyboardHeaderHeight: 30px;
-// .input {
-//   max-width: 600px;
-//   height: 300px;
-//   line-height: 30px;
-//   border: 1px solid #eee;
-//   padding: 5px;
-//   word-wrap: break-word;
-// }
 @keyframes flash {
   0% {
     opacity: 1;
