@@ -44,6 +44,16 @@
           custom keyboard</router-link
         >
       </li>
+      <li>
+        <router-link class="nav-link" to="/noEmoji">
+          keyboard no Emoji</router-link
+        >
+      </li>
+      <li>
+        <router-link class="nav-link" to="/hidehead">
+          keyboard props hideHead</router-link
+        >
+      </li>
     </ul>
   </div>
 </template>

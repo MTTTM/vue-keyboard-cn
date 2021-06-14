@@ -679,12 +679,16 @@ $keyboardHeaderHeight: 30px;
     }
   }
 }
+
 .key-board-box-head-op {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   z-index: 30;
+  &.key-board-box-head-hide-head {
+    justify-content: flex-end;
+  }
   .pingying-box {
     font-size: 16px;
     padding: 0 5px;
@@ -704,6 +708,10 @@ $keyboardHeaderHeight: 30px;
     .iconfont {
       font-size: 20px;
     }
+    &.head-op-icon-hide {
+      flex: none;
+      width: 50px;
+    }
     &.active {
       color: orange;
       &.disabled {
@@ -717,6 +725,7 @@ $keyboardHeaderHeight: 30px;
       pointer-events: none;
     }
   }
+
   &.zh-text-list-box {
     justify-content: flex-start;
     align-items: flex-start;

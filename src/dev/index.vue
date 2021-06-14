@@ -4,19 +4,35 @@
     v-show="show"
     ref="key-board-box"
   >
-    <div class="key-board-box-head-op" @touchstart.stop>
+    <div
+      :class="[
+        'key-board-box-head-op',
+        hideHead ? 'key-board-box-head-hide-head' : '',
+      ]"
+      @touchstart.stop
+    >
       <!-- 键盘设置列表 -->
+      <template v-if="!hideHead">
+        <template v-for="(item, index) in operationList">
+          <span
+            class="head-op-icon"
+            :key="item.id"
+            @click.prevent.stop="operateBtnFn(index, item)"
+            :class="[
+              operationActiveIndex == index ? 'active' : '',
+              isDisabled(item) ? 'disabled' : '',
+            ]"
+            v-if="index !== 1 || (index == 1 && emojiMapKeysLength)"
+          >
+            <span :class="item.classs"></span>
+          </span>
+        </template>
+      </template>
       <span
-        class="head-op-icon"
-        v-for="(item, index) in operationList"
-        :key="item.id"
-        @click.prevent.stop="operateBtnFn(index, item)"
-        :class="[
-          operationActiveIndex == index ? 'active' : '',
-          isDisabled(item) ? 'disabled' : '',
-        ]"
+        class="head-op-icon head-op-icon-hide"
+        @click.prevent.stop="operateBtnFn(3, {})"
       >
-        <span :class="item.classs"></span>
+        <span class="icon iconfont icon-arrow-right-filling icon-route"></span>
       </span>
     </div>
     <component
@@ -72,6 +88,11 @@ export default {
         );
       },
     },
+    //隐藏头部
+    hideHead: {
+      type: Boolean,
+      default: () => false,
+    },
   },
   data() {
     return {
@@ -92,10 +113,6 @@ export default {
           classs: "icon iconfont icon-operation",
           id: 3,
         },
-        {
-          classs: "icon iconfont icon-arrow-right-filling icon-route",
-          id: 4,
-        },
       ],
       bodyEl: document.body,
       top: 0,
@@ -109,6 +126,9 @@ export default {
   computed: {
     isMix() {
       return this.getInputInfo && this.getInputInfo.type === "mix";
+    },
+    emojiMapKeysLength() {
+      return this.emojiMap && Object.keys(this.emojiMap).length > 0;
     },
   },
   watch: {
@@ -332,6 +352,7 @@ export default {
   background: red;
   animation: flash 0.3s infinite linear;
 }
+
 .key-board-box {
   touch-action: none;
   user-select: none;

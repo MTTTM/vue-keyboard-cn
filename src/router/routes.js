@@ -8,6 +8,8 @@ import canSwitchOtherBoard from "../demo/canSwitchOtherBoard"
 import showFixedInput from "../demo/showFixedInput"
 import InputMaxLength from "../demo/inputMaxLength.vue"
 import Customkeyboard from "../demo/Customkeyboard.vue"
+import noEmoji from "../demo/noEmoji.vue"
+import hideHead from "../demo/hideHead.vue"
 export default [
   {
     path: '/',  // 重定向到home页面
@@ -53,5 +55,12 @@ export default [
     path:"/customkeyboard",
     component:Customkeyboard
   }
-  
+  ,{
+    path:"/noEmoji",
+    component:noEmoji
+  },
+  {
+    path:"/hidehead",
+    component:hideHead
+  }
 ]

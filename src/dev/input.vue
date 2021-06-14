@@ -227,6 +227,11 @@ export default {
       this.blurMethods = this.inputWillblur.bind(this);
       document.addEventListener("click", this.blurMethods);
     },
+    /**
+     * 输入框内部滚动
+     * @params dom {dom}
+     * @params isDefaultInput {Boolean} 是普通输入框还是固定底部的输入框
+     */
     computedInputScrollDis(dom, isDefaultInput = true) {
       let scrollDisY = 0;
       let scrollDisX = 0;
@@ -249,6 +254,9 @@ export default {
 
       dom.scrollTo(scrollDisX, scrollDisY);
     },
+    /**
+     * 获取当前展示的键盘高度
+     */
     getKeyBoardHeight() {
       let keyboards = document.querySelectorAll(".key-board-box");
       let keyBoardHeight = 0;
@@ -262,6 +270,9 @@ export default {
       }
       return keyBoardHeight;
     },
+    /**
+     * 获取固定在键盘顶部的输入框的高度
+     */
     getFixedInputHeight() {
       let fixedInput = this.$refs["vue-keyboard-input-fixed-wrap"];
       if (!fixedInput) {
@@ -271,11 +282,17 @@ export default {
         return parseFloat(height);
       }
     },
+    /**
+     * 获取bodyY轴滚动距离
+     */
     getBodyScrollTop() {
       const scrollTop =
         document.documentElement.scrollTop || document.body.scrollTop;
       return scrollTop;
     },
+    /**
+     * 获取网页可视区的高度
+     */
     getViewPortHeight() {
       const viewPortHeight =
         window.innerHeight ||
