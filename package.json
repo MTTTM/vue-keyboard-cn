@@ -5,13 +5,17 @@
   "author": "eddyerburgh <edward.yerburgh@gmail.com>",
   "license": "MIT",
   "private": true,
+  "files": ["dist"],
+  "main":"./dist/index.es.min.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot --host 0.0.0.0",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "test": "cross-env BABEL_ENV=test nyc --reporter=lcov --reporter=text karma start",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "distDemo": "cross-env NODE_ENV=production webpack --config webpack.demo.js",
-    "distLibs": "cross-env NODE_ENV=production webpack --config webpack.components.js"
+    "distLibs": "cross-env NODE_ENV=production webpack --config webpack.components.js",
+    "dist": "cross-env NODE_ENV=production webpack --config webpack.libs.dist.js"
+    
   },
   "dependencies": {
     "@babel/core": "^7.14.3",

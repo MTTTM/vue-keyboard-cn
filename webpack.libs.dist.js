@@ -1,11 +1,10 @@
 var path = require('path')
 var webpack = require('webpack')
-const Components = require('./components.json');
 module.exports = {
-  entry: Components,
+  entry: "./packages/index.js",
   output: {
-    path: path.resolve(__dirname, './distComponents'),
-    filename: '[name].min.js',
+    path: path.resolve(__dirname, './dist'),
+    filename: 'index.es.min.js',
     chunkFilename: '[id].js',
   },
   module: {
