@@ -26,6 +26,7 @@
       @click="focus(true)"
       :style="fixedInputWrap"
       v-if="isFocus && showFixedInput"
+      ref="vue-keyboard-input-fixed-wrap"
     >
       <slot name="prepend"></slot>
       <div
@@ -113,6 +114,10 @@ export default {
     },
     maxLength: {
       type: Number,
+    },
+    docBodyAutoScroll: {
+      type: Boolean,
+      default: () => true,
     },
   },
   model: {
@@ -204,7 +209,6 @@ export default {
     },
     tmpValue() {
       this.$nextTick(() => {
-        // this.fixAutoHeight(); //自适应高度
         this.inputDomScroll();
       });
     },
@@ -215,9 +219,6 @@ export default {
     this.addRootEventLister();
     this.selectAllBlur();
   },
-  mounted() {
-    // this.fixAutoHeight(); //自适应高度
-  },
   beforeDestroy() {
     document.removeEventListener("click", this.blurMethods);
   },
@@ -226,21 +227,10 @@ export default {
       this.blurMethods = this.inputWillblur.bind(this);
       document.addEventListener("click", this.blurMethods);
     },
-    fixAutoHeight() {
-      // this.$nextTick(() => {
-      //   if (this.autoHeight) {
-      //     let dom = this.$refs["vueKeyboardInput"];
-      //     dom.style.height = dom.scrollHeight + "px";
-      //   }
-      // });
-    },
-    inputDomScroll() {
-      let dom = this.$refs["vueKeyboardInput"];
-      let FixedDom = this.$refs["vueKeyboardInputFixed"];
+    computedInputScrollDis(dom, isDefaultInput = true) {
       let scrollDisY = 0;
       let scrollDisX = 0;
-      let flashDom =
-        this.$refs["vueKeyboardInput"].querySelector(".key-board-flash");
+      let flashDom = dom.querySelector(".key-board-flash");
       let styles = window.getComputedStyle(dom);
       let paddingTop = parseInt(styles["padding-top"])
         ? parseInt(styles["padding-top"])
@@ -252,10 +242,89 @@ export default {
         scrollDisY = flashDom.offsetTop - paddingTop;
         scrollDisX = flashDom.offsetLeft - paddingLeft;
       }
-      this.scrollLeft = scrollDisX;
-      this.scrollTop = scrollDisY;
+      if (isDefaultInput) {
+        this.scrollLeft = scrollDisX;
+        this.scrollTop = scrollDisY;
+      }
+
       dom.scrollTo(scrollDisX, scrollDisY);
-      FixedDom && FixedDom.scrollTo(scrollDisX, scrollDisY);
+    },
+    getKeyBoardHeight() {
+      let keyboards = document.querySelectorAll(".key-board-box");
+      let keyBoardHeight = 0;
+      for (let t = 0; t < keyboards.length; t++) {
+        let styles = window.getComputedStyle(keyboards[t]);
+        let keyBoardStyleHeight = parseInt(styles.height);
+        if (keyBoardStyleHeight > 0) {
+          keyBoardHeight = keyBoardStyleHeight;
+          break;
+        }
+      }
+      return keyBoardHeight;
+    },
+    getFixedInputHeight() {
+      let fixedInput = this.$refs["vue-keyboard-input-fixed-wrap"];
+      if (!fixedInput) {
+        return 0;
+      } else {
+        let height = window.getComputedStyle(fixedInput).height;
+        return parseFloat(height);
+      }
+    },
+    getBodyScrollTop() {
+      const scrollTop =
+        document.documentElement.scrollTop || document.body.scrollTop;
+      return scrollTop;
+    },
+    getViewPortHeight() {
+      const viewPortHeight =
+        window.innerHeight ||
+        document.documentElement.clientHeight ||
+        document.body.clientHeight;
+      return viewPortHeight;
+    },
+    getBoundingClientRect(el, attr) {
+      return el && el.getBoundingClientRect()[attr];
+    },
+    isDomInViewPort(dom) {
+      const viewPortHeight = this.getViewPortHeight();
+      const domTop = this.getBoundingClientRect(dom, "top");
+      const domBottom = this.getBoundingClientRect(dom, "bottom");
+      const keyBoardHeight = this.getKeyBoardHeight();
+      const fixedInputHeight = this.getFixedInputHeight();
+      return (
+        domTop >= 0 &&
+        viewPortHeight - (keyBoardHeight + fixedInputHeight) >= domBottom
+      );
+    },
+
+    docBodyAutoScrollFn(dom) {
+      const scrollTop = this.getBodyScrollTop();
+      const viewPortHeight = this.getViewPortHeight();
+      const keyBoardHeight = this.getKeyBoardHeight();
+      const domBottom = this.getBoundingClientRect(dom, "bottom");
+      const fixedInputHeight = this.getFixedInputHeight();
+      //targetY=已经滚动的Y距离+浏览器底部距离inputDOm的距离(让内容滚回可视区)+键盘高度+补充的间距
+      var targetY =
+        scrollTop +
+        (domBottom - viewPortHeight) +
+        (keyBoardHeight + fixedInputHeight) +
+        10;
+      window.scrollTo(0, targetY);
+    },
+    inputDomScroll() {
+      let dom = this.$refs["vueKeyboardInput"];
+      let domFlash = dom.querySelector(".key-board-flash");
+      let FixedDom = this.$refs["vueKeyboardInputFixed"];
+      dom && this.computedInputScrollDis(dom, true);
+      FixedDom && this.computedInputScrollDis(FixedDom, false);
+      // if (domFlash) {
+      //   console.log("在视图内么", this.isDomInViewPort(domFlash));
+      // }
+
+      if (domFlash && !this.isDomInViewPort(domFlash)) {
+        this.docBodyAutoScrollFn(domFlash);
+      }
     },
     addRootEventLister() {
       //监听键盘关闭事件

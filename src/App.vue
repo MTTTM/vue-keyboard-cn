@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <h2><router-link class="nav-link" to="/home"> < Home</router-link></h2>
-    <hr />
+    <h2 class="header">
+      <router-link class="nav-link" to="/home"> < Home</router-link>
+    </h2>
     <router-view></router-view>
   </div>
 </template>
@@ -45,6 +46,13 @@ export default {
 };
 </script>
 <style>
+.header {
+  position: sticky;
+  top: 10px;
+  background: #fff;
+  z-index: 999;
+  border-bottom: 1px solid #eee;
+}
 h1 {
   border-bottom: 1px solid #999;
   margin-bottom: 10px;

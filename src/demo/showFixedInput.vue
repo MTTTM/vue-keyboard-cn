@@ -12,6 +12,7 @@
       v-model="mixValue"
       placeholder="Any string"
       :showFixedInput="true"
+      :allowEnter="true"
     />
     <key-board :emojiMap="emoji" />
     <div style="height: 800px"></div>
