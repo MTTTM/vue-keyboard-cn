@@ -688,6 +688,10 @@ $keyboardHeaderHeight: 30px;
   z-index: 30;
   &.key-board-box-head-hide-head {
     justify-content: flex-end;
+    .head-op-icon-hide {
+      flex: none;
+      width: 50px;
+    }
   }
   .pingying-box {
     font-size: 16px;
@@ -708,10 +712,7 @@ $keyboardHeaderHeight: 30px;
     .iconfont {
       font-size: 20px;
     }
-    &.head-op-icon-hide {
-      flex: none;
-      width: 50px;
-    }
+
     &.active {
       color: orange;
       &.disabled {
