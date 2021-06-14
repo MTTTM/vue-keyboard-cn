@@ -48,7 +48,7 @@ export default {
 <style>
 .header {
   position: sticky;
-  top: 10px;
+  top: 0;
   background: #fff;
   z-index: 999;
   border-bottom: 1px solid #eee;

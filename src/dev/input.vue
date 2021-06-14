@@ -309,7 +309,7 @@ export default {
         scrollTop +
         (domBottom - viewPortHeight) +
         (keyBoardHeight + fixedInputHeight) +
-        10;
+        20;
       window.scrollTo(0, targetY);
     },
     inputDomScroll() {
@@ -322,7 +322,11 @@ export default {
       //   console.log("在视图内么", this.isDomInViewPort(domFlash));
       // }
 
-      if (domFlash && !this.isDomInViewPort(domFlash)) {
+      if (
+        domFlash &&
+        this.docBodyAutoScroll &&
+        !this.isDomInViewPort(domFlash)
+      ) {
         this.docBodyAutoScrollFn(domFlash);
       }
     },
