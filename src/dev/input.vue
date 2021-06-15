@@ -195,6 +195,7 @@ export default {
           //数据类型
           this.valueArr = t;
           this.cursorIndex = this.valueArr.length;
+          this.valueArr.splice(this.cursorIndex, 0, cursorStr);
         } else {
           this.valueArr = this.valueArr.filter((item) => item != cursorStr);
           //this.cursorIndex就是光标的索引，所以不需要-1
