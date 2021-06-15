@@ -114,7 +114,6 @@ export default {
           id: 3,
         },
       ],
-      bodyEl: document.body,
       top: 0,
       value: "", //输入框组件的值，不可以手动改
       windowChangeCallbackBind: null,
@@ -150,8 +149,6 @@ export default {
     },
   },
   created() {
-    this.bodyEl = document.body;
-
     //获取最新输入框的值
     this.$root.$on(EventKeys["vue-keyboard-cn-update-value"], (newV) => {
       this.value = newV;
