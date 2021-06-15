@@ -1,24 +1,29 @@
 <template>
-  <div
-    class="vue-keyboard-input"
-    :class="[disabled ? 'disabled' : '']"
-    :data-scroll-left="scrollLeft"
-    :data-scroll-top="scrollTop"
-    @click="focus(true)"
-    ref="vueKeyboardInput"
-    v-disabled-body-scroll
-  >
-    <template v-if="placeholder && !value">
-      <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
-    </template>
+  <div class="vue-keyboard-input-wrap">
+    <slot name="prepend"></slot>
     <div
-      tabindex="-1"
-      class="vue-keyboard-input-text"
-      v-html="tmpValue"
-      ref="input"
-      @click="getClickElement"
-      :id="inputId"
-    ></div>
+      class="vue-keyboard-input"
+      :class="[disabled ? 'disabled' : '']"
+      :data-scroll-left="scrollLeft"
+      :data-scroll-top="scrollTop"
+      @click="focus(true)"
+      ref="vueKeyboardInput"
+      v-disabled-body-scroll
+    >
+      <template v-if="placeholder && value !== 0 && !value">
+        <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
+      </template>
+
+      <div
+        tabindex="-1"
+        class="vue-keyboard-input-text"
+        v-html="tmpValue"
+        ref="input"
+        @click="getClickElement"
+        :id="inputId"
+      ></div>
+    </div>
+    <slot name="append"></slot>
 
     <div
       class="vue-keyboard-input-fixed-wrap"
@@ -29,13 +34,13 @@
       v-if="isFocus && showFixedInput"
       ref="vue-keyboard-input-fixed-wrap"
     >
-      <slot name="prepend"></slot>
+      <slot name="prependFixed"></slot>
       <div
         class="vue-keyboard-input-fixed"
         v-disabled-body-scroll
         ref="vueKeyboardInputFixed"
       >
-        <template v-if="placeholder && !value">
+        <template v-if="placeholder && value !== 0 && !value">
           <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
         </template>
         <div
@@ -47,7 +52,7 @@
           :id="inputId"
         ></div>
       </div>
-      <slot name="append"></slot>
+      <slot name="appendFixed"></slot>
     </div>
   </div>
 </template>
@@ -71,7 +76,7 @@ export default {
   },
   props: {
     value: {
-      type: String,
+      type: [String, Number],
       required: true,
     },
     type: {
@@ -173,16 +178,21 @@ export default {
   },
   watch: {
     value: {
-      handler(newV) {
-        let t = splitStringToArray(newV, this.allowEnter);
+      handler(newV, oldV) {
+        let t = splitStringToArray("" + newV, this.allowEnter);
+
+        // console.log("ttttt", t);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
-        // console.log("this.valueArr", this.valueArr, labelIndex);
+        console.log("this.valueArr", this.valueArr, labelIndex);
         if (this.isFocus && labelIndex == -1) {
           t.push(cursorStr);
           this.valueArr = t;
-          // console.log("新值 cursorIndex 为0", this.valueArr);
           this.cursorIndex = this.valueArr.length - 1;
         } else if (!this.isFocus) {
+          this.valueArr = t;
+          this.cursorIndex = this.valueArr.length;
+        } else if (this.isFocus && !isNaN(Number(newV))) {
+          //数据类型
           this.valueArr = t;
           this.cursorIndex = this.valueArr.length;
         } else {
@@ -194,7 +204,7 @@ export default {
         /*向所有组件推送，最新值
          *1.光标控制面板，复制需要用到
          */
-        this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], newV);
+        this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], "" + newV);
         //输入时候内容滚到指定位置
         this.$nextTick(() => {
           this.inputDomScroll();
@@ -601,13 +611,20 @@ export default {
 };
 </script>
 <style lang="scss">
+.vue-keyboard-input-wrap {
+  display: flex;
+  align-items: center;
+  border: 1px solid #eee;
+  overflow: auto;
+  line-height: 30px;
+}
 .vue-keyboard-input {
   position: relative; //它是必须的，否则会影响获取容器的滚动
   min-height: 30px;
   overflow: auto;
   box-sizing: border-box;
   line-height: 30px;
-  border: 1px solid #eee;
+  flex: 1;
   padding: 5px;
   word-wrap: break-word;
   white-space: pre-wrap;

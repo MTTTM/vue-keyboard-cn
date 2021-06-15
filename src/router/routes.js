@@ -11,6 +11,7 @@ import Customkeyboard from "../demo/Customkeyboard.vue"
 import noEmoji from "../demo/noEmoji.vue"
 import hideHead from "../demo/hideHead.vue"
 import inputDisabled from "../demo/inputDisabled.vue"
+import inputSlot from "../demo/inputSlot.vue"
 export default [
   {
     path: '/',  // 重定向到home页面
@@ -67,5 +68,8 @@ export default [
   {
     path:"/inputDisabled",
     component:inputDisabled
+  },{
+    path:"/inputSlot",
+    component:inputSlot
   }
 ]

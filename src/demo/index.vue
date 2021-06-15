@@ -59,6 +59,11 @@
           input props disabled</router-link
         >
       </li>
+      <li>
+        <router-link class="nav-link" to="/inputSlot">
+          input name slot</router-link
+        >
+      </li>
     </ul>
   </div>
 </template>
