@@ -264,10 +264,6 @@ export default {
     url("assets/font/iconfont.woff?t=1620317185581") format("woff"),
     url("assets/font/iconfont.ttf?t=1620317185581") format("truetype");
 }
-* {
-  margin: 0;
-  padding: 0;
-}
 
 .iconfont {
   font-family: "iconfont" !important;
@@ -368,6 +364,10 @@ export default {
   display: flex;
   flex-direction: column;
   z-index: 9999;
+  * {
+    margin: 0;
+    padding: 0;
+  }
   &.hs-key-board-box {
     height: 60%;
     max-height: 300px;

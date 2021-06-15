@@ -573,6 +573,10 @@ $keyboardHeaderHeight: 30px;
   flex: 1;
 }
 .key-board-box {
+  * {
+    margin: 0;
+    padding: 0;
+  }
   .key-board-box-head {
     height: $keyboardHeaderHeight;
     background: #eee;

@@ -9,16 +9,31 @@
         >
         </span>
         <span
-          class="operation-btn operation-btn-btm icon icon iconfont icon-bg-next"
+          class="
+            operation-btn operation-btn-btm
+            icon icon
+            iconfont
+            icon-bg-next
+          "
           @click.stop.prevent="cursorMove('bottom')"
         ></span>
         <!-- 左右 -->
         <span
-          class="operation-btn operation-btn-left icon iconfont icon-arrow-left-filling"
+          class="
+            operation-btn operation-btn-left
+            icon
+            iconfont
+            icon-arrow-left-filling
+          "
           @click.stop.prevent="cursorMove('left')"
         ></span>
         <span
-          class="operation-btn operation-btn-right icon iconfont icon-arrow-right-filling"
+          class="
+            operation-btn operation-btn-right
+            icon
+            iconfont
+            icon-arrow-right-filling
+          "
           @click.stop.prevent="cursorMove('right')"
         ></span>
       </div>
@@ -249,6 +264,10 @@ export default {
   justify-content: center;
   align-items: center;
   position: relative;
+  * {
+    margin: 0;
+    padding: 0;
+  }
   .copy-tip {
     color: #999;
     text-align: center;
