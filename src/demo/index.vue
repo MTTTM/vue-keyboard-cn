@@ -54,6 +54,11 @@
           keyboard props hideHead</router-link
         >
       </li>
+      <li>
+        <router-link class="nav-link" to="/inputDisabled">
+          input props disabled</router-link
+        >
+      </li>
     </ul>
   </div>
 </template>

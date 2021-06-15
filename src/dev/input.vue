@@ -1,6 +1,7 @@
 <template>
   <div
     class="vue-keyboard-input"
+    :class="[disabled ? 'disabled' : '']"
     :data-scroll-left="scrollLeft"
     :data-scroll-top="scrollTop"
     @click="focus(true)"
@@ -118,6 +119,10 @@ export default {
     docBodyAutoScroll: {
       type: Boolean,
       default: () => true,
+    },
+    disabled: {
+      type: Boolean,
+      default: () => false,
     },
   },
   model: {
@@ -521,7 +526,9 @@ export default {
       }
     },
     getClickElement(e) {
-      console.log("点击元素", e.target);
+      if (this.disabled) {
+        return;
+      }
       if (
         e.target &&
         e.target.classList &&
@@ -563,6 +570,9 @@ export default {
       this.$emit("input", this.eventParams);
     },
     focus(bool = false) {
+      if (this.disabled) {
+        return;
+      }
       this.isFocus = bool;
       let obj = {
         isFocus: bool,
@@ -602,6 +612,12 @@ export default {
   word-wrap: break-word;
   white-space: pre-wrap;
   -webkit-overflow-scrolling: touch;
+  &.disabled {
+    background: #eee;
+    .vue-keyboard-input-text {
+      color: #999;
+    }
+  }
   .vue-keyboard-text-item {
     display: inline-block;
   }

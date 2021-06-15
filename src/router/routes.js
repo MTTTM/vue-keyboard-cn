@@ -10,6 +10,7 @@ import InputMaxLength from "../demo/inputMaxLength.vue"
 import Customkeyboard from "../demo/Customkeyboard.vue"
 import noEmoji from "../demo/noEmoji.vue"
 import hideHead from "../demo/hideHead.vue"
+import inputDisabled from "../demo/inputDisabled.vue"
 export default [
   {
     path: '/',  // 重定向到home页面
@@ -62,5 +63,9 @@ export default [
   {
     path:"/hidehead",
     component:hideHead
+  },
+  {
+    path:"/inputDisabled",
+    component:inputDisabled
   }
 ]
