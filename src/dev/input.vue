@@ -181,20 +181,17 @@ export default {
       handler(newV, oldV) {
         let t = splitStringToArray("" + newV, this.allowEnter);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
-        console.log("newV", newV, "t", t);
         if (this.isFocus) {
+          console.log("labelIndex", labelIndex);
           if (labelIndex == -1) {
             t.push(cursorStr);
             this.valueArr = t;
             this.cursorIndex = this.valueArr.length - 1;
-          } else if (!isNaN(Number(newV))) {
+          } else {
             //数据类型
             this.valueArr = t;
             this.cursorIndex = this.valueArr.length;
-            this.valueArr.splice(this.cursorIndex, 0, cursorStr);
-          } else {
-            this.valueArr = t;
-            this.cursorIndex = this.valueArr.length - 1;
+            this.valueArr.splice(this.cursorIndex, 0, cursorStr); //必须要追加光标
           }
         } else if (!this.isFocus) {
           this.valueArr = t;
@@ -715,6 +712,9 @@ export default {
   display: inline-block;
   position: relative;
   z-index: 10;
+  &:focus-visible {
+    outline: none;
+  }
   &.vue-keyboard-input-text-focus {
     background: rgba(135, 206, 235, 0.3);
     &:focus {
