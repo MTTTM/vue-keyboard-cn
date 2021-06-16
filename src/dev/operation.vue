@@ -47,14 +47,6 @@
         >
           全选
         </div>
-        <!-- <div
-          
-          v-clipboard:copy="inputValue"
-          v-clipboard:success="onCopy"
-          v-clipboard:error="onError"
-        >
-          复制
-        </div> -->
         <div class="operation-wrap-right-item" @click="onCopyCallback">
           复制
         </div>

@@ -11,8 +11,7 @@
     <p v-html="floatValue"></p>
     <ky-input
       v-model="floatValue"
-      placeholder="
-2 decimal places"
+      placeholder="2 decimal places"
       type="float"
     />
 

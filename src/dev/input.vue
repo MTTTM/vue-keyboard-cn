@@ -180,28 +180,45 @@ export default {
     value: {
       handler(newV, oldV) {
         let t = splitStringToArray("" + newV, this.allowEnter);
-
-        // console.log("ttttt", t);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
-        console.log("this.valueArr", this.valueArr, labelIndex);
-        if (this.isFocus && labelIndex == -1) {
-          t.push(cursorStr);
-          this.valueArr = t;
-          this.cursorIndex = this.valueArr.length - 1;
+        console.log("newV", newV, "t", t);
+        if (this.isFocus) {
+          if (labelIndex == -1) {
+            t.push(cursorStr);
+            this.valueArr = t;
+            this.cursorIndex = this.valueArr.length - 1;
+          } else if (!isNaN(Number(newV))) {
+            //数据类型
+            this.valueArr = t;
+            this.cursorIndex = this.valueArr.length;
+            this.valueArr.splice(this.cursorIndex, 0, cursorStr);
+          } else {
+            this.valueArr = t;
+            this.cursorIndex = this.valueArr.length - 1;
+          }
         } else if (!this.isFocus) {
           this.valueArr = t;
           this.cursorIndex = this.valueArr.length;
-        } else if (this.isFocus && !isNaN(Number(newV))) {
-          //数据类型
-          this.valueArr = t;
-          this.cursorIndex = this.valueArr.length;
-          this.valueArr.splice(this.cursorIndex, 0, cursorStr);
-        } else {
-          this.valueArr = this.valueArr.filter((item) => item != cursorStr);
-          //this.cursorIndex就是光标的索引，所以不需要-1
-          this.valueArr.splice(this.cursorIndex, 0, cursorStr);
-          // console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
         }
+
+        // if (this.isFocus && labelIndex == -1) {
+        //   t.push(cursorStr);
+        //   this.valueArr = t;
+        //   this.cursorIndex = this.valueArr.length - 1;
+        // } else if (!this.isFocus) {
+        //   this.valueArr = t;
+        //   this.cursorIndex = this.valueArr.length;
+        // } else if (this.isFocus && !isNaN(Number(newV))) {
+        //   //数据类型
+        //   this.valueArr = t;
+        //   this.cursorIndex = this.valueArr.length;
+        //   this.valueArr.splice(this.cursorIndex, 0, cursorStr);
+        // } else {
+        //   this.valueArr = this.valueArr.filter((item) => item != cursorStr);
+        //   //this.cursorIndex就是光标的索引，所以不需要-1
+        //   this.valueArr.splice(this.cursorIndex, 0, cursorStr);
+        //   // console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
+        // }
         /*向所有组件推送，最新值
          *1.光标控制面板，复制需要用到
          */
@@ -209,6 +226,7 @@ export default {
         //输入时候内容滚到指定位置
         this.$nextTick(() => {
           this.inputDomScroll();
+          this.inputWillblur(); //失去全选
         });
       },
       immediate: true,
@@ -401,6 +419,11 @@ export default {
         if (!text) {
           return false;
         }
+        //全选状态下输入
+        if (this.currInputIsSelected()) {
+          this.replaceAllWith(text);
+          return;
+        }
         let bool = this.canPushItem(text);
         console.log("可输入么?", bool, "this.type", this.type, "值:", text);
         if (!bool) {
@@ -425,6 +448,11 @@ export default {
       //删除
       this.$root.$on(EventKeys["vue-keyboard-cn-append-delete"], () => {
         if (!this.isFocus) {
+          return;
+        }
+        //全选状态下输入
+        if (this.currInputIsSelected()) {
+          this.replaceAllWith("");
           return;
         }
         this.deleteFn();
@@ -528,13 +556,34 @@ export default {
       if (!this.isFocus) {
         return;
       }
-      if (
-        e.target &&
-        typeof e.target.getAttribute == "function" &&
-        e.target.getAttribute("attr-input-select") !== "true"
-      ) {
+      var inputs = document.querySelectorAll(".vue-keyboard-input-text-focus");
+      for (let i = 0; i < inputs.length; i++) {
+        inputs[i].classList.remove("vue-keyboard-input-text-focus");
+      }
+      // if (
+      //   e.target &&
+      //   typeof e.target.getAttribute == "function" &&
+      //   e.target.getAttribute("attr-input-select") !== "true"
+      // ) {
+      //   this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
+      // }
+    },
+    replaceAllWith(val) {
+      this.$emit("change", val); //v-model同步数据
+      this.$emit("input", {
+        value: val,
+        el: this.$refs["vueKeyboardInput"],
+      });
+    },
+    currInputRemoveSelectedClass() {
+      if (this.currInputIsSelected()) {
         this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
       }
+    },
+    currInputIsSelected() {
+      return this.$refs["input"].classList.contains(
+        "vue-keyboard-input-text-focus"
+      );
     },
     getClickElement(e) {
       if (this.disabled) {
@@ -667,6 +716,7 @@ export default {
   position: relative;
   z-index: 10;
   &.vue-keyboard-input-text-focus {
+    background: rgba(135, 206, 235, 0.3);
     &:focus {
       background: rgba(135, 206, 235, 0.3);
     }
