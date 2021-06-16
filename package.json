@@ -1,12 +1,19 @@
 {
-  "name": "vue-test-utils-karma-example",
-  "description": "A Vue.js project",
-  "version": "1.0.0",
-  "author": "eddyerburgh <edward.yerburgh@gmail.com>",
+  "name": "vue-keyboard-cn",
+  "description": "vue virtual keyboard",
+  "version": "0.0.1",
+  "author": "MTTTM",
   "license": "MIT",
-  "private": true,
+  "private": false,
   "files": ["dist"],
   "main":"./dist/index.es.min.js",
+  "keywords": [
+    "vue",
+    "keyboard",
+    "virtual",
+    "keyboard-key",
+    "virtual keyboard"
+  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot --host 0.0.0.0",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
@@ -15,7 +22,6 @@
     "distDemo": "cross-env NODE_ENV=production webpack --config webpack.demo.js",
     "distLibs": "cross-env NODE_ENV=production webpack --config webpack.components.js",
     "dist": "cross-env NODE_ENV=production webpack --config webpack.libs.dist.js"
-    
   },
   "dependencies": {
     "@babel/core": "^7.14.3",
