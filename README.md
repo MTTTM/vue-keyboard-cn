@@ -5,6 +5,7 @@
 - Provide numeric input keyboard
 - Only supports mobile web pages
 - [demo](https://mtttm.github.io/vue-keyboard-cn/#/home)
+- [中文wiki](https://github.com/MTTTM/vue-keyboard-cn/wiki)
 
 ## Installation
 
