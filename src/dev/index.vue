@@ -35,16 +35,18 @@
         <span class="icon iconfont icon-arrow-right-filling icon-route"></span>
       </span>
     </div>
-    <component
-      v-bind:is="currentView"
-      :emojiMap="emojiMap"
-      :inputValue="value"
-      :getInputInfo="getInputInfo"
-      :disabledInputUpdateMixKeyBoardLang="disabledInputUpdateMixKeyBoardLang"
-      :keyBoardMaps="keyBoardMaps"
-      @show="triggerShow"
-      ref="dynamicComponent"
-    ></component>
+    <keep-alive>
+      <component
+        v-bind:is="currentView"
+        :emojiMap="emojiMap"
+        :inputValue="value"
+        :getInputInfo="getInputInfo"
+        :disabledInputUpdateMixKeyBoardLang="disabledInputUpdateMixKeyBoardLang"
+        :keyBoardMaps="keyBoardMaps"
+        @show="triggerShow"
+        ref="dynamicComponent"
+      ></component>
+    </keep-alive>
   </div>
 </template>
 <script>
