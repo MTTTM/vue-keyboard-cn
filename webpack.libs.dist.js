@@ -1,11 +1,16 @@
 var path = require('path')
 var webpack = require('webpack')
+var ExtractTextPlugin = require("extract-text-webpack-plugin")
+var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 module.exports = {
   entry: "./packages/index.js",
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'index.es.min.js',
     chunkFilename: '[id].js',
+    libraryExport: 'default',
+    library: "vue-keyboard-cn",
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
@@ -15,7 +20,7 @@ module.exports = {
           'vue-style-loader',
           'css-loader'
         ],
-      },   
+      },
       {
         test: /\.scss$/,
         use: [
@@ -28,7 +33,19 @@ module.exports = {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
+          extractCSS: true, // 会把vue中的样式文件提取出来
           loaders: {
+            css: ExtractTextPlugin.extract({
+              use: 'css-loader',
+              fallback: 'vue-style-loader'
+            }),
+            sass: ExtractTextPlugin.extract({
+              use: [
+                'css-loader',
+                'sass-loader'
+              ],
+              fallback: 'vue-style-loader'
+            })
           }
           // other vue-loader options go here
         }
@@ -42,7 +59,8 @@ module.exports = {
         test: /\.(png|jpg|gif|svg|eot|woff|woff2?|ttf)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
+          name: '[name].[ext]?[hash]',
+          publicPath: './'
         }
       }
     ]
@@ -73,12 +91,18 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
+    new ExtractTextPlugin("index.css"),
+    new OptimizeCssAssetsPlugin({
+      cssProcessor: require('cssnano'),
+      cssProcessorOptions: { safe: true, discardComments: { removeAll: true } },
+      canPrint: true
+    }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: false,
       compress: {
         warnings: false,
-        drop_debugger:true,
-        drop_console:true,
+        drop_debugger: true,
+        drop_console: true,
         pure_funcs: ['console.log']//移除console
       }
     }),

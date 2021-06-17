@@ -22,9 +22,10 @@
 #### main.js
 
 ```javascript
-import {kyInput,keyBoard} from "vue-keyboard-cn";
+import { KyInput, KyBoard } from "vue-keyboard-cn";
+import "vue-keyboard-cn/dist/index.css"
 Vue.component("ky-input",kyInput)
-Vue.component("key-board",keyBoard)
+Vue.component("key-board",KyBoard)
 
 ```
 

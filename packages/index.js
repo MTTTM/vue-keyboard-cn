@@ -3,5 +3,9 @@
  */
 import KyInputComponent from '../src/dev/input.vue';
 import KyBoardComponent from "../src/dev/index.vue";
-export const KyInput= KyInputComponent;
-export const KyBoard= KyBoardComponent;
+export const KyInput = KyInputComponent;
+export const KyBoard = KyBoardComponent;
+export default {
+  KyInput,
+  KyBoard
+}

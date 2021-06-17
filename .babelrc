@@ -4,19 +4,12 @@
     ["@babel/preset-env", 
       {
         "useBuiltIns": "usage",
-        "corejs":3
+        "corejs":3,
+        "modules": false
       }
     ]
     
   ],
-  // "plugins":[
-  //   "@babel/plugin-transform-modules-commonjs",
-  //   ["babel-plugin-istanbul",{
-  //     "extension":[".js",".vue"]
-  //   }]
-    
-  // ]
-  // ,
   "env":{
      "test":{
       "plugins":[

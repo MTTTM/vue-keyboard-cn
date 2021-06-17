@@ -1,12 +1,14 @@
 {
   "name": "vue-keyboard-cn",
-  "description": "vue virtual keyboard",
-  "version": "0.0.1",
+  "description": "vue virtual keyboard for wap",
+  "version": "0.0.2",
   "author": "MTTTM",
   "license": "MIT",
   "private": false,
-  "files": ["dist"],
-  "main":"./dist/index.es.min.js",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.es.min.js",
   "keywords": [
     "vue",
     "keyboard",
@@ -28,7 +30,6 @@
     "@babel/preset-env": "^7.14.2",
     "core-js": "^3.13.1",
     "disable-body-scroll": "^0.1.3",
-    "highlight.js": "^11.0.1",
     "html-webpack-plugin": "^2.24.1",
     "node-sass": "^4.14.1",
     "sass": "^1.34.0",
@@ -51,6 +52,7 @@
     "chai": "^4.1.2",
     "cross-env": "^5.1.3",
     "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
     "file-loader": "^1.1.4",
     "karma": "^2.0.0",
     "karma-chai": "^0.1.0",
@@ -62,6 +64,7 @@
     "karma-webpack": "^2.0.9",
     "mocha": "^5.0.0",
     "nyc": "^15.1.0",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
     "sass-loader": "^7.3.1",
     "vue-loader": "^13.0.5",
     "vue-template-compiler": "^2.4.4",
