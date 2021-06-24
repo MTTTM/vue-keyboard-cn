@@ -125,6 +125,17 @@ export default {
       type: Boolean,
       default: () => true,
     },
+    //input可滚动的容器id或class，input获取焦点时候出发该dom滚动，让input出现到可视区
+    scrollWrap: {
+      type: String,
+    },
+    //最外层容器如果是固定横屏时候，会用到,默认是0，也就是不选择
+    rotate: {
+      validator: function (value) {
+        return [0, 90, -90].indexOf(value) > -1;
+      },
+      default: () => 0,
+    },
     disabled: {
       type: Boolean,
       default: () => false,
@@ -232,11 +243,11 @@ export default {
       this.valueArr = splitStringToArray(this.value, this.allowEnter);
       if (newV) {
         this.valueArr.push(cursorStr);
+        this.inputDomScroll();
       } else {
         this.valueArr = this.valueArr.filter((item) => item != cursorStr);
         console.log("我是这时候变的么?");
       }
-      this.inputDomScroll();
     },
     tmpValue() {
       this.$nextTick(() => {
@@ -288,18 +299,24 @@ export default {
     /**
      * 获取当前展示的键盘高度
      */
-    getKeyBoardHeight() {
+    getKeyBoardAndHeight() {
       let keyboards = document.querySelectorAll(".key-board-box");
-      let keyBoardHeight = 0;
+      let keyBoard = {
+        height: 0,
+        el: null,
+      };
       for (let t = 0; t < keyboards.length; t++) {
         let styles = window.getComputedStyle(keyboards[t]);
         let keyBoardStyleHeight = parseInt(styles.height);
         if (keyBoardStyleHeight > 0) {
-          keyBoardHeight = keyBoardStyleHeight;
+          keyBoard = {
+            height: keyBoardStyleHeight,
+            el: keyboards[t],
+          };
           break;
         }
       }
-      return keyBoardHeight;
+      return keyBoard;
     },
     /**
      * 获取固定在键盘顶部的输入框的高度
@@ -312,6 +329,38 @@ export default {
         let height = window.getComputedStyle(fixedInput).height;
         return parseFloat(height);
       }
+    },
+    /**
+     * props scrollWrap 存在时候才会用到
+     * 获取滚动容器的高度
+     * @returns number
+     */
+    getScrollWrapHeight() {
+      let scrollWrapDom;
+      if (this.scrollWrap && document.querySelector(this.scrollWrap)) {
+        scrollWrapDom = document.querySelector(this.scrollWrap);
+      }
+      if (!scrollWrapDom) {
+        return 0;
+      }
+      let styles = window.getComputedStyle(scrollWrapDom);
+      let height = parseInt(styles.height);
+      return height;
+    },
+    /**
+     * props scrollWrap 存在时候才会用到
+     * 获取滚动容器的滚动高度
+     * @returns number
+     */
+    getScrollWrapScrollY() {
+      let scrollWrapDom;
+      if (this.scrollWrap && document.querySelector(this.scrollWrap)) {
+        scrollWrapDom = document.querySelector(this.scrollWrap);
+      }
+      if (!scrollWrapDom) {
+        return 0;
+      }
+      return scrollWrapDom.scrollTop;
     },
     /**
      * 获取bodyY轴滚动距离
@@ -335,30 +384,70 @@ export default {
       return el && el.getBoundingClientRect()[attr];
     },
     isDomInViewPort(dom) {
-      const viewPortHeight = this.getViewPortHeight();
-      const domTop = this.getBoundingClientRect(dom, "top");
-      const domBottom = this.getBoundingClientRect(dom, "bottom");
-      const keyBoardHeight = this.getKeyBoardHeight();
+      let viewPortHeight = this.getViewPortHeight();
+      let domTop = this.getBoundingClientRect(dom, "top");
+      let domBottom = this.getBoundingClientRect(dom, "bottom");
+      const keyBoardHeight = this.getKeyBoardAndHeight().height;
       const fixedInputHeight = this.getFixedInputHeight();
+      if (this.scrollWrap && document.querySelector(this.scrollWrap)) {
+        viewPortHeight = this.getScrollWrapHeight(); //滚动容器的高度
+        //外层容器旋转90度时候
+        //一定要画图来，才容易理解这里的参数取值
+        if (this.rotate === 90) {
+          domTop = viewPortHeight - this.getBoundingClientRect(dom, "left");
+          return (
+            domTop >= 0 &&
+            this.getBoundingClientRect(dom, "left") >= keyBoardHeight
+          );
+        } else if (this.rotate === -90) {
+          domTop = this.getBoundingClientRect(dom, "left");
+          return (
+            domTop >= 0 &&
+            this.getBoundingClientRect(dom, "left") <=
+              viewPortHeight - keyBoardHeight
+          );
+        }
+      }
       return (
         domTop >= 0 &&
         viewPortHeight - (keyBoardHeight + fixedInputHeight) >= domBottom
       );
     },
 
-    docBodyAutoScrollFn(dom) {
-      const scrollTop = this.getBodyScrollTop();
-      const viewPortHeight = this.getViewPortHeight();
-      const keyBoardHeight = this.getKeyBoardHeight();
-      const domBottom = this.getBoundingClientRect(dom, "bottom");
+    docBodyAutoScrollFn(dom, scrollWrapDom) {
+      let scrollTop = this.getBodyScrollTop();
+      let viewPortHeight = this.getViewPortHeight();
+      let keyBoardInfo = this.getKeyBoardAndHeight();
+      const keyBoardHeight = keyBoardInfo.height;
+      const keyBoardDom = keyBoardInfo.el;
+      let domBottom = this.getBoundingClientRect(dom, "bottom");
       const fixedInputHeight = this.getFixedInputHeight();
-      //targetY=已经滚动的Y距离+浏览器底部距离inputDOm的距离(让内容滚回可视区)+键盘高度+补充的间距
-      var targetY =
-        scrollTop +
-        (domBottom - viewPortHeight) +
-        (keyBoardHeight + fixedInputHeight) +
-        20;
-      window.scrollTo(0, targetY);
+      let keyBoardTop = this.getBoundingClientRect(dom, "bottom");
+      let targetY = undefined;
+      if (scrollWrapDom) {
+        scrollTop = this.getScrollWrapScrollY();
+        viewPortHeight = this.getScrollWrapHeight(); //滚动容器的高度
+        if (this.rotate === 90) {
+          domBottom = viewPortHeight - this.getBoundingClientRect(dom, "left");
+          keyBoardTop = viewPortHeight - keyBoardHeight; //得到键盘距离【页面视图】顶部的空隙
+          targetY = scrollTop + (domBottom - keyBoardTop) + 20;
+        } else if (this.rotate === -90) {
+          domBottom = this.getBoundingClientRect(dom, "right"); //把input的dom高度也加 进来
+          keyBoardTop = viewPortHeight - keyBoardHeight; //得到键盘距离【页面视图】顶部的空隙
+          targetY = scrollTop + (domBottom - keyBoardTop) + 20;
+        } else {
+          //非选择
+          console.log("非旋转");
+        }
+      } else {
+        //targetY=已经滚动的Y距离+浏览器底部距离inputDOm的距离(让内容滚回可视区)+键盘高度+补充的间距
+        targetY =
+          scrollTop +
+          (domBottom - viewPortHeight) +
+          (keyBoardHeight + fixedInputHeight) +
+          20;
+      }
+      targetY !== undefined && scrollWrapDom.scrollTo(0, targetY);
     },
     inputDomScroll() {
       let dom = this.$refs["vueKeyboardInput"];
@@ -366,17 +455,25 @@ export default {
       let FixedDom = this.$refs["vueKeyboardInputFixed"];
       dom && this.computedInputScrollDis(dom, true);
       FixedDom && this.computedInputScrollDis(FixedDom, false);
-      // if (domFlash) {
-      //   console.log("在视图内么", this.isDomInViewPort(domFlash));
-      // }
-
-      if (
-        domFlash &&
-        this.docBodyAutoScroll &&
-        !this.isDomInViewPort(domFlash)
-      ) {
-        this.docBodyAutoScrollFn(domFlash);
+      //容器滚动,默认是body滚动，如果指定了滚动的容器，就不再出发body滚动
+      //input获取焦点了，并且不再试图内
+      console.log("不在试图内", !this.isDomInViewPort(domFlash));
+      if (domFlash && !this.isDomInViewPort(domFlash)) {
+        let scrollWrapDom = document.querySelector(this.scrollWrap);
+        if (this.scrollWrap && scrollWrapDom) {
+          this.docBodyAutoScrollFn(domFlash, scrollWrapDom);
+        } else if (this.docBodyAutoScroll) {
+          this.docBodyAutoScrollFn(domFlash);
+        }
       }
+
+      // if (
+      //   domFlash &&
+      //   this.docBodyAutoScroll &&
+      //   !this.isDomInViewPort(domFlash)
+      // ) {
+      //   this.docBodyAutoScrollFn(domFlash);
+      // }
     },
     addRootEventLister() {
       //监听键盘关闭事件
@@ -731,6 +828,10 @@ export default {
   align-items: center;
   z-index: 9999;
   overflow: hidden;
+  .emoji-icon {
+    width: 20px;
+    height: 20px;
+  }
 }
 .vue-keyboard-input-fixed {
   position: relative;

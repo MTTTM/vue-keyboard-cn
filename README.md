@@ -89,6 +89,7 @@ export default {
 | disabledInputUpdateMixKeyBoardLang | Prohibit the input component from switching input methods  | FALSE       | FALSE     |
 | keyBoardMaps         | Keyboard table of contents [reference](https://github.com/MTTTM/vue-keyboard-cn/blob/main/src/dev/boardMaps.js)                                                          | object | FALSE    |
 | hideHead          |  hide top tab header                                                                   | FALSE      | FALSE     |
+| isHscreenApp      | Only need to be used for apps with horizontal screen design              | FALSE      | FALSE     |
 
 
 ## Events

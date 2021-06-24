@@ -1,6 +1,9 @@
 <template>
   <div
-    :class="['key-board-box', screenDir == 1 ? 'hs-key-board-box' : '']"
+    :class="[
+      'key-board-box',
+      screenDir == 1 || isHscreenApp ? 'hs-key-board-box' : '',
+    ]"
     v-show="show"
     ref="key-board-box"
   >
@@ -94,6 +97,11 @@ export default {
     hideHead: {
       type: Boolean,
       default: () => false,
+    },
+    //是否固定横屏的app
+    isHscreenApp: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
