@@ -4,6 +4,7 @@
 - Provide English input keyboard
 - Provide numeric input keyboard
 - Only supports mobile web pages
+- Friendly to horizontal screen apps
 - [demo](https://mtttm.github.io/vue-keyboard-cn/#/home)
 - [中文wiki](https://github.com/MTTTM/vue-keyboard-cn/wiki)
 
