@@ -83,7 +83,7 @@ export default {
 | placeholder    | placeholder Text                                                              | ---     | FALSE    |
 | docBodyAutoScroll    | Whether to trigger the body to scroll, let the input enter the visual area       | TRUE     | FALSE    |
 | scrollWrap    | Selector for scrollable dom container, replace document body scroll,like "#box"，only work when you set props rotate  | --     | FALSE    |
-| rotate    | Horizontal screen app rotation angle，Choose between 90 and -90  | --     | FALSE    |
+| rotate    | Horizontal screen app rotation angle，Choose between 90 and -90.Only for horizontal screen app  | --     | FALSE    |
 
 
 ### keyBoard
