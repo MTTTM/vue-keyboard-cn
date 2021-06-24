@@ -81,6 +81,9 @@ export default {
 | showFixedInput    | Whether to display the input box fixed at the bottom of the keyboard   -    | FALSE     | FALSE    |
 | placeholder    | placeholder Text                                                              | ---     | FALSE    |
 | docBodyAutoScroll    | Whether to trigger the body to scroll, let the input enter the visual area       | TRUE     | FALSE    |
+| scrollWrap    | Selector for scrollable dom container, replace document body scroll,like "#box"，only work when you set props rotate  | --     | FALSE    |
+| rotate    | Horizontal screen app rotation angle，Choose between 90 and -90  | --     | FALSE    |
+
 
 ### keyBoard
 | key            | desc                                                                     | default  | required |

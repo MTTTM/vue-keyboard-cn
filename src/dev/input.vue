@@ -437,7 +437,7 @@ export default {
           targetY = scrollTop + (domBottom - keyBoardTop) + 20;
         } else {
           //非选择
-          console.log("非旋转");
+          console.log("非旋转,不做处理");
         }
       } else {
         //targetY=已经滚动的Y距离+浏览器底部距离inputDOm的距离(让内容滚回可视区)+键盘高度+补充的间距
