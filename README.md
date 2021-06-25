@@ -144,6 +144,7 @@ export default {
 
 - Q:Scrollable container is not a body node
 - A:The input component should use the props scrollWrap.Only in this way will the input component appear in the visual area when the keyboard is processed
-
+-  Q:What to do if the app is a horizontal screen app
+- A:Add the props rotate to the KyInput element,and add the props isHscreenApp to KyBoard element
 
 
