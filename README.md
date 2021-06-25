@@ -23,10 +23,11 @@
 #### main.js
 
 ```javascript
-import { KyInput, KyBoard } from "vue-keyboard-cn";
+import { KyInput, KyBoard,KeyboardAwareScrollView } from "vue-keyboard-cn";
 import "vue-keyboard-cn/dist/index.css"
-Vue.component("ky-input",kyInput)
+Vue.component("ky-input",KyInput)
 Vue.component("key-board",KyBoard)
+Vue.component("key-board-aware-scroll-view", KeyboardAwareScrollView)
 
 ```
 
@@ -36,10 +37,10 @@ Vue.component("key-board",KyBoard)
 
 
 <template>
-  <div>
+  <key-board-aware-scroll-view class="inner-wrap">
     <ky-input v-model="mixValue" placeholder="Any string"/>
     <key-board :emojiMap="emoji" />
-  </div>
+  </key-board-aware-scroll-view>
 </template>
 
 <script>
@@ -132,4 +133,17 @@ export default {
 -  append
 -  prependFixed
 -  appendFixed
+
+
+## Q&A
+
+***
+
+-  Q:The input box is covered by the keyboard 
+- A:Use KeyboardAwareScrollView component to wrap form elements
+
+- Q:Scrollable container is not a body node
+- A:The input component should use the props scrollWrap.Only in this way will the input component appear in the visual area when the keyboard is processed
+
+
 

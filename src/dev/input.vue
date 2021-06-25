@@ -447,10 +447,17 @@ export default {
           (keyBoardHeight + fixedInputHeight) +
           20;
       }
-      targetY !== undefined && scrollWrapDom.scrollTo(0, targetY);
+      if (scrollWrapDom) {
+        targetY !== undefined && scrollWrapDom.scrollTo(0, targetY);
+      } else {
+        targetY !== undefined && window.scrollTo(0, targetY);
+      }
     },
     inputDomScroll() {
       let dom = this.$refs["vueKeyboardInput"];
+      if (!dom) {
+        return;
+      }
       let domFlash = dom.querySelector(".key-board-flash");
       let FixedDom = this.$refs["vueKeyboardInputFixed"];
       dom && this.computedInputScrollDis(dom, true);
@@ -493,6 +500,11 @@ export default {
             bottom: height,
             width: width,
           };
+          //延迟滚动，如果有被KeyboardAwareScrollView包裹，需要重新修复滚动
+          setTimeout(() => {
+            this.inputDomScroll();
+            console.log("延长滚动==");
+          }, 150);
         }
       });
       //监听回车事件

@@ -14,6 +14,10 @@ import inputDisabled from "../demo/inputDisabled.vue"
 import inputSlot from "../demo/inputSlot.vue"
 import horizontalScreen from "../demo/horizontalScreen"
 import horizontalScreen2 from "../demo/horizontalScreen2"
+
+import KeyboardAwareScrollView1 from "../demo/KeyboardAwareScrollView1"
+import KeyboardAwareScrollView2 from "../demo/KeyboardAwareScrollView2"
+import KeyboardAwareScrollView3 from "../demo/KeyboardAwareScrollView3"
 export default [
   {
     path: '/',  // 重定向到home页面
@@ -95,5 +99,20 @@ export default [
     path: "/horizontalScreen2",
     component: horizontalScreen2,
     title: "horizontal screen rotate -90"
+  },
+  {
+    path: "/KeyboardAwareScrollView1",
+    component: KeyboardAwareScrollView1,
+    title: "1. KeyboardAwareScrollView components is scrollBox"
+  },
+  {
+    path: "/KeyboardAwareScrollView2",
+    component: KeyboardAwareScrollView2,
+    title: "2. KeyboardAwareScrollView components is scrollBox"
+  },
+  {
+    path: "/KeyboardAwareScrollView3",
+    component: KeyboardAwareScrollView3,
+    title: "3.KeyboardAwareScrollView.body is scrollBox"
   }
 ]

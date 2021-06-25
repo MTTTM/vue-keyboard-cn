@@ -97,15 +97,15 @@ if (process.env.NODE_ENV === 'production') {
       cssProcessorOptions: { safe: true, discardComments: { removeAll: true } },
       canPrint: true
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: false,
-      compress: {
-        warnings: false,
-        drop_debugger: true,
-        drop_console: true,
-        pure_funcs: ['console.log']//移除console
-      }
-    }),
+    // new webpack.optimize.UglifyJsPlugin({
+    //   sourceMap: false,
+    //   compress: {
+    //     warnings: false,
+    //     drop_debugger: true,
+    //     drop_console: true,
+    //     pure_funcs: ['console.log']//移除console
+    //   }
+    // }),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     })
