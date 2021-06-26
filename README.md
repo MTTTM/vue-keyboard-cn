@@ -134,11 +134,13 @@ export default {
 -  prependFixed
 -  appendFixed
 
-## Select all input content
+## Select  input content
+
+***
 
 ```html
  <button @click.stop="selectFuc">select</button>
-<button @click.stop="unselectFuc">unSelect</button>
+ <button @click.stop="unselectFuc">unSelect</button>
 
 ```
 
