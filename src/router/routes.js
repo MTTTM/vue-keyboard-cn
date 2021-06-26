@@ -14,6 +14,7 @@ import inputDisabled from "../demo/inputDisabled.vue"
 import inputSlot from "../demo/inputSlot.vue"
 import horizontalScreen from "../demo/horizontalScreen"
 import horizontalScreen2 from "../demo/horizontalScreen2"
+import inputFuncSelect from "../demo/inputFuncSelect.vue"
 
 import KeyboardAwareScrollView1 from "../demo/KeyboardAwareScrollView1"
 import KeyboardAwareScrollView2 from "../demo/KeyboardAwareScrollView2"
@@ -32,6 +33,11 @@ export default [
     path: "/type",
     component: Type,
     title: "input props type",
+  },
+  {
+    path: "/inputFuncSelect",
+    component: inputFuncSelect,
+    title: "input select function"
   },
   {
     path: "/breakwrap",

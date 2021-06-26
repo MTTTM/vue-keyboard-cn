@@ -193,7 +193,6 @@ export default {
         let t = splitStringToArray("" + newV, this.allowEnter);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
         if (this.isFocus) {
-          console.log("labelIndex", labelIndex);
           if (labelIndex == -1) {
             t.push(cursorStr);
             this.valueArr = t;
@@ -209,25 +208,8 @@ export default {
           this.cursorIndex = this.valueArr.length;
         }
 
-        // if (this.isFocus && labelIndex == -1) {
-        //   t.push(cursorStr);
-        //   this.valueArr = t;
-        //   this.cursorIndex = this.valueArr.length - 1;
-        // } else if (!this.isFocus) {
-        //   this.valueArr = t;
-        //   this.cursorIndex = this.valueArr.length;
-        // } else if (this.isFocus && !isNaN(Number(newV))) {
-        //   //数据类型
-        //   this.valueArr = t;
-        //   this.cursorIndex = this.valueArr.length;
-        //   this.valueArr.splice(this.cursorIndex, 0, cursorStr);
-        // } else {
-        //   this.valueArr = this.valueArr.filter((item) => item != cursorStr);
-        //   //this.cursorIndex就是光标的索引，所以不需要-1
-        //   this.valueArr.splice(this.cursorIndex, 0, cursorStr);
-        //   // console.log("新值 cursorIndex 不0", this.cursorIndex, this.valueArr);
-        // }
-        /*向所有组件推送，最新值
+        /*
+         * 向所有组件推送，最新值
          *1.光标控制面板，复制需要用到
          */
         this.$root.$emit(EventKeys["vue-keyboard-cn-update-value"], "" + newV);
@@ -246,7 +228,6 @@ export default {
         this.inputDomScroll();
       } else {
         this.valueArr = this.valueArr.filter((item) => item != cursorStr);
-        console.log("我是这时候变的么?");
       }
     },
     tmpValue() {
@@ -473,14 +454,16 @@ export default {
           this.docBodyAutoScrollFn(domFlash);
         }
       }
-
-      // if (
-      //   domFlash &&
-      //   this.docBodyAutoScroll &&
-      //   !this.isDomInViewPort(domFlash)
-      // ) {
-      //   this.docBodyAutoScrollFn(domFlash);
-      // }
+    },
+    select() {
+      this.$refs["input"].classList.add("vue-keyboard-input-text-focus");
+      this.$refs["input"].focus();
+      console.log("进来了");
+    },
+    unSelect() {
+      this.$refs["input"].blur();
+      this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
+      console.log("失去焦点了");
     },
     addRootEventLister() {
       //监听键盘关闭事件
@@ -525,14 +508,14 @@ export default {
         if (!text) {
           return false;
         }
+        let bool = this.canPushItem(text);
+        if (!bool) {
+          return;
+        }
+        //可以输入后再判断处理============================
         //全选状态下输入
         if (this.currInputIsSelected()) {
           this.replaceAllWith(text);
-          return;
-        }
-        let bool = this.canPushItem(text);
-        console.log("可输入么?", bool, "this.type", this.type, "值:", text);
-        if (!bool) {
           return;
         }
         if (text === " ") {
@@ -573,11 +556,9 @@ export default {
             "vue-keyboard-input-text-focus"
           )
         ) {
-          this.$refs["input"].blur();
-          this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
+          this.unSelect();
         } else {
-          this.$refs["input"].classList.add("vue-keyboard-input-text-focus");
-          this.$refs["input"].focus();
+          this.select();
         }
       });
       //监听方向
@@ -634,6 +615,7 @@ export default {
         this.maxLength > 0 &&
         endText.length > this.maxLength
       ) {
+        console.log("被禁用了?");
         return;
       }
       if (this.regx) {
@@ -666,13 +648,7 @@ export default {
       for (let i = 0; i < inputs.length; i++) {
         inputs[i].classList.remove("vue-keyboard-input-text-focus");
       }
-      // if (
-      //   e.target &&
-      //   typeof e.target.getAttribute == "function" &&
-      //   e.target.getAttribute("attr-input-select") !== "true"
-      // ) {
-      //   this.$refs["input"].classList.remove("vue-keyboard-input-text-focus");
-      // }
+      console.log("为啥会失去焦点");
     },
     replaceAllWith(val) {
       this.$emit("change", val); //v-model同步数据
