@@ -134,6 +134,20 @@ export default {
 -  prependFixed
 -  appendFixed
 
+## Select all input content
+
+```html
+ <button @click.stop="selectFuc">select</button>
+<button @click.stop="unselectFuc">unSelect</button>
+
+```
+
+```javascript
+
+this.$refs["inputElement"].select();
+this.$refs["inputElement"].unSelect();
+
+```
 
 ## Q&A
 
