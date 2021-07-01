@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-top: 40px">
     <ul class="nav">
       <li>
         <a

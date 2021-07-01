@@ -35,12 +35,8 @@
 <script>
 import EventKeys from "./eventKeys";
 import EmojiItem from "./emojiItem";
-import { directive } from "disable-body-scroll";
 export default {
   name: "emoji",
-  directives: {
-    "disabled-body-scroll": { ...directive },
-  },
   components: { EmojiItem },
   props: {
     emojiMap: {

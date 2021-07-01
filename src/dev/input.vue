@@ -1,48 +1,24 @@
 <template>
-  <div class="vue-keyboard-input-wrap">
+  <div
+    class="vue-keyboard-input-wrap"
+    :style="inputWrapStyle"
+    ref="wrapvueKeyboardInput"
+  >
     <slot name="prepend"></slot>
-    <div
-      class="vue-keyboard-input"
-      :class="[disabled ? 'disabled' : '']"
-      :data-scroll-left="scrollLeft"
-      :data-scroll-top="scrollTop"
-      @click="focus(true)"
-      ref="vueKeyboardInput"
-      v-disabled-body-scroll
-    >
-      <template v-if="placeholder && value !== 0 && !value">
-        <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
-      </template>
-
+    <div class="vue-keyboard-input-block">
       <div
-        tabindex="-1"
-        class="vue-keyboard-input-text"
-        v-html="tmpValue"
-        ref="input"
-        @click="getClickElement"
-        :id="inputId"
-      ></div>
-    </div>
-    <slot name="append"></slot>
-
-    <div
-      class="vue-keyboard-input-fixed-wrap"
-      :data-scroll-left="scrollLeft"
-      :data-scroll-top="scrollTop"
-      @click="focus(true)"
-      :style="fixedInputWrap"
-      v-if="isFocus && showFixedInput"
-      ref="vue-keyboard-input-fixed-wrap"
-    >
-      <slot name="prependFixed"></slot>
-      <div
-        class="vue-keyboard-input-fixed"
+        class="vue-keyboard-input"
+        :class="[disabled ? 'disabled' : '']"
+        :data-scroll-left="scrollLeft"
+        :data-scroll-top="scrollTop"
+        @click="focus(true)"
+        ref="vueKeyboardInput"
         v-disabled-body-scroll
-        ref="vueKeyboardInputFixed"
       >
         <template v-if="placeholder && value !== 0 && !value">
           <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
         </template>
+
         <div
           tabindex="-1"
           class="vue-keyboard-input-text"
@@ -51,6 +27,39 @@
           @click="getClickElement"
           :id="inputId"
         ></div>
+      </div>
+    </div>
+    <slot name="append"></slot>
+
+    <div
+      class="vue-keyboard-input-fixed-wrap"
+      :data-scroll-left="scrollLeft"
+      :data-scroll-top="scrollTop"
+      @click="focus(true)"
+      @touchstart.stop
+      :style="fixedInputWrap"
+      v-if="isFocus && showFixedInput"
+      ref="vue-keyboard-input-fixed-wrap"
+    >
+      <slot name="prependFixed"></slot>
+      <div class="vue-keyboard-input-block">
+        <div
+          class="vue-keyboard-input-fixed"
+          v-disabled-body-scroll
+          ref="vueKeyboardInputFixed"
+        >
+          <template v-if="placeholder && value !== 0 && !value">
+            <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
+          </template>
+          <div
+            tabindex="-1"
+            class="vue-keyboard-input-text"
+            v-html="tmpValue"
+            ref="input"
+            @click="getClickElement"
+            :id="inputId"
+          ></div>
+        </div>
       </div>
       <slot name="appendFixed"></slot>
     </div>
@@ -68,12 +77,8 @@ import {
 } from "./tools.js";
 import { copyEventListener } from "./copyPaste.js";
 import { cursorStr, moveToFn, moveTo } from "./cursor.js";
-import { directive } from "disable-body-scroll";
 export default {
   name: "keyboardInput",
-  directives: {
-    "disabled-body-scroll": { ...directive },
-  },
   props: {
     value: {
       type: [String, Number],
@@ -140,6 +145,10 @@ export default {
       type: Boolean,
       default: () => false,
     },
+    height: {
+      type: [String, Number],
+      default: () => -1,
+    },
   },
   model: {
     prop: "value",
@@ -157,6 +166,23 @@ export default {
     };
   },
   computed: {
+    inputWrapStyle() {
+      if (this.height != -1 && !isNaN(parseInt(this.height))) {
+        if (/(px)$/.test(this.height)) {
+          return {
+            height: this.height,
+            display: "block",
+          };
+        } else {
+          return {
+            height: parseFloat(this.height) + "px",
+            display: "block",
+          };
+        }
+      } else {
+        console.warn("erro props  height of input");
+      }
+    },
     inputId() {
       let tString = new Date().getTime();
       return `input-id-${tString}-${uuid()}`;
@@ -206,6 +232,14 @@ export default {
         } else if (!this.isFocus) {
           this.valueArr = t;
           this.cursorIndex = this.valueArr.length;
+
+          this.$nextTick(() => {
+            let dom = this.$refs["wrapvueKeyboardInput"];
+            if (dom && this.height != -1) {
+              console.log("滚动不??");
+              setTimeout(() => this.scrollToBottom(dom), 500);
+            }
+          });
         }
 
         /*
@@ -225,7 +259,9 @@ export default {
       this.valueArr = splitStringToArray(this.value, this.allowEnter);
       if (newV) {
         this.valueArr.push(cursorStr);
-        this.inputDomScroll();
+        this.$nextTick(() => {
+          this.inputDomScroll();
+        });
       } else {
         this.valueArr = this.valueArr.filter((item) => item != cursorStr);
       }
@@ -242,6 +278,15 @@ export default {
     this.addRootEventLister();
     this.selectAllBlur();
   },
+  // mounted() {
+  //   this.$nextTick(() => {
+  //     let dom = this.$refs["wrapvueKeyboardInput"];
+  //     console.log("dom", dom);
+  //     if (dom && this.height != -1) {
+  //       this.scrollToBottom(dom);
+  //     }
+  //   });
+  // },
   beforeDestroy() {
     document.removeEventListener("click", this.blurMethods);
   },
@@ -269,6 +314,7 @@ export default {
       if (flashDom) {
         scrollDisY = flashDom.offsetTop - paddingTop;
         scrollDisX = flashDom.offsetLeft - paddingLeft;
+        // console.log("有", scrollDisY, "scrollDisX", scrollDisX);
       }
       if (isDefaultInput) {
         this.scrollLeft = scrollDisX;
@@ -434,6 +480,13 @@ export default {
         targetY !== undefined && window.scrollTo(0, targetY);
       }
     },
+    scrollToBottom(dom) {
+      console.log("滚动内部高度", dom.scrollHeight);
+      if (dom && dom.scrollHeight) {
+        console.log("滚动到底部", dom.scrollHeight);
+        dom.scrollTo(0, dom.scrollHeight);
+      }
+    },
     inputDomScroll() {
       let dom = this.$refs["vueKeyboardInput"];
       if (!dom) {
@@ -445,8 +498,14 @@ export default {
       FixedDom && this.computedInputScrollDis(FixedDom, false);
       //容器滚动,默认是body滚动，如果指定了滚动的容器，就不再出发body滚动
       //input获取焦点了，并且不再试图内
-      console.log("不在试图内", !this.isDomInViewPort(domFlash));
-      if (domFlash && !this.isDomInViewPort(domFlash)) {
+
+      //不固定高度时候用光标计算，如果是固定高度，就用容器来计算
+      let noInViewProps =
+        this.height == -1
+          ? !this.isDomInViewPort(domFlash)
+          : !this.isDomInViewPort(dom);
+      console.log("不在试图内", noInViewProps);
+      if (domFlash && noInViewProps) {
         let scrollWrapDom = document.querySelector(this.scrollWrap);
         if (this.scrollWrap && scrollWrapDom) {
           this.docBodyAutoScrollFn(domFlash, scrollWrapDom);
@@ -726,12 +785,17 @@ export default {
         inputLang: this.inputLang,
         allowEnter: this.allowEnter,
       };
-      console.log("this.keyBoard", this.keyBoard);
       if (this.keyBoard) {
         this.keyBoard.getInputInfo = obj;
         this.keyBoard.show = true;
       } else {
         this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], obj);
+      }
+      //如果设置了固定高度，获取焦点时候就自动滚到底部
+      let dom = this.$refs["wrapvueKeyboardInput"];
+      if (bool && this.height != -1) {
+        console.log("滚到底部");
+        this.scrollToBottom(dom);
       }
       //非当前id的input都失去焦点
       this.$root.$emit(EventKeys["vue-keyboard-cn-no-me-will-blur"], {
@@ -749,6 +813,10 @@ export default {
   border: 1px solid #eee;
   overflow: auto;
   line-height: 30px;
+  -webkit-overflow-scrolling: touch;
+}
+.vue-keyboard-input-block {
+  flex: 1;
 }
 .vue-keyboard-input {
   position: relative; //它是必须的，否则会影响获取容器的滚动
@@ -761,6 +829,7 @@ export default {
   word-wrap: break-word;
   white-space: pre-wrap;
   -webkit-overflow-scrolling: touch;
+
   &.disabled {
     background: #eee;
     .vue-keyboard-input-text {

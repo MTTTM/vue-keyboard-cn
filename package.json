@@ -1,5 +1,5 @@
 {
-  "name": "vue-keyboard-cn",
+  "name": "vue-keyboard-cnxx",
   "description": "vue virtual keyboard for wap",
   "version": "0.0.2",
   "author": "MTTTM",
@@ -29,12 +29,12 @@
     "@babel/core": "^7.14.3",
     "@babel/preset-env": "^7.14.2",
     "core-js": "^3.13.1",
-    "disable-body-scroll": "^0.1.3",
+    "disable-body-scroll": "^0.1.6",
     "html-webpack-plugin": "^2.24.1",
     "node-sass": "^4.14.1",
     "sass": "^1.34.0",
     "vue": "^2.5.11",
-    "vue-horizontal-screen": "^0.1.15",
+    "vue-horizontal-screen": "^0.1.18",
     "vue-router": "^3.5.1"
   },
   "browserslist": [
