@@ -36,6 +36,7 @@
       inputLang="en"
       id="aa"
     />
+
     <key-board :emojiMap="emoji" />
     <div style="height: 800px"></div>
   </div>

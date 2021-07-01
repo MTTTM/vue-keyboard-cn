@@ -22,9 +22,9 @@ function disabledDefault(dom, swipeDir = "moveToTop") {
   return false;
 }
 function removeDocumentStartEvent(el) {
-  dom.removeEventListener("touchstart", el.$documentTouchStart);
-  dom.removeEventListener("mousemove", el.$movefunction)
-  dom.removeEventListener("mouseup", el.$upFunction)
+  el.removeEventListener("touchstart", el.$documentTouchStart);
+  el.removeEventListener("mousemove", el.$movefunction)
+  el.removeEventListener("mouseup", el.$upFunction)
 }
 /**
  * 

@@ -278,15 +278,6 @@ export default {
     this.addRootEventLister();
     this.selectAllBlur();
   },
-  // mounted() {
-  //   this.$nextTick(() => {
-  //     let dom = this.$refs["wrapvueKeyboardInput"];
-  //     console.log("dom", dom);
-  //     if (dom && this.height != -1) {
-  //       this.scrollToBottom(dom);
-  //     }
-  //   });
-  // },
   beforeDestroy() {
     document.removeEventListener("click", this.blurMethods);
   },
@@ -488,13 +479,14 @@ export default {
       }
     },
     inputDomScroll() {
-      let dom = this.$refs["vueKeyboardInput"];
-      if (!dom) {
+      //用最外层容器
+      let domWrap = this.$refs["wrapvueKeyboardInput"];
+      if (!domWrap) {
         return;
       }
-      let domFlash = dom.querySelector(".key-board-flash");
+      let domFlash = domWrap.querySelector(".key-board-flash");
       let FixedDom = this.$refs["vueKeyboardInputFixed"];
-      dom && this.computedInputScrollDis(dom, true);
+      domWrap && this.computedInputScrollDis(domWrap, true);
       FixedDom && this.computedInputScrollDis(FixedDom, false);
       //容器滚动,默认是body滚动，如果指定了滚动的容器，就不再出发body滚动
       //input获取焦点了，并且不再试图内
@@ -503,7 +495,7 @@ export default {
       let noInViewProps =
         this.height == -1
           ? !this.isDomInViewPort(domFlash)
-          : !this.isDomInViewPort(dom);
+          : !this.isDomInViewPort(domWrap);
       console.log("不在试图内", noInViewProps);
       if (domFlash && noInViewProps) {
         let scrollWrapDom = document.querySelector(this.scrollWrap);
@@ -790,12 +782,6 @@ export default {
         this.keyBoard.show = true;
       } else {
         this.$root.$emit(EventKeys["vue-keyboard-cn-focus"], obj);
-      }
-      //如果设置了固定高度，获取焦点时候就自动滚到底部
-      let dom = this.$refs["wrapvueKeyboardInput"];
-      if (bool && this.height != -1) {
-        console.log("滚到底部");
-        this.scrollToBottom(dom);
       }
       //非当前id的input都失去焦点
       this.$root.$emit(EventKeys["vue-keyboard-cn-no-me-will-blur"], {
