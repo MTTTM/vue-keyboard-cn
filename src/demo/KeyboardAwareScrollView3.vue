@@ -118,7 +118,7 @@
       scrollToBottom!!!!!!!!!!!
     </p>
     <ky-input v-model="mixValue" placeholder="Any string" :rotate="route" />
-    <key-board :emojiMap="emoji" :isHscreenApp="true" />
+    <key-board :emojiMap="emoji" />
   </key-board-aware-scroll-view>
 </template>
 
