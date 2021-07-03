@@ -3,6 +3,7 @@
     class="vue-keyboard-input-wrap"
     :style="inputWrapStyle"
     ref="wrapvueKeyboardInput"
+    v-disabled-body-scroll
   >
     <slot name="prepend"></slot>
     <div class="vue-keyboard-input-block">
@@ -13,7 +14,6 @@
         :data-scroll-top="scrollTop"
         @click="focus(true)"
         ref="vueKeyboardInput"
-        v-disabled-body-scroll
       >
         <template v-if="placeholder && value !== 0 && !value">
           <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
@@ -800,6 +800,7 @@ export default {
   overflow: auto;
   line-height: 30px;
   -webkit-overflow-scrolling: touch;
+  box-sizing: border-box; //请勿修改它，否则该节点的scrollHeight计算会把border和padding额外
 }
 .vue-keyboard-input-block {
   flex: 1;
