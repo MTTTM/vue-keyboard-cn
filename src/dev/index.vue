@@ -340,22 +340,6 @@ export default {
   content: "\e68b";
 }
 
-@keyframes flash {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-.key-board-flash {
-  display: inline-block;
-  width: 2px;
-  height: 12px;
-  background: red;
-  animation: flash 0.3s infinite linear;
-}
-
 .key-board-box {
   touch-action: none;
   user-select: none;

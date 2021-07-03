@@ -4,7 +4,7 @@
       <h1>props allowEnter</h1>
 
       <h2>default false</h2>
-      <p v-html="mixValue"></p>
+
       <ky-input
         v-model="mixValue"
         scrollWrap="#innerWrap"
@@ -13,12 +13,20 @@
       />
 
       <h2>true</h2>
-      <p v-html="mixValue"></p>
+
       <ky-input
         v-model="mixValue"
         placeholder="Any string"
         scrollWrap="#innerWrap"
         :rotate="route"
+      />
+      <p>fixed height mult line</p>
+      <ky-input
+        v-model="mixValue2"
+        placeholder="Any string"
+        height="80px"
+        :allowEnter="true"
+        inputLang="en"
       />
       <key-board :emojiMap="emoji" :isHscreenApp="true" />
       <ul>
@@ -70,6 +78,10 @@ export default {
         symbo,
       },
       mixValue: `hello,world!!`,
+      mixValue2: `hello,
+world!!
+world!!
+world!!`,
       route: route,
       obj: {
         width: 2001,

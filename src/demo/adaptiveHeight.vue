@@ -21,10 +21,10 @@
     >
       height="80px"
     </h6>
-    <p style="margin: 0; padding: 0; font-size: 12px">
+    <div style="margin: 0; padding: 0; font-size: 12px">
       If the height is fixed, diplay must be set to block, otherwise scrolltop
       will be set to 0, but in fact it does not scroll to the top
-    </p>
+    </div>
     <!-- <p v-html="mixValue"></p> -->
     <!-- If the height is fixed, diplay must be set to block, 
     otherwise scrolltop will be set to 0, but in fact it does not scroll to the top -->

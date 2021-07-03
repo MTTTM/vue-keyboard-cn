@@ -12,8 +12,9 @@
         :class="[disabled ? 'disabled' : '']"
         :data-scroll-left="scrollLeft"
         :data-scroll-top="scrollTop"
-        @click="focus(true)"
+        @click.stop.prevent="focus(true)"
         ref="vueKeyboardInput"
+        tabindex="-1"
       >
         <template v-if="placeholder && value !== 0 && !value">
           <div class="vue-keyboard-input-placeholder">{{ placeholder }}</div>
@@ -24,18 +25,16 @@
           class="vue-keyboard-input-text"
           v-html="tmpValue"
           ref="input"
-          @click="getClickElement"
-          :id="inputId"
+          @click.stop.prevent="getClickElement"
         ></div>
       </div>
     </div>
     <slot name="append"></slot>
-
     <div
       class="vue-keyboard-input-fixed-wrap"
       :data-scroll-left="scrollLeft"
       :data-scroll-top="scrollTop"
-      @click="focus(true)"
+      @click.stop.prevent="focus(true)"
       @touchstart.stop
       :style="fixedInputWrap"
       v-if="isFocus && showFixedInput"
@@ -56,8 +55,7 @@
             class="vue-keyboard-input-text"
             v-html="tmpValue"
             ref="input"
-            @click="getClickElement"
-            :id="inputId"
+            @click.stop.prevent="getClickElement"
           ></div>
         </div>
       </div>
@@ -167,7 +165,7 @@ export default {
   },
   computed: {
     inputWrapStyle() {
-      if (this.height != -1 && !isNaN(parseInt(this.height))) {
+      if (this.height != -1 || !isNaN(parseInt(this.height))) {
         if (/(px)$/.test(this.height)) {
           return {
             height: this.height,
@@ -801,9 +799,25 @@ export default {
   line-height: 30px;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box; //请勿修改它，否则该节点的scrollHeight计算会把border和padding额外
+  -webkit-tap-highlight-color: transparent;
+  &:focus-visible,
+  &:focus,
+  &:hover,
+  &:active {
+    outline: none;
+    box-shadow: none;
+  }
 }
 .vue-keyboard-input-block {
+  -webkit-tap-highlight-color: transparent;
   flex: 1;
+  &:focus-visible,
+  &:focus,
+  &:hover,
+  &:active {
+    outline: none;
+    box-shadow: none;
+  }
 }
 .vue-keyboard-input {
   position: relative; //它是必须的，否则会影响获取容器的滚动
@@ -816,6 +830,15 @@ export default {
   word-wrap: break-word;
   white-space: pre-wrap;
   -webkit-overflow-scrolling: touch;
+  -webkit-tap-highlight-color: transparent;
+
+  &:focus-visible,
+  &:focus,
+  &:hover,
+  &:active {
+    outline: none;
+    box-shadow: none;
+  }
 
   &.disabled {
     background: #eee;
@@ -843,6 +866,10 @@ export default {
     height: 12px;
     background: red;
     animation: flash 0.3s infinite linear;
+    &:focus-visible,
+    &:focus {
+      outline: none;
+    }
   }
   .emoji-icon {
     width: 20px;

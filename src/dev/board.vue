@@ -552,21 +552,7 @@ export default {
 </script>
 <style lang="scss" >
 $keyboardHeaderHeight: 30px;
-@keyframes flash {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-.key-board-flash {
-  display: inline-block;
-  width: 2px;
-  height: 12px;
-  background: red;
-  animation: flash 0.3s infinite linear;
-}
+
 .key-board-box-wrap {
   display: flex;
   flex-direction: column;

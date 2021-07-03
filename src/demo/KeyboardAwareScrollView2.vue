@@ -1,10 +1,7 @@
 <template>
   <div v-horizontal-screen="obj" class="demo-KeyboardAwareScrollView2-wrap">
     <key-board-aware-scroll-view class="inner-wrap" id="innerWrap">
-      <h1>props allowEnter</h1>
-
-      <h2>default false</h2>
-      <p v-html="mixValue"></p>
+      <h2>KeyboardAwareScrollView components is scrollBox</h2>
       <ky-input
         v-model="mixValue"
         scrollWrap="#innerWrap"
@@ -12,8 +9,118 @@
         :rotate="route"
       />
 
-      <h2>true</h2>
-      <p v-html="mixValue"></p>
+      <p>
+        请滚到底部 scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
+      <p>
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!! scrollToBottom!!!!!!!!!!!
+        scrollToBottom!!!!!!!!!!!
+      </p>
       <ky-input
         v-model="mixValue"
         placeholder="Any string"
