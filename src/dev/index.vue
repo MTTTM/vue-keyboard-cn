@@ -98,10 +98,12 @@ export default {
       type: Boolean,
       default: () => false,
     },
-    //是否固定横屏的app
-    isHscreenApp: {
-      type: Boolean,
-      default: false,
+    //rotate，可选[0,90,-90]
+    rotate: {
+      validator: function (value) {
+        return [0, 90, -90].indexOf(value) > -1;
+      },
+      default: () => 0,
     },
   },
   data() {
@@ -138,6 +140,10 @@ export default {
     },
     emojiMapKeysLength() {
       return this.emojiMap && Object.keys(this.emojiMap).length > 0;
+    },
+    //是固定横屏的app
+    isHscreenApp() {
+      return [-90, 90].indexOf(this.rotate) > -1;
     },
   },
   watch: {
@@ -176,6 +182,7 @@ export default {
       this.show = isFocus;
       this.value = tmpValueNoFlash; //直接引用
       this.getInputInfo = data;
+      this.getInputInfo.rotate = this.rotate; //把容器旋转参数添加上去
       this.changeView("board");
       this.operationActiveIndex = 0;
     });

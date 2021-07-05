@@ -3,11 +3,11 @@
     <h1>input props showFixedInput</h1>
 
     <h2>default false</h2>
-    <p v-html="mixValue"></p>
+
     <ky-input v-model="mixValue" placeholder="Any string" />
 
     <h2>true</h2>
-    <p v-html="mixValue"></p>
+
     <ky-input
       v-model="mixValue"
       placeholder="Any string"

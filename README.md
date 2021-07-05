@@ -84,7 +84,7 @@ export default {
 | placeholder    | placeholder Text                                                              | ---     | FALSE    |
 | docBodyAutoScroll    | Whether to trigger the body to scroll, let the input enter the visual area       | TRUE     | FALSE    |
 | scrollWrap    | Selector for scrollable dom container, replace document body scroll,like "#box"，only work when you set props rotate  | --     | FALSE    |
-| rotate    | Horizontal screen app rotation angle，Choose between 90 and -90.Only for horizontal screen app  | --     | FALSE    |
+| rotate    | Horizontal screen app rotation angle，Choose between [0,90,-90].Only for horizontal screen app  | --     | FALSE    |
 
 
 ### keyBoard
@@ -94,7 +94,7 @@ export default {
 | disabledInputUpdateMixKeyBoardLang | Prohibit the input component from switching input methods  | FALSE       | FALSE     |
 | keyBoardMaps         | Keyboard table of contents [reference](https://github.com/MTTTM/vue-keyboard-cn/blob/main/src/dev/boardMaps.js)                                                          | object | FALSE    |
 | hideHead          |  hide top tab header                                                                   | FALSE      | FALSE     |
-| isHscreenApp      | Only need to be used for apps with horizontal screen design              | FALSE      | FALSE     |
+| rotate      | Horizontal screen app rotation angle，Choose between [0,90,-90]       | FALSE      | FALSE     |
 
 
 ## Events

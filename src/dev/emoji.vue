@@ -1,7 +1,11 @@
 <template>
   <div class="emoji-wrap">
     <div class="emoj-wrap-body">
-      <div class="emoj-wrap-body-inner" v-disabled-body-scroll ref="scrollBox">
+      <div
+        class="emoj-wrap-body-inner"
+        v-disabled-body-scroll="rotate"
+        ref="scrollBox"
+      >
         <div class="emoji-item-wrap">
           <div
             class="emoj-wrap-body-item"
@@ -43,6 +47,10 @@ export default {
       type: Object,
       default: () => {},
     },
+    getInputInfo: {
+      type: Object,
+      default: () => {},
+    },
   },
   computed: {
     emojiKeys() {
@@ -50,6 +58,12 @@ export default {
     },
     currEmojList() {
       return this.emojiMap[this.key].list;
+    },
+    //外层容器旋转，横屏app适用
+    rotate() {
+      return this.getInputInfo && this.getInputInfo.rotate
+        ? this.getInputInfo.rotate
+        : 0;
     },
   },
   created() {

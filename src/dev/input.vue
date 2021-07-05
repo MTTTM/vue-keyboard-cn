@@ -3,7 +3,6 @@
     class="vue-keyboard-input-wrap"
     :style="inputWrapStyle"
     ref="wrapvueKeyboardInput"
-    v-disabled-body-scroll
   >
     <slot name="prepend"></slot>
     <div class="vue-keyboard-input-block">
@@ -25,7 +24,7 @@
           class="vue-keyboard-input-text"
           v-html="tmpValue"
           ref="input"
-          @click.stop.prevent="getClickElement"
+          @click.prevent="getClickElement"
         ></div>
       </div>
     </div>
@@ -44,7 +43,7 @@
       <div class="vue-keyboard-input-block">
         <div
           class="vue-keyboard-input-fixed"
-          v-disabled-body-scroll
+          v-disabled-body-scroll:[disabledScrollDirectiveStatus]="rotate"
           ref="vueKeyboardInputFixed"
         >
           <template v-if="placeholder && value !== 0 && !value">
@@ -55,7 +54,7 @@
             class="vue-keyboard-input-text"
             v-html="tmpValue"
             ref="input"
-            @click.stop.prevent="getClickElement"
+            @click.prevent="getClickElement"
           ></div>
         </div>
       </div>
@@ -210,6 +209,9 @@ export default {
         el: this.$refs["vueKeyboardInput"],
       };
     },
+    disabledScrollDirectiveStatus() {
+      return this.allowEnter ? "working" : "disabled";
+    },
   },
   watch: {
     value: {
@@ -309,8 +311,12 @@ export default {
         this.scrollLeft = scrollDisX;
         this.scrollTop = scrollDisY;
       }
-
-      dom.scrollTo(scrollDisX, scrollDisY);
+      //只有运行换行时候，才做input y轴滚动
+      if (this.allowEnter) {
+        dom.scrollTo(scrollDisX, scrollDisY);
+      } else {
+        dom.scrollTo(scrollDisX, 0);
+      }
     },
     /**
      * 获取当前展示的键盘高度
@@ -486,6 +492,7 @@ export default {
       let FixedDom = this.$refs["vueKeyboardInputFixed"];
       domWrap && this.computedInputScrollDis(domWrap, true);
       FixedDom && this.computedInputScrollDis(FixedDom, false);
+
       //容器滚动,默认是body滚动，如果指定了滚动的容器，就不再出发body滚动
       //input获取焦点了，并且不再试图内
 
@@ -818,7 +825,27 @@ export default {
     outline: none;
     box-shadow: none;
   }
+  @keyframes flash {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+  .key-board-flash {
+    display: inline-block;
+    width: 2px;
+    height: 12px;
+    background: red;
+    animation: flash 0.3s infinite linear;
+    &:focus-visible,
+    &:focus {
+      outline: none;
+    }
+  }
 }
+
 .vue-keyboard-input {
   position: relative; //它是必须的，否则会影响获取容器的滚动
   min-height: 30px;
@@ -852,25 +879,7 @@ export default {
   .vue-keyboard-text-item-br {
     display: block;
   }
-  @keyframes flash {
-    0% {
-      opacity: 1;
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-  .key-board-flash {
-    display: inline-block;
-    width: 2px;
-    height: 12px;
-    background: red;
-    animation: flash 0.3s infinite linear;
-    &:focus-visible,
-    &:focus {
-      outline: none;
-    }
-  }
+
   .emoji-icon {
     width: 20px;
     height: 20px;

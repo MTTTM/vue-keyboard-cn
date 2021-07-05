@@ -28,7 +28,7 @@
         :allowEnter="true"
         inputLang="en"
       />
-      <key-board :emojiMap="emoji" :isHscreenApp="true" />
+      <key-board :emojiMap="emoji" :rotate="-90" />
       <ul>
         <li>1</li>
         <li>2</li>
