@@ -2,7 +2,6 @@
   <div>
     <h1>props type</h1>
     <h2>default mix</h2>
-    <p v-html="mixValue"></p>
     <ky-input v-model="mixValue" placeholder="Any string" />
     <h2>int</h2>
     <p v-html="intValue"></p>
@@ -43,7 +42,8 @@ export default {
       floatValue: "1.22",
       cnValue: "鼓励·拿扎",
       envalue: "hellogg",
-      mixValue: "你好啊,world!!",
+      mixValue:
+        "你好啊,world!!你好啊,world!!你好啊,world!!你好啊,world!!你好啊,world!!你好啊,world!!你好啊,world!!",
     };
   },
   methods: {

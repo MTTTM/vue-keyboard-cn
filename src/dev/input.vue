@@ -8,7 +8,10 @@
     <div class="vue-keyboard-input-block">
       <div
         class="vue-keyboard-input"
-        :class="[disabled ? 'disabled' : '']"
+        :class="[
+          disabled ? 'disabled' : '',
+          !allowEnter ? 'vue-keyboard-input-text-one-line' : '',
+        ]"
         :data-scroll-left="scrollLeft"
         :data-scroll-top="scrollTop"
         @click.stop.prevent="focus(true)"
@@ -21,7 +24,10 @@
 
         <div
           tabindex="-1"
-          class="vue-keyboard-input-text"
+          :class="[
+            'vue-keyboard-input-text',
+            !allowEnter ? 'vue-keyboard-input-text-one-line' : '',
+          ]"
           v-html="tmpValue"
           ref="input"
           @click.prevent="getClickElement"
@@ -164,13 +170,15 @@ export default {
   },
   computed: {
     inputWrapStyle() {
-      if (this.height != -1 || !isNaN(parseInt(this.height))) {
+      console.log("this.height", this.height);
+      if (this.height != -1 && !isNaN(parseInt(this.height))) {
         if (/(px)$/.test(this.height)) {
           return {
             height: this.height,
             display: "block",
           };
         } else {
+          console.log("his.height != -1 ??", this.height != -1, this.height);
           return {
             height: parseFloat(this.height) + "px",
             display: "block",
@@ -885,10 +893,15 @@ export default {
     height: 20px;
   }
 }
+.vue-keyboard-input-text-one-line {
+  white-space: nowrap !important;
+  word-wrap: normal !important;
+}
 .vue-keyboard-input-text {
   display: inline-block;
   position: relative;
   z-index: 10;
+
   &:focus-visible {
     outline: none;
   }
