@@ -6,6 +6,9 @@ Vue.use(VueRouter);
 
 export default new VueRouter({
   mode: 'hash',
-  routes
+  routes,
+  scrollBehavior() {
+    return { x: 0, y: 0 }
+  }
 });
 
