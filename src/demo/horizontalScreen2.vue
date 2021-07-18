@@ -27,6 +27,8 @@
         height="80px"
         :allowEnter="true"
         inputLang="en"
+        scrollWrap="#innerWrap"
+        :rotate="route"
       />
       <key-board :emojiMap="emoji" :rotate="-90" />
       <ul>

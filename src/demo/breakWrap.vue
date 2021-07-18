@@ -26,7 +26,7 @@ export default {
       },
       mixValue: `hello
 ,world!!
-,world!!`,
+,world!?`,
     };
   },
   methods: {

@@ -287,7 +287,7 @@ export default {
           this.valueArr = splitStringToArray(this.value, this.allowEnter);
           this.valueArr.push(cursorStr);
         }
-
+        this.inputDomScroll();
         this.$nextTick(() => {
           this.inputDomScroll();
         });
@@ -833,7 +833,7 @@ export default {
         ".vue-keyboard-text-item"
       );
       let lastSpanItem;
-      for (let i = 0; i < spanItem.length - 1; i++) {
+      for (let i = 0; i < spanItem.length; i++) {
         let currItem = spanItem[i];
         let top = this.getBoundingClientRect(currItem, "top");
         let bottom = this.getBoundingClientRect(currItem, "bottom");
@@ -843,12 +843,11 @@ export default {
         }
       }
       if (lastSpanItem) {
-        let index = getElementIndexOnParent(lastSpanItem);
-        index += 1; //为什么这里要加一
+        //光标的位置要比内容元素大1
+        let index = getElementIndexOnParent(lastSpanItem) + 1;
         let movedData = moveTo(this.valueArr, index);
         if (Array.isArray(movedData.arr)) {
           this.valueArr = movedData.arr;
-          this.cursorIndex = movedData.index; //这里却不需要
         }
       }
     },
