@@ -3,11 +3,10 @@
     <h1>props allowEnter</h1>
 
     <h2>default false</h2>
-    <p v-html="mixValue"></p>
+
     <ky-input v-model="mixValue" placeholder="Any string" />
 
     <h2>true</h2>
-    <p v-html="mixValue"></p>
     <ky-input v-model="mixValue" placeholder="Any string" :allowEnter="true" />
     <key-board :emojiMap="emoji" />
     <div style="height: 800px"></div>
@@ -26,6 +25,7 @@ export default {
         symbo,
       },
       mixValue: `hello
+,world!!
 ,world!!`,
     };
   },

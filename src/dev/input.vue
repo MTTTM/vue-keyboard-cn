@@ -14,7 +14,7 @@
         ]"
         :data-scroll-left="scrollLeft"
         :data-scroll-top="scrollTop"
-        @click.stop.prevent="focus(true)"
+        @click.stop.prevent="allowEnterBoxClickEmptyArea"
         ref="vueKeyboardInput"
         tabindex="-1"
       >
@@ -30,7 +30,7 @@
           ]"
           v-html="tmpValue"
           ref="input"
-          @click.prevent="getClickElement"
+          @click.prevent.stop="getClickElement"
         ></div>
       </div>
     </div>
@@ -226,6 +226,7 @@ export default {
       handler(newV, oldV) {
         let t = splitStringToArray("" + newV, this.allowEnter);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
+        console.log("labelIndex", labelIndex);
         if (this.isFocus) {
           if (labelIndex == -1) {
             t.push(cursorStr);
@@ -234,8 +235,25 @@ export default {
           } else {
             //数据类型
             this.valueArr = t;
-            this.cursorIndex = this.valueArr.length;
+            // if (newV) {
+            //   if (oldV) {
+            //     if (String(newV).length > String(oldV).length) {
+            //       console.log("新增1个");
+            //       this.cursorIndex = this.cursorIndex;
+            //     } else {
+            //       this.cursorIndex = this.cursorIndex - 1;
+            //       console.log("删除一个");
+            //     }
+            //   } else {
+            //     console.log("没有old");
+            //     this.cursorIndex = this.valueArr.length;
+            //   }
+            // } else {
+            //   this.cursorIndex = this.valueArr.length;
+            // }
+
             this.valueArr.splice(this.cursorIndex, 0, cursorStr); //必须要追加光标
+            console.log("有关表！！！");
           }
         } else if (!this.isFocus) {
           this.valueArr = t;
@@ -264,9 +282,12 @@ export default {
       immediate: true,
     },
     isFocus(newV) {
-      this.valueArr = splitStringToArray(this.value, this.allowEnter);
       if (newV) {
-        this.valueArr.push(cursorStr);
+        if (!this.allowEnter) {
+          this.valueArr = splitStringToArray(this.value, this.allowEnter);
+          this.valueArr.push(cursorStr);
+        }
+
         this.$nextTick(() => {
           this.inputDomScroll();
         });
@@ -735,6 +756,7 @@ export default {
       if (this.disabled) {
         return;
       }
+      this.focus(true);
       if (
         e.target &&
         e.target.classList &&
@@ -801,6 +823,34 @@ export default {
         inputId: this.inputId,
         keyBoard: this.keyBoard,
       });
+    },
+    allowEnterBoxClickEmptyArea(e) {
+      this.focus(true);
+      if (!this.allowEnter || this.disabled) {
+        return;
+      }
+      let spanItem = this.$refs["wrapvueKeyboardInput"].querySelectorAll(
+        ".vue-keyboard-text-item"
+      );
+      let lastSpanItem;
+      for (let i = 0; i < spanItem.length - 1; i++) {
+        let currItem = spanItem[i];
+        let top = this.getBoundingClientRect(currItem, "top");
+        let bottom = this.getBoundingClientRect(currItem, "bottom");
+        let clientY = e.clientY;
+        if (clientY >= top && clientY <= bottom) {
+          lastSpanItem = currItem;
+        }
+      }
+      if (lastSpanItem) {
+        let index = getElementIndexOnParent(lastSpanItem);
+        index += 1; //为什么这里要加一
+        let movedData = moveTo(this.valueArr, index);
+        if (Array.isArray(movedData.arr)) {
+          this.valueArr = movedData.arr;
+          this.cursorIndex = movedData.index; //这里却不需要
+        }
+      }
     },
   },
 };
