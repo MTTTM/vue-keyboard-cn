@@ -1,5 +1,5 @@
 <template>
-  <div class="emoji-wrap">
+  <div class="emoji-wrap" ref="emojiWrap">
     <div class="emoj-wrap-body">
       <div
         class="emoj-wrap-body-inner"
@@ -67,15 +67,48 @@ export default {
     },
   },
   created() {
-    console.log("this.emoji", this.emojiMap);
     this.key = this.emojiKeys[0];
+    this.scrollEvent = this.disabledItemClickEvent.bind(this);
+  },
+  mounted() {
+    this.$nextTick(() => {
+      this.$refs["scrollBox"].addEventListener("scroll", this.scrollEvent);
+      this.disabledItemClickEvent();
+    });
+  },
+  beforeDestroy() {
+    this.$refs["scrollBox"].removeEventListener("scroll", this.scrollEvent);
   },
   data() {
     return {
       key: 0,
+      scrollEvent: null,
     };
   },
+
   methods: {
+    getBoundingClientRect(el, attr) {
+      return el && el.getBoundingClientRect()[attr];
+    },
+    disabledItemClickEvent(e) {
+      let wrap = this.$refs["emojiWrap"];
+      let items = wrap.querySelectorAll(".emoj-wrap-body-item");
+      let deleteBtn = wrap.querySelector(".emoji-delete");
+      let deleteBtnLeft = this.getBoundingClientRect(deleteBtn, "left");
+      let deleteBtnTop = this.getBoundingClientRect(deleteBtn, "top");
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i];
+        let itemLeft = this.getBoundingClientRect(item, "left");
+        let itemTop = this.getBoundingClientRect(item, "top");
+        item.classList.remove("disabled");
+        if (
+          Math.abs(deleteBtnLeft - itemLeft) <= 20 &&
+          Math.abs(deleteBtnTop - itemTop) <= 30
+        ) {
+          item.classList.add("disabled");
+        }
+      }
+    },
     setKey(item) {
       this.key = item;
       if (this.$refs["scrollBox"]) {
@@ -134,6 +167,7 @@ export default {
     justify-content: center;
     align-items: center;
     border-radius: 4px;
+    z-index: 9999;
   }
 
   .emoj-wrap-body-item {
@@ -143,6 +177,10 @@ export default {
     background-position: center center;
     background-size: contain;
     margin-bottom: 5px;
+    &.disabled {
+      opacity: 0.2;
+      pointer-events: none;
+    }
 
     .img {
       background-position: center center;
