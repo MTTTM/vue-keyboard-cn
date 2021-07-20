@@ -226,46 +226,28 @@ export default {
       handler(newV, oldV) {
         let t = splitStringToArray("" + newV, this.allowEnter);
         let labelIndex = this.valueArr.findIndex((item) => item == cursorStr);
-        console.log("labelIndex", labelIndex);
         if (this.isFocus) {
           if (labelIndex == -1) {
             t.push(cursorStr);
             this.valueArr = t;
             this.cursorIndex = this.valueArr.length - 1;
           } else {
-            //数据类型
-            this.valueArr = t;
-            // if (newV) {
-            //   if (oldV) {
-            //     if (String(newV).length > String(oldV).length) {
-            //       console.log("新增1个");
-            //       this.cursorIndex = this.cursorIndex;
-            //     } else {
-            //       this.cursorIndex = this.cursorIndex - 1;
-            //       console.log("删除一个");
-            //     }
-            //   } else {
-            //     console.log("没有old");
-            //     this.cursorIndex = this.valueArr.length;
-            //   }
-            // } else {
-            //   this.cursorIndex = this.valueArr.length;
-            // }
-
-            this.valueArr.splice(this.cursorIndex, 0, cursorStr); //必须要追加光标
-            console.log("有关表！！！");
+            //修复bug:数据类型，并且用了插槽 累-1或累+1时候，光标没有位移到最后
+            //这里添加相差值为1，是因为用户可以点击字符串中间某个值来直接修改
+            if (
+              (this.type === "int" || this.type === "float") &&
+              Math.abs(newV - oldV) == 1
+            ) {
+              t.push(cursorStr);
+              this.valueArr = t;
+            } else {
+              this.valueArr = t;
+              this.valueArr.splice(this.cursorIndex, 0, cursorStr); //必须要追加光标
+            }
           }
         } else if (!this.isFocus) {
           this.valueArr = t;
           this.cursorIndex = this.valueArr.length;
-
-          this.$nextTick(() => {
-            let dom = this.$refs["wrapvueKeyboardInput"];
-            if (dom && this.height != -1) {
-              console.log("滚动不??");
-              setTimeout(() => this.scrollToBottom(dom), 500);
-            }
-          });
         }
 
         /*
@@ -287,7 +269,6 @@ export default {
           this.valueArr = splitStringToArray(this.value, this.allowEnter);
           this.valueArr.push(cursorStr);
         }
-        this.inputDomScroll();
         this.$nextTick(() => {
           this.inputDomScroll();
         });
@@ -297,7 +278,7 @@ export default {
     },
     tmpValue() {
       this.$nextTick(() => {
-        this.inputDomScroll();
+        this.isFocus && this.inputDomScroll();
       });
     },
   },
@@ -504,14 +485,8 @@ export default {
         targetY !== undefined && window.scrollTo(0, targetY);
       }
     },
-    scrollToBottom(dom) {
-      console.log("滚动内部高度", dom.scrollHeight);
-      if (dom && dom.scrollHeight) {
-        console.log("滚动到底部", dom.scrollHeight);
-        dom.scrollTo(0, dom.scrollHeight);
-      }
-    },
     inputDomScroll() {
+      console.log(":::::::::: scroll");
       //用最外层容器
       let domWrap = this.$refs["wrapvueKeyboardInput"];
       if (!domWrap) {
