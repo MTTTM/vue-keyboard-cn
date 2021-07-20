@@ -102,6 +102,7 @@ export default {
         let itemTop = this.getBoundingClientRect(item, "top");
         item.classList.remove("disabled");
         if (
+          deleteBtn &&
           Math.abs(deleteBtnLeft - itemLeft) <= 20 &&
           Math.abs(deleteBtnTop - itemTop) <= 30
         ) {
