@@ -835,11 +835,20 @@ export default {
       let lastSpanItem;
       for (let i = 0; i < spanItem.length; i++) {
         let currItem = spanItem[i];
-        let top = this.getBoundingClientRect(currItem, "top");
-        let bottom = this.getBoundingClientRect(currItem, "bottom");
-        let clientY = e.clientY;
-        if (clientY >= top && clientY <= bottom) {
-          lastSpanItem = currItem;
+        if (this.rotate === 90 || this.rotate === -90) {
+          let clientX = e.clientX;
+          let right = this.getBoundingClientRect(currItem, "right");
+          let left = this.getBoundingClientRect(currItem, "left");
+          if (clientX >= left && clientX <= right) {
+            lastSpanItem = currItem;
+          }
+        } else {
+          let clientY = e.clientY;
+          let top = this.getBoundingClientRect(currItem, "top");
+          let bottom = this.getBoundingClientRect(currItem, "bottom");
+          if (clientY >= top && clientY <= bottom) {
+            lastSpanItem = currItem;
+          }
         }
       }
       if (lastSpanItem) {
